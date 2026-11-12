@@ -61,14 +61,16 @@ export default function App() {
 
   const toast = useCallback((t: Omit<Toast, 'id'>) => {
     const id = Date.now() + Math.random()
-    setToasts((ts) => [...ts, { ...t, id }])
-    window.setTimeout(() => setToasts((ts) => ts.filter((x) => x.id !== id)), 6500)
+    // at most 2 on screen; each auto-dismisses after 5 s
+    setToasts((ts) => [...ts, { ...t, id }].slice(-2))
+    window.setTimeout(() => setToasts((ts) => ts.filter((x) => x.id !== id)), 5000)
   }, [])
 
   // "resumed from checkpoint #N" toast when the worker restart count goes up
   const prev = useRef<RunSnapshot | null>(null)
   useEffect(() => {
     const p = prev.current
+    // Only toast transitions observed live: the first snapshot after (re)loading a run is a baseline.
     if (snap && p && p.run_id === snap.run_id) {
       if (snap.worker.restarts > p.worker.restarts) {
         toast({

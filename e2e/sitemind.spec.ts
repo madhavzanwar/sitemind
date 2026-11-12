@@ -12,7 +12,10 @@ const SHOTS = resolve(HERE, '..', 'docs', 'screenshots')
 mkdirSync(SHOTS, { recursive: true })
 // Real-backend screenshots are saved as docs/screenshots/real-*.png (mock ones come from screenshots.spec.ts).
 const shot = async (page: Page, name: string) => {
-  if (!MOCK) await page.screenshot({ path: join(SHOTS, `real-${name}.png`) })
+  if (MOCK) return
+  // let transient toasts auto-dismiss so they don't cover the dashboard
+  await expect(page.getByTestId('toast')).toHaveCount(0, { timeout: 8_000 })
+  await page.screenshot({ path: join(SHOTS, `real-${name}.png`) })
 }
 
 const status = (page: Page) => page.getByTestId('run-status')
