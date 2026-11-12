@@ -1,4 +1,4 @@
-"""Durable LangGraph state machine: plan -> execute(one task) -> monitor -> [replan] -> ... -> finish.
+"""Durable LangGraph state machine: plan -> execute(1 task) -> monitor -> [replan] -> finish.
 
 * Compiled with ``SqliteSaver`` (thread_id = run_id); every super-step runs exactly ONE plan
   task, so a checkpoint is persisted after every task (``durability="sync"``).
@@ -76,15 +76,16 @@ DURATION_DAYS: dict[str, float] = {
     "chase": 2.0,
     "rank": 1.0,
     "escalate": 0.5,
-    "approve-vendor": 4.0,  # human turnaround (steering committee)
+    "approve-vendor": 5.0,  # human turnaround (steering committee)
     "draft-po": 3.0,
-    "approve-po": 2.0,  # human turnaround (finance sign-off)
+    "approve-po": 3.0,  # human turnaround (finance sign-off)
     "send-po": 0.5,
 }
 RFQ_WINDOW_DAYS = 2.0
 RFQ_MAX_ATTEMPTS = 3
 PO_BUFFER_DAYS = 3.0  # schedule-risk buffer on the projected PO issue date
 REPLAN_HOURS = 3.0
+ROBUST_FLOAT_DAYS = 14  # an option with less float is "thin" (see approvals.LOW_FLOAT_DAYS)
 PROCESS_COST_INR: dict[str, float] = {
     "takeoff": 21_000.0,
     "rfq": 6_000.0,  # per RFQ actually sent
@@ -282,7 +283,7 @@ class Ctx:
         }
 
 
-# --------------------------------------------------------------------------- ledger-backed vendor channel
+# ------------------------------------------------------------------ ledger-backed vendor channel
 
 
 class LedgerNetwork:
@@ -419,9 +420,7 @@ def projected_po_date(plan: Plan, now: datetime, exclude: str | None = None) -> 
     return (now + timedelta(days=remaining + PO_BUFFER_DAYS)).date()
 
 
-def _add_budget_point(
-    facts: dict[str, Any], when: datetime, rt: Runtime, label: str = ""
-) -> None:
+def _add_budget_point(facts: dict[str, Any], when: datetime, rt: Runtime, label: str = "") -> None:
     committed = float(facts.get("committed_inr", 0.0))
     forecast = _forecast(facts)
     pts: list[dict[str, Any]] = facts.setdefault("budget_points", [])
@@ -446,9 +445,12 @@ def _forecast(facts: dict[str, Any]) -> float:
         rec = next((o for o in opts if o.recommended), opts[0])
         bud = _budgets(facts).get(rec.vendor_id)
         pct = (bud.contingency_inr / bud.quote_total_inr) if bud and bud.quote_total_inr else 0.05
-        return rec.total_inr - rec.expedite_fee_inr + (
-            rec.total_inr - rec.expedite_fee_inr
-        ) * pct + rec.expedite_fee_inr
+        return (
+            rec.total_inr
+            - rec.expedite_fee_inr
+            + (rec.total_inr - rec.expedite_fee_inr) * pct
+            + rec.expedite_fee_inr
+        )
     buds = [b for b in _budgets(facts).values() if b.committed_inr > 0]
     ok = [b for b in buds if b.verdict != "breach"] or buds
     return min((b.committed_inr for b in ok), default=0.0)
@@ -575,9 +577,7 @@ def h_levelling(ctx: Ctx, plan: Plan, task: PlanTask, vendor: str | None) -> Out
     quotes = _quotes(ctx.facts)
     net = LedgerNetwork(ctx.rt.network, ctx)
     when = ctx.at(days=1)
-    new, log = refresh_quotes(
-        cast(VendorNetwork, net), [quotes[k] for k in sorted(quotes)], when
-    )
+    new, log = refresh_quotes(cast(VendorNetwork, net), [quotes[k] for k in sorted(quotes)], when)
     hist: list[dict[str, Any]] = ctx.facts.setdefault("quote_history", [])
     revised = []
     for old, q in zip([quotes[k] for k in sorted(quotes)], new, strict=True):
@@ -779,7 +779,7 @@ def h_rank(ctx: Ctx, plan: Plan, task: PlanTask, vendor: str | None) -> Outcome:
     opts = [o for o in opts if o.option_id not in rejected]
     if not opts:
         raise RuntimeError("every option was rejected")
-    for i, o in enumerate(opts):
+    for o in opts:
         o.recommended = False
     rec = next((o for o in opts if is_feasible(o)), None)
     if rec is not None:
@@ -982,8 +982,12 @@ def h_approve_vendor(ctx: Ctx, plan: Plan, task: PlanTask, vendor: str | None) -
             inputs=decision,
         )
         ctx.event("human", f"Rejected {choice} — agent will re-plan", "error", when)
-        return Outcome(wait, f"Vendor selection {choice} rejected.", status=TaskStatus.failed,
-                       note="rejected by human")
+        return Outcome(
+            wait,
+            f"Vendor selection {choice} rejected.",
+            status=TaskStatus.failed,
+            note="rejected by human",
+        )
     ctx.facts["selected_option"] = choice
     opt = next(o for o in memo.options if o.option_id == choice)
     ctx.audit(
@@ -1008,8 +1012,9 @@ def h_draft_po(ctx: Ctx, plan: Plan, task: PlanTask, vendor: str | None) -> Outc
     q = _quotes(ctx.facts)[opt.vendor_id]
     takeoff = TakeoffResult.model_validate(ctx.facts["takeoff"])
     issued = ctx.at(days=DURATION_DAYS["draft-po"])
-    seq = 1 + sum(1 for t in plan.tasks if task_action(t)[0] == "draft-po" and t.status ==
-                  TaskStatus.done)
+    seq = 1 + sum(
+        1 for t in plan.tasks if task_action(t)[0] == "draft-po" and t.status == TaskStatus.done
+    )
     po_number = f"PO-ALPHA-{issued:%Y%m%d}-{opt.vendor_id}-{seq:02d}"
     po = draft_po(rt_goal(ctx), opt, q, takeoff, po_number, issued.date())
     ctx.facts["po"] = po.model_dump(mode="json")
@@ -1049,8 +1054,9 @@ def h_approve_po(ctx: Ctx, plan: Plan, task: PlanTask, vendor: str | None) -> Ou
             inputs=decision,
         )
         ctx.event("human", f"PO {po.po_number} release rejected", "error", when)
-        return Outcome(wait, "PO release rejected.", status=TaskStatus.failed,
-                       note="rejected by human")
+        return Outcome(
+            wait, "PO release rejected.", status=TaskStatus.failed, note="rejected by human"
+        )
     po.status = "approved"
     ctx.facts["po"] = po.model_dump(mode="json")
     ctx.audit(
@@ -1106,7 +1112,7 @@ def h_send_po(ctx: Ctx, plan: Plan, task: PlanTask, vendor: str | None) -> Outco
         f"{po.vendor_id} acknowledged PO; delivery {_d(s.delivery_date)} ({s.float_days:+d} d "
         "float)",
         "success",
-        ctx.at(days=1),
+        ctx.at(hours=8),
     )
     return Outcome(
         DURATION_DAYS["send-po"],
@@ -1245,8 +1251,6 @@ def build_graph(rt: Runtime, checkpointer: Any) -> Any:
         task = ready[0]
         action, vendor = task_action(task)
         rt.store.update_run(rt.run_id, current_node=f"execute:{task.id}")
-        if rt.step_delay > 0 and action not in HUMAN_ACTIONS:
-            time.sleep(rt.step_delay)
         if rt.on_step:
             rt.on_step(task.id)
         ctx = Ctx(rt, task.id, now, plan.version, task_id=task.id, facts=facts)
@@ -1256,6 +1260,12 @@ def build_graph(rt: Runtime, checkpointer: Any) -> Any:
             get_task(running, task.id).started_at = now
             _save_projection(rt, running, None, facts, now)
         out = HANDLERS[action](ctx, plan, task, vendor)
+        # Demo pacing happens AFTER the task's side effects (perform_once) and BEFORE the node
+        # returns / is checkpointed: a SIGKILL in this window re-runs the node on resume and
+        # every ledgered effect returns its stored result (executions += 1, executed once).
+        if rt.step_delay > 0 and action not in HUMAN_ACTIONS:
+            rt.store.update_run(rt.run_id, current_node=f"execute:{task.id}:pacing")
+            time.sleep(rt.step_delay)
         cost = ctx.cost + (PROCESS_COST_INR.get(action, 0.0) if action != "rfq" else 0.0)
         facts["process_cost_inr"] = float(facts.get("process_cost_inr", 0.0)) + cost
         end = now + timedelta(days=out.duration_days)
@@ -1307,13 +1317,15 @@ def build_graph(rt: Runtime, checkpointer: Any) -> Any:
         if not new:
             return {"triggers": []}
         details = facts.setdefault("trigger_details", {})
-        ctx = Ctx(rt, f"monitor-v{plan.version}:{state.get('last_task')}", now, plan.version,
-                  facts=facts)
+        ctx = Ctx(
+            rt, f"monitor-v{plan.version}:{state.get('last_task')}", now, plan.version, facts=facts
+        )
         for trig, detail in found:
             if trig in new:
                 details[trig] = detail
-                ctx.audit("monitor", "trigger.detected", f"{trig}: {detail}",
-                          outputs={"trigger": trig})
+                ctx.audit(
+                    "monitor", "trigger.detected", f"{trig}: {detail}", outputs={"trigger": trig}
+                )
                 ctx.event("planner", f"Monitor: {detail}", "warning")
         return {"triggers": new, "facts": facts}
 
@@ -1328,8 +1340,9 @@ def build_graph(rt: Runtime, checkpointer: Any) -> Any:
         before = {t.id: t.status for t in plan.tasks}
         added = [t.id for t in new.tasks if t.id not in before]
         skipped = [
-            t.id for t in new.tasks if t.status == TaskStatus.skipped and before.get(t.id) !=
-            TaskStatus.skipped
+            t.id
+            for t in new.tasks
+            if t.status == TaskStatus.skipped and before.get(t.id) != TaskStatus.skipped
         ]
         llm_res = rt.store.get_ledger(f"{rt.run_id}:plan-v{v}:llm:replan")
         llm_meta = (
@@ -1353,7 +1366,7 @@ def build_graph(rt: Runtime, checkpointer: Any) -> Any:
             "warning",
         )
         facts["handled_triggers"] = list(facts.get("handled_triggers", [])) + triggers
-        history = list(state.get("plan_history") or []) + [new.model_dump(mode="json")]
+        history = [*(state.get("plan_history") or []), new.model_dump(mode="json")]
         end = now + timedelta(hours=REPLAN_HOURS)
         _save_projection(rt, new, history, facts, end)
         return {
@@ -1384,8 +1397,9 @@ def build_graph(rt: Runtime, checkpointer: Any) -> Any:
             ctx.event("system", f"Goal met — PO sent {_d(now)}, {days:.0f} sim days", "success")
             rt.store.update_run(rt.run_id, status="completed", current_node="finish")
         else:
-            stuck = [t.id for t in plan.tasks if t.status not in (TaskStatus.done,
-                                                                  TaskStatus.skipped)]
+            stuck = [
+                t.id for t in plan.tasks if t.status not in (TaskStatus.done, TaskStatus.skipped)
+            ]
             summary = f"Run stopped without completing: {', '.join(stuck)}"
             ctx.audit("system", "run.failed", summary)
             ctx.event("system", summary, "error")
@@ -1456,23 +1470,24 @@ def detect_triggers(plan: Plan, facts: dict[str, Any], rt: Runtime) -> list[tupl
                     f"({b.utilisation:.0%} of budget) — breach",
                 )
             )
-    feasible = [
+    robust = [
         v
-        for v, q in quotes.items()
+        for v in quotes
         if v in buds
         and v in scheds
         and buds[v].verdict != "breach"
-        and scheds[v].meets_deadline
+        and scheds[v].float_days >= ROBUST_FLOAT_DAYS
     ]
-    if not feasible:
+    if not robust:
         for v, s in sorted(scheds.items()):
             b = buds.get(v)
             if not s.meets_deadline and v in offers and b is not None and b.verdict != "breach":
                 found.append(
                     (
                         f"deadline_break:{v}",
-                        f"{v} delivers {s.delivery_date}, {-s.float_days} d after required "
-                        f"on site; expedite offer −{offers[v].days_saved} d available",
+                        f"{v} delivers {s.delivery_date} ({s.float_days:+d} d vs required on "
+                        f"site) and no option has ≥{ROBUST_FLOAT_DAYS} d float; expedite offer "
+                        f"−{offers[v].days_saved} d available",
                     )
                 )
     return found

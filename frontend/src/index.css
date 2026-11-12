@@ -98,7 +98,10 @@
   @apply border-b border-white/[0.05] px-3 py-2 text-ink-200;
   font-variant-numeric: tabular-nums;
 }
-.po-md td:nth-last-child(-n + 3) {
+.po-md thead:has(th:empty:first-child + th:empty) {
+  display: none;
+}
+.po-md td:nth-child(n + 4) {
   @apply font-mono text-[12px];
 }
 .po-md tr:last-child td {

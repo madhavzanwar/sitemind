@@ -47,21 +47,27 @@ export function Timeline({ snap, className }: { snap: RunSnapshot; className?: s
   const yOf = (lane: string) => AXIS_H + lanes.indexOf(lane) * laneH + laneH / 2
   const tickEvery = plotW / days < 44 ? 2 : 1
 
-  // Direct labels: per lane, skip a label if it would collide with the previous one.
+  // Direct labels: each lane has three label tracks (inline, above, below); a label takes the
+  // first track where it doesn't collide. Inline labels must also stop before the next dot.
   const labelled = useMemo(() => {
-    const lastEnd = new Map<string, number>()
-    const out = new Set<number>()
-    snap.timeline
-      .map((e, i) => ({ e, i, x: xOf(parseTime(e.sim_time)) }))
-      .sort((a, b) => a.x - b.x)
-      .forEach(({ e, i, x }) => {
-        const width = e.label.length * 5.9 + 14
-        const prev = lastEnd.get(e.lane) ?? -Infinity
-        if (x > prev + 6 && x + width < w) {
-          out.add(i)
-          lastEnd.set(e.lane, x + width)
+    const ends = new Map<string, number>()
+    const out = new Map<number, number>()
+    const items = snap.timeline.map((e, i) => ({ e, i, x: xOf(parseTime(e.sim_time)) })).sort((a, b) => a.x - b.x)
+    items.forEach(({ e, i, x }, k) => {
+      const width = e.label.length * 5.6 + 12
+      const next = items.slice(k + 1).find((o) => o.e.lane === e.lane && o.x > x + 2)
+      for (let t = 0; t < 3; t++) {
+        const key = `${e.lane}:${t}`
+        const prev = ends.get(key) ?? -Infinity
+        const limit = t === 0 ? Math.min(next ? next.x - 8 : Infinity, w - 4) : w - 4
+        const start = t === 0 ? x : x - 6
+        if (start > prev + 6 && x + width < limit) {
+          out.set(i, t)
+          ends.set(key, x + width)
+          break
         }
-      })
+      }
+    })
     return out
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [snap.timeline, w, h, start, end])
@@ -140,14 +146,17 @@ export function Timeline({ snap, className }: { snap: RunSnapshot; className?: s
                   <stop offset="1" stopColor={killed ? 'rgba(244,63,94,0.07)' : 'rgba(255,178,36,0.05)'} />
                 </linearGradient>
               </defs>
-              <line x1={xOf(nowT)} x2={xOf(nowT)} y1={AXIS_H - 6} y2={h} stroke={killed ? '#F43F5E' : '#FFB224'} strokeWidth={1.5} />
-              <rect x={xOf(nowT) - 16} y={AXIS_H - 13} width={32} height={13} rx={3} fill={killed ? '#F43F5E' : '#FFB224'} />
-              <text x={xOf(nowT)} y={AXIS_H - 3.5} textAnchor="middle" className="fill-ink-950 font-mono text-[9px] font-bold">
+              <line x1={xOf(nowT)} x2={xOf(nowT)} y1={AXIS_H} y2={h - 14} stroke={killed ? '#F43F5E' : '#FFB224'} strokeWidth={1.5} />
+              <rect x={xOf(nowT) - 16} y={h - 15} width={32} height={13} rx={3} fill={killed ? '#F43F5E' : '#FFB224'} />
+              <text x={xOf(nowT)} y={h - 5.5} textAnchor="middle" className="fill-ink-950 font-mono text-[9px] font-bold">
                 NOW
               </text>
             </g>
             {/* events */}
-            {snap.timeline.map((e, i) => {
+            {snap.timeline
+              .map((e, i) => [e, i] as const)
+              .sort((a, b) => Number(a[0].kind === 'kill') - Number(b[0].kind === 'kill'))
+              .map(([e, i]) => {
               const x = xOf(parseTime(e.sim_time))
               const y = yOf(e.lane)
               const c = TONE[EVENT_TONE[e.kind]].hex
@@ -167,7 +176,11 @@ export function Timeline({ snap, className }: { snap: RunSnapshot; className?: s
                     <circle cx={x} cy={y} r={strong ? 5 : 4.5} fill={c} stroke="#0A0D13" strokeWidth={2} />
                   )}
                   {labelled.has(i) && (
-                    <text x={x + 9} y={y + 3.5} className={cx('text-[10.5px]', strong ? 'fill-ink-100' : 'fill-ink-300')}>
+                    <text
+                      x={labelled.get(i) === 0 ? x + 9 : x - 4}
+                      y={labelled.get(i) === 0 ? y + 3.5 : labelled.get(i) === 1 ? y - 10 : y + 17}
+                      className={cx('text-[10.5px]', strong ? 'fill-ink-100' : 'fill-ink-300')}
+                    >
                       {e.label}
                     </text>
                   )}

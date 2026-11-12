@@ -138,11 +138,12 @@ class LLM:
     def _run_agent(self, prompt: str, output_type: Any, max_tokens: int | None) -> tuple[Any, int]:
         from pydantic_ai import Agent
 
-        agent: Any = Agent(
+        agent_cls: Any = Agent
+        agent: Any = agent_cls(
             self._model(),
             output_type=output_type,
             system_prompt=SYSTEM,
-            model_settings=self._settings(max_tokens),  # type: ignore[arg-type]
+            model_settings=self._settings(max_tokens),
             retries=1,
         )
         res = agent.run_sync(prompt)

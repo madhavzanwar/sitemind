@@ -167,7 +167,11 @@ function Detail({
                                   </Badge>
                                 )}
                               </div>
-                              {o.expedite_fee_inr > 0 && <div className="mt-0.5 text-[11px] text-sky-300">incl. expedite {inr(o.expedite_fee_inr)}</div>}
+                              <div className="mt-0.5 flex gap-2 text-[11px]">
+                                {o.expedite_fee_inr > 0 && <span className="text-sky-300">incl. expedite {inr(o.expedite_fee_inr)}</span>}
+                                {o.budget_verdict === 'breach' && <span className="text-rose-300">infeasible · over budget</span>}
+                                {!o.meets_deadline && <span className="text-rose-300">infeasible · misses ROS</span>}
+                              </div>
                             </td>
                             <td className="td num text-right text-ink-50">{inr(o.total_inr)}</td>
                             <td className="td num text-right">{o.lead_time_days} d</td>
@@ -213,9 +217,10 @@ function Detail({
         </div>
 
         <aside className="space-y-4">
+          {memo && <RecCard memo={memo} budget={snap.goal.budget_inr} />}
           <div className="rounded-xl border border-violet-400/20 bg-violet-400/[0.05] p-4">
             <Label className="text-violet-300">The ask</Label>
-            <p className="mt-1.5 text-[13.5px] leading-relaxed text-ink-100">{memo?.asks ?? a.summary}</p>
+            <p className="mt-1.5 text-[13.5px] leading-relaxed text-ink-100">{memo?.asks ?? (a.kind === 'po_release' && a.po ? `Release ${a.po.po_number} to ${a.po.vendor_name}? On approval the agent dispatches it exactly once — the send is recorded under an idempotency key, so a crash or retry can never double-order.` : a.summary)}</p>
           </div>
           {pending ? (
             <div className="space-y-3 rounded-xl border border-white/[0.06] bg-ink-850/60 p-4">
@@ -327,5 +332,35 @@ function Section({ icon: Icon, title, children }: { icon: typeof Inbox; title: s
       </div>
       {children}
     </section>
+  )
+}
+
+function RecCard({ memo, budget }: { memo: NonNullable<ApprovalRequest['memo']>; budget: number }) {
+  const o = memo.options.find((x) => x.option_id === memo.recommendation)
+  if (!o) return null
+  const committed = o.total_inr + (o.total_inr - o.expedite_fee_inr) * 0.05
+  return (
+    <div className="rounded-xl border border-accent-400/30 bg-accent-400/[0.05] p-4 shadow-glow">
+      <div className="flex items-center gap-2">
+        <Award className="h-4 w-4 text-accent-300" />
+        <Label className="text-accent-300">Agent recommends</Label>
+        <span className="ml-auto font-mono text-[11px] text-accent-200">{o.option_id}</span>
+      </div>
+      <div className="mt-2 text-[16px] font-semibold text-ink-50">{o.vendor_name}</div>
+      <div className="mt-3 grid grid-cols-3 gap-3">
+        <div>
+          <Label>Total</Label>
+          <div className="num mt-0.5 text-[14px] font-semibold text-ink-50">{inr(o.total_inr)}</div>
+        </div>
+        <div>
+          <Label>Float</Label>
+          <div className={cx('num mt-0.5 text-[14px] font-semibold', o.float_days < 0 ? 'text-rose-300' : 'text-emerald-300')}>{signed(o.float_days)}</div>
+        </div>
+        <div>
+          <Label>Budget</Label>
+          <div className="num mt-0.5 text-[14px] font-semibold text-ink-50">{pct(committed / budget)}</div>
+        </div>
+      </div>
+    </div>
   )
 }

@@ -338,8 +338,9 @@ class Store:
         """Append an audit entry. With ``dedupe_key`` a replayed write is ignored."""
         with self._tx() as c:
             cur = c.execute(
-                "INSERT OR IGNORE INTO audit(run_id, dedupe_key, sim_time, wall_time, actor, action,"
-                " summary, inputs, outputs, cost_inr, llm_tokens, confidence, task_id, plan_version)"
+                "INSERT OR IGNORE INTO audit(run_id, dedupe_key, sim_time, wall_time, actor,"
+                " action, summary, inputs, outputs, cost_inr, llm_tokens, confidence, task_id,"
+                " plan_version)"
                 " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                 (
                     run_id,
@@ -420,7 +421,7 @@ class Store:
     def list_timeline(self, run_id: str) -> list[TimelineEvent]:
         with self._conn() as c:
             rows = c.execute(
-                "SELECT * FROM timeline WHERE run_id=? ORDER BY id", (run_id,)
+                "SELECT * FROM timeline WHERE run_id=? ORDER BY sim_time, id", (run_id,)
             ).fetchall()
         return [
             TimelineEvent(

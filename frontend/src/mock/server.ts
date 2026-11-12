@@ -69,7 +69,7 @@ export function buildFixture(stage: FixtureStage): MockEngine {
       e.kill()
       e.resume()
       ticks(20)
-      approve('vendor_selection', 'Go with Voltaris; add weekly expediting.')
+      approve('vendor_selection', 'Go with Anvil expedite — tie the ₹26 L fee to the delivery milestone.')
       ticks(5)
       break
     case 'completed':
@@ -77,7 +77,7 @@ export function buildFixture(stage: FixtureStage): MockEngine {
       e.kill()
       e.resume()
       ticks(20)
-      approve('vendor_selection', 'Go with Voltaris; add weekly expediting.')
+      approve('vendor_selection', 'Go with Anvil expedite — tie the ₹26 L fee to the delivery milestone.')
       ticks(5)
       approve('po_release', 'Released.')
       ticks(5)

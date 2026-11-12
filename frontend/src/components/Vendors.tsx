@@ -66,8 +66,11 @@ function VendorCard({ row, firstTotal, chosen }: { row: Row; firstTotal?: number
   const total = o?.total_inr ?? q?.total_inr
   const revised = (q?.revision ?? 1) > 1
   const revAttempt = row.attempts.find((a) => a.outcome === 'revised')
-  const delta = revised && q && firstTotal ? q.total_inr - firstTotal : null
-  const deltaPct = delta != null && firstTotal ? delta / firstTotal : null
+  const parsedOld = revAttempt?.detail.match(/INR\s*([\d,]+)\s*(?:->|→)/)?.[1]
+  const oldTotal = firstTotal ?? (parsedOld ? Number(parsedOld.replace(/,/g, '')) : undefined)
+  const delta = revised && q && oldTotal ? q.total_inr - oldTotal : null
+  const deltaPct = delta != null && oldTotal ? delta / oldTotal : null
+  const revPct = revAttempt?.detail.match(/\(([+−-][\d.]+\s?%)\)/)?.[1]
   const waiting = !q
   const rec = o?.recommended
   const verdict = o?.budget_verdict
@@ -75,7 +78,7 @@ function VendorCard({ row, firstTotal, chosen }: { row: Row; firstTotal?: number
     <div
       data-testid={`vendor-${row.id}`}
       className={cx(
-        'relative rounded-xl border px-3.5 py-3 transition-all duration-500',
+        'relative rounded-xl border px-3.5 py-2.5 transition-all duration-500',
         rec || chosen ? 'border-accent-400/40 bg-accent-400/[0.04] shadow-glow' : 'border-white/[0.06] bg-ink-850/70',
       )}
     >
@@ -104,10 +107,11 @@ function VendorCard({ row, firstTotal, chosen }: { row: Row; firstTotal?: number
           <div className={cx('num text-[17px] font-semibold leading-none', waiting ? 'text-ink-500' : 'text-ink-50')}>{total != null ? inr(total) : '—'}</div>
           {revised && (
             <div className="mt-1 flex justify-end">
-              <Badge tone="danger" testId={`revised-${row.id}`}>
+              {oldTotal != null && <span className="num mr-1.5 self-center text-[10.5px] text-ink-500 line-through">{inr(oldTotal)}</span>}
+              <Badge tone="danger" testId={`revised-${row.id}`} title={revAttempt?.detail}>
                 <TrendingUp className="h-3 w-3" />
                 Rev {q?.revision}
-                {deltaPct != null ? ` +${(deltaPct * 100).toFixed(1)} % · +${inr(delta)}` : revAttempt?.detail ? ` ${revAttempt.detail}` : ''}
+                {deltaPct != null ? ` +${(deltaPct * 100).toFixed(1)} %` : revPct ? ` ${revPct}` : ''}
               </Badge>
             </div>
           )}
@@ -115,7 +119,7 @@ function VendorCard({ row, firstTotal, chosen }: { row: Row; firstTotal?: number
       </div>
 
       {(q || o) && (
-        <div className="mt-2.5 grid grid-cols-4 gap-2">
+        <div className="mt-2 grid grid-cols-4 gap-2">
           <Metric icon={Clock} label="Lead" value={`${o?.lead_time_days ?? q?.lead_time_days ?? '—'} d`} />
           <Metric icon={Truck} label="Delivery" value={o ? dayMonth(o.delivery_date) : '—'} />
           <Metric
@@ -134,7 +138,7 @@ function VendorCard({ row, firstTotal, chosen }: { row: Row; firstTotal?: number
         </div>
       )}
 
-      <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
+      <div className="mt-2 flex flex-wrap items-center gap-1.5">
         {verdict && (
           <Badge tone={VERDICT_TONE[verdict]} dot testId={`verdict-${row.id}`}>
             Budget {verdict}

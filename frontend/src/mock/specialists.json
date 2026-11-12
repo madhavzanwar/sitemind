@@ -1,0 +1,1414 @@
+{
+ "takeoff": {
+  "document": "project_alpha_480V_switchgear_spec.pdf",
+  "lines": [
+   {
+    "item_code": "SWGR-MAIN-4000A",
+    "description": "Main LV switchgear lineup, draw-out ACB incomer",
+    "qty": 4,
+    "unit": "ea",
+    "rating": "4000 A, 65 kA",
+    "source": "project_alpha_480V_switchgear_spec.pdf p4 table 1 row 1"
+   },
+   {
+    "item_code": "BKR-TIE-4000A",
+    "description": "Bus-tie air circuit breaker, draw-out",
+    "qty": 2,
+    "unit": "ea",
+    "rating": "4000 A, 65 kA",
+    "source": "project_alpha_480V_switchgear_spec.pdf p4 table 1 row 2"
+   },
+   {
+    "item_code": "BKR-FDR-1600A",
+    "description": "Feeder ACB, electronic trip LSIG",
+    "qty": 8,
+    "unit": "ea",
+    "rating": "1600 A, 65 kA",
+    "source": "project_alpha_480V_switchgear_spec.pdf p4 table 1 row 3"
+   },
+   {
+    "item_code": "BKR-FDR-800A",
+    "description": "Feeder MCCB, electronic trip LSI",
+    "qty": 16,
+    "unit": "ea",
+    "rating": "800 A, 65 kA",
+    "source": "project_alpha_480V_switchgear_spec.pdf p4 table 1 row 4"
+   },
+   {
+    "item_code": "ATS-1200A-4P",
+    "description": "Automatic transfer switch, 4-pole, open transition",
+    "qty": 4,
+    "unit": "ea",
+    "rating": "1200 A",
+    "source": "project_alpha_480V_switchgear_spec.pdf p4 table 1 row 5"
+   },
+   {
+    "item_code": "MTR-PQ-02S",
+    "description": "Power quality meter, Modbus TCP",
+    "qty": 10,
+    "unit": "ea",
+    "rating": "Class 0.2S",
+    "source": "project_alpha_480V_switchgear_spec.pdf p4 table 1 row 6"
+   },
+   {
+    "item_code": "SPD-T1-200KA",
+    "description": "Surge protective device Type 1+2",
+    "qty": 4,
+    "unit": "ea",
+    "rating": "200 kA",
+    "source": "project_alpha_480V_switchgear_spec.pdf p4 table 1 row 7"
+   },
+   {
+    "item_code": "BUSWAY-4000A-CU",
+    "description": "Sandwich busway, copper, IP54",
+    "qty": 120,
+    "unit": "m",
+    "rating": "4000 A",
+    "source": "project_alpha_480V_switchgear_spec.pdf p4 table 1 row 8"
+   }
+  ],
+  "confidence": 0.92,
+  "warnings": [
+   "SPD-T1-200KA: drawing p3 shows 3 ea (SPD-xx tags) but the equipment schedule lists 4 ea; schedule quantity used - raise an RFI to confirm."
+  ]
+ },
+ "quotes_r1": [
+  {
+   "vendor_id": "V1",
+   "vendor_name": "Voltaris Switchgear Pvt Ltd",
+   "quote_id": "Q-V1-20270111-R1",
+   "revision": 1,
+   "lines": [
+    {
+     "item_code": "SWGR-MAIN-4000A",
+     "qty": 4,
+     "unit_price_inr": 4628000.0,
+     "total_inr": 18512000.0
+    },
+    {
+     "item_code": "BKR-TIE-4000A",
+     "qty": 2,
+     "unit_price_inr": 1319500.0,
+     "total_inr": 2639000.0
+    },
+    {
+     "item_code": "BKR-FDR-1600A",
+     "qty": 8,
+     "unit_price_inr": 558000.0,
+     "total_inr": 4464000.0
+    },
+    {
+     "item_code": "BKR-FDR-800A",
+     "qty": 16,
+     "unit_price_inr": 170200.0,
+     "total_inr": 2723200.0
+    },
+    {
+     "item_code": "ATS-1200A-4P",
+     "qty": 4,
+     "unit_price_inr": 862400.0,
+     "total_inr": 3449600.0
+    },
+    {
+     "item_code": "MTR-PQ-02S",
+     "qty": 10,
+     "unit_price_inr": 64600.0,
+     "total_inr": 646000.0
+    },
+    {
+     "item_code": "SPD-T1-200KA",
+     "qty": 4,
+     "unit_price_inr": 88400.0,
+     "total_inr": 353600.0
+    },
+    {
+     "item_code": "BUSWAY-4000A-CU",
+     "qty": 120,
+     "unit_price_inr": 19400.0,
+     "total_inr": 2328000.0
+    }
+   ],
+   "freight_inr": 360000.0,
+   "total_inr": 35475400.0,
+   "lead_time_days": 140,
+   "valid_until": "2027-02-10",
+   "reliability": 0.82,
+   "status": "received",
+   "received_at": "2027-01-11T09:00:00+05:30",
+   "notes": "Lowest price; type-tested IEC 61439-2 panels but two late deliveries on the last five orders (on-time 82%)."
+  },
+  {
+   "vendor_id": "V2",
+   "vendor_name": "Kestrel Power Systems",
+   "quote_id": "Q-V2-20270111-R1",
+   "revision": 1,
+   "lines": [
+    {
+     "item_code": "SWGR-MAIN-4000A",
+     "qty": 4,
+     "unit_price_inr": 5094400.0,
+     "total_inr": 20377600.0
+    },
+    {
+     "item_code": "BKR-TIE-4000A",
+     "qty": 2,
+     "unit_price_inr": 1406500.0,
+     "total_inr": 2813000.0
+    },
+    {
+     "item_code": "BKR-FDR-1600A",
+     "qty": 8,
+     "unit_price_inr": 601400.0,
+     "total_inr": 4811200.0
+    },
+    {
+     "item_code": "BKR-FDR-800A",
+     "qty": 16,
+     "unit_price_inr": 179400.0,
+     "total_inr": 2870400.0
+    },
+    {
+     "item_code": "ATS-1200A-4P",
+     "qty": 4,
+     "unit_price_inr": 931600.0,
+     "total_inr": 3726400.0
+    },
+    {
+     "item_code": "MTR-PQ-02S",
+     "qty": 10,
+     "unit_price_inr": 66000.0,
+     "total_inr": 660000.0
+    },
+    {
+     "item_code": "SPD-T1-200KA",
+     "qty": 4,
+     "unit_price_inr": 92200.0,
+     "total_inr": 368800.0
+    },
+    {
+     "item_code": "BUSWAY-4000A-CU",
+     "qty": 120,
+     "unit_price_inr": 21200.0,
+     "total_inr": 2544000.0
+    }
+   ],
+   "freight_inr": 480000.0,
+   "total_inr": 38651400.0,
+   "lead_time_days": 112,
+   "valid_until": "2027-01-25",
+   "reliability": 0.93,
+   "status": "received",
+   "received_at": "2027-01-11T09:00:00+05:30",
+   "notes": "Best on-time record (93%) and shortest lead time; prices are list less a 3% early-order discount valid 14 days; copper-indexed price variation clause. Includes 3% early-order discount, valid 14 days."
+  },
+  {
+   "vendor_id": "V3",
+   "vendor_name": "Anvil Electric India",
+   "quote_id": "Q-V3-20270111-R1",
+   "revision": 1,
+   "lines": [
+    {
+     "item_code": "SWGR-MAIN-4000A",
+     "qty": 4,
+     "unit_price_inr": 4836000.0,
+     "total_inr": 19344000.0
+    },
+    {
+     "item_code": "BKR-TIE-4000A",
+     "qty": 2,
+     "unit_price_inr": 1363000.0,
+     "total_inr": 2726000.0
+    },
+    {
+     "item_code": "BKR-FDR-1600A",
+     "qty": 8,
+     "unit_price_inr": 570400.0,
+     "total_inr": 4563200.0
+    },
+    {
+     "item_code": "BKR-FDR-800A",
+     "qty": 16,
+     "unit_price_inr": 175800.0,
+     "total_inr": 2812800.0
+    },
+    {
+     "item_code": "ATS-1200A-4P",
+     "qty": 4,
+     "unit_price_inr": 901600.0,
+     "total_inr": 3606400.0
+    },
+    {
+     "item_code": "MTR-PQ-02S",
+     "qty": 10,
+     "unit_price_inr": 66000.0,
+     "total_inr": 660000.0
+    },
+    {
+     "item_code": "SPD-T1-200KA",
+     "qty": 4,
+     "unit_price_inr": 85500.0,
+     "total_inr": 342000.0
+    },
+    {
+     "item_code": "BUSWAY-4000A-CU",
+     "qty": 120,
+     "unit_price_inr": 20200.0,
+     "total_inr": 2424000.0
+    }
+   ],
+   "freight_inr": 780000.0,
+   "total_inr": 37258400.0,
+   "lead_time_days": 168,
+   "valid_until": "2027-02-25",
+   "reliability": 0.9,
+   "status": "received",
+   "received_at": "2027-01-11T09:00:00+05:30",
+   "notes": "Mid-priced, 90% on-time; standard lead time is long because Line 1 is booked through Q2 2027; expedite slot available for a fee. Expedite available: -42 days for INR 2,600,000."
+  }
+ ],
+ "attempts_r1": [
+  {
+   "vendor_id": "V1",
+   "attempt": 1,
+   "outcome": "timeout",
+   "at": "2027-01-11T09:00:00+05:30",
+   "detail": "no response within 24 h; retrying (attempt 2/3)"
+  },
+  {
+   "vendor_id": "V1",
+   "attempt": 2,
+   "outcome": "timeout",
+   "at": "2027-01-11T09:00:00+05:30",
+   "detail": "no response within 24 h; retrying (attempt 3/3)"
+  },
+  {
+   "vendor_id": "V1",
+   "attempt": 3,
+   "outcome": "ok",
+   "at": "2027-01-11T09:00:00+05:30",
+   "detail": "Q-V1-20270111-R1: INR 35,475,400 ex-GST, lead 140 d"
+  },
+  {
+   "vendor_id": "V2",
+   "attempt": 1,
+   "outcome": "ok",
+   "at": "2027-01-11T09:00:00+05:30",
+   "detail": "Q-V2-20270111-R1: INR 38,651,400 ex-GST, lead 112 d"
+  },
+  {
+   "vendor_id": "V3",
+   "attempt": 1,
+   "outcome": "ok",
+   "at": "2027-01-11T09:00:00+05:30",
+   "detail": "Q-V3-20270111-R1: INR 37,258,400 ex-GST, lead 168 d"
+  }
+ ],
+ "options_initial": [
+  {
+   "option_id": "O-V2",
+   "vendor_id": "V2",
+   "vendor_name": "Kestrel Power Systems",
+   "total_inr": 38651400.0,
+   "lead_time_days": 112,
+   "delivery_date": "2027-06-17",
+   "float_days": 43,
+   "reliability": 0.93,
+   "expedite_fee_inr": 0.0,
+   "budget_verdict": "ok",
+   "meets_deadline": true,
+   "score": 0.73,
+   "recommended": true,
+   "rationale": "Kestrel Power Systems: committed INR 405.8 L (88.2% of budget, ok); delivers 2027-06-17 (+43 d float); on-time record 93%."
+  },
+  {
+   "option_id": "O-V3X",
+   "vendor_id": "V3",
+   "vendor_name": "Anvil Electric India",
+   "total_inr": 39858400.0,
+   "lead_time_days": 126,
+   "delivery_date": "2027-07-01",
+   "float_days": 29,
+   "reliability": 0.9,
+   "expedite_fee_inr": 2600000.0,
+   "budget_verdict": "warn",
+   "meets_deadline": true,
+   "score": 0.654,
+   "recommended": false,
+   "rationale": "Anvil Electric India expedited (-42 d): committed INR 417.2 L (90.7% of budget, warn); delivers 2027-07-01 (+29 d float); on-time record 90%."
+  },
+  {
+   "option_id": "O-V1",
+   "vendor_id": "V1",
+   "vendor_name": "Voltaris Switchgear Pvt Ltd",
+   "total_inr": 35475400.0,
+   "lead_time_days": 140,
+   "delivery_date": "2027-07-15",
+   "float_days": 15,
+   "reliability": 0.82,
+   "expedite_fee_inr": 0.0,
+   "budget_verdict": "ok",
+   "meets_deadline": true,
+   "score": 0.579,
+   "recommended": false,
+   "rationale": "Voltaris Switchgear Pvt Ltd: committed INR 372.5 L (81.0% of budget, ok); delivers 2027-07-15 (+15 d float); on-time record 82%."
+  },
+  {
+   "option_id": "O-V3",
+   "vendor_id": "V3",
+   "vendor_name": "Anvil Electric India",
+   "total_inr": 37258400.0,
+   "lead_time_days": 168,
+   "delivery_date": "2027-08-12",
+   "float_days": -13,
+   "reliability": 0.9,
+   "expedite_fee_inr": 0.0,
+   "budget_verdict": "ok",
+   "meets_deadline": false,
+   "score": 0.406,
+   "recommended": false,
+   "rationale": "Anvil Electric India: committed INR 391.2 L (85.0% of budget, ok); delivers 2027-08-12 (-13 d float); on-time record 90%; INFEASIBLE: misses required-on-site by 13 d."
+  }
+ ],
+ "budgets_initial": [
+  {
+   "vendor_id": "V1",
+   "quote_total_inr": 35475400.0,
+   "contingency_inr": 1773770.0,
+   "committed_inr": 37249170.0,
+   "budget_inr": 46000000.0,
+   "headroom_inr": 8750830.0,
+   "utilisation": 0.8098,
+   "verdict": "ok",
+   "reasons": [
+    "Quote Q-V1-20270111-R1 INR 35,475,400 + 5% contingency INR 1,773,770 = INR 37,249,170 committed vs budget INR 46,000,000 (81.0% utilised).",
+    "Healthy headroom of INR 8,750,830."
+   ]
+  },
+  {
+   "vendor_id": "V2",
+   "quote_total_inr": 38651400.0,
+   "contingency_inr": 1932570.0,
+   "committed_inr": 40583970.0,
+   "budget_inr": 46000000.0,
+   "headroom_inr": 5416030.0,
+   "utilisation": 0.8823,
+   "verdict": "ok",
+   "reasons": [
+    "Quote Q-V2-20270111-R1 INR 38,651,400 + 5% contingency INR 1,932,570 = INR 40,583,970 committed vs budget INR 46,000,000 (88.2% utilised).",
+    "Healthy headroom of INR 5,416,030."
+   ]
+  },
+  {
+   "vendor_id": "V3",
+   "quote_total_inr": 37258400.0,
+   "contingency_inr": 1862920.0,
+   "committed_inr": 39121320.0,
+   "budget_inr": 46000000.0,
+   "headroom_inr": 6878680.0,
+   "utilisation": 0.8505,
+   "verdict": "ok",
+   "reasons": [
+    "Quote Q-V3-20270111-R1 INR 37,258,400 + 5% contingency INR 1,862,920 = INR 39,121,320 committed vs budget INR 46,000,000 (85.0% utilised).",
+    "Healthy headroom of INR 6,878,680."
+   ]
+  }
+ ],
+ "quotes_refreshed": [
+  {
+   "vendor_id": "V1",
+   "vendor_name": "Voltaris Switchgear Pvt Ltd",
+   "quote_id": "Q-V1-20270111-R1",
+   "revision": 1,
+   "lines": [
+    {
+     "item_code": "SWGR-MAIN-4000A",
+     "qty": 4,
+     "unit_price_inr": 4628000.0,
+     "total_inr": 18512000.0
+    },
+    {
+     "item_code": "BKR-TIE-4000A",
+     "qty": 2,
+     "unit_price_inr": 1319500.0,
+     "total_inr": 2639000.0
+    },
+    {
+     "item_code": "BKR-FDR-1600A",
+     "qty": 8,
+     "unit_price_inr": 558000.0,
+     "total_inr": 4464000.0
+    },
+    {
+     "item_code": "BKR-FDR-800A",
+     "qty": 16,
+     "unit_price_inr": 170200.0,
+     "total_inr": 2723200.0
+    },
+    {
+     "item_code": "ATS-1200A-4P",
+     "qty": 4,
+     "unit_price_inr": 862400.0,
+     "total_inr": 3449600.0
+    },
+    {
+     "item_code": "MTR-PQ-02S",
+     "qty": 10,
+     "unit_price_inr": 64600.0,
+     "total_inr": 646000.0
+    },
+    {
+     "item_code": "SPD-T1-200KA",
+     "qty": 4,
+     "unit_price_inr": 88400.0,
+     "total_inr": 353600.0
+    },
+    {
+     "item_code": "BUSWAY-4000A-CU",
+     "qty": 120,
+     "unit_price_inr": 19400.0,
+     "total_inr": 2328000.0
+    }
+   ],
+   "freight_inr": 360000.0,
+   "total_inr": 35475400.0,
+   "lead_time_days": 140,
+   "valid_until": "2027-02-10",
+   "reliability": 0.82,
+   "status": "received",
+   "received_at": "2027-01-11T09:00:00+05:30",
+   "notes": "Lowest price; type-tested IEC 61439-2 panels but two late deliveries on the last five orders (on-time 82%)."
+  },
+  {
+   "vendor_id": "V2",
+   "vendor_name": "Kestrel Power Systems",
+   "quote_id": "Q-V2-20270117-R2",
+   "revision": 2,
+   "lines": [
+    {
+     "item_code": "SWGR-MAIN-4000A",
+     "qty": 4,
+     "unit_price_inr": 5829700.0,
+     "total_inr": 23318800.0
+    },
+    {
+     "item_code": "BKR-TIE-4000A",
+     "qty": 2,
+     "unit_price_inr": 1609500.0,
+     "total_inr": 3219000.0
+    },
+    {
+     "item_code": "BKR-FDR-1600A",
+     "qty": 8,
+     "unit_price_inr": 688200.0,
+     "total_inr": 5505600.0
+    },
+    {
+     "item_code": "BKR-FDR-800A",
+     "qty": 16,
+     "unit_price_inr": 205400.0,
+     "total_inr": 3286400.0
+    },
+    {
+     "item_code": "ATS-1200A-4P",
+     "qty": 4,
+     "unit_price_inr": 1066000.0,
+     "total_inr": 4264000.0
+    },
+    {
+     "item_code": "MTR-PQ-02S",
+     "qty": 10,
+     "unit_price_inr": 75500.0,
+     "total_inr": 755000.0
+    },
+    {
+     "item_code": "SPD-T1-200KA",
+     "qty": 4,
+     "unit_price_inr": 105500.0,
+     "total_inr": 422000.0
+    },
+    {
+     "item_code": "BUSWAY-4000A-CU",
+     "qty": 120,
+     "unit_price_inr": 24300.0,
+     "total_inr": 2916000.0
+    }
+   ],
+   "freight_inr": 480000.0,
+   "total_inr": 44166800.0,
+   "lead_time_days": 112,
+   "valid_until": "2027-01-31",
+   "reliability": 0.93,
+   "status": "revised",
+   "received_at": "2027-01-17T09:00:00+05:30",
+   "notes": "Revision 2 of Q-V2-20270111-R1: Raw copper surcharge +11% (LME Cu up since RFQ); 3% early-order discount withdrawn because the 14-day offer validity lapsed"
+  },
+  {
+   "vendor_id": "V3",
+   "vendor_name": "Anvil Electric India",
+   "quote_id": "Q-V3-20270111-R1",
+   "revision": 1,
+   "lines": [
+    {
+     "item_code": "SWGR-MAIN-4000A",
+     "qty": 4,
+     "unit_price_inr": 4836000.0,
+     "total_inr": 19344000.0
+    },
+    {
+     "item_code": "BKR-TIE-4000A",
+     "qty": 2,
+     "unit_price_inr": 1363000.0,
+     "total_inr": 2726000.0
+    },
+    {
+     "item_code": "BKR-FDR-1600A",
+     "qty": 8,
+     "unit_price_inr": 570400.0,
+     "total_inr": 4563200.0
+    },
+    {
+     "item_code": "BKR-FDR-800A",
+     "qty": 16,
+     "unit_price_inr": 175800.0,
+     "total_inr": 2812800.0
+    },
+    {
+     "item_code": "ATS-1200A-4P",
+     "qty": 4,
+     "unit_price_inr": 901600.0,
+     "total_inr": 3606400.0
+    },
+    {
+     "item_code": "MTR-PQ-02S",
+     "qty": 10,
+     "unit_price_inr": 66000.0,
+     "total_inr": 660000.0
+    },
+    {
+     "item_code": "SPD-T1-200KA",
+     "qty": 4,
+     "unit_price_inr": 85500.0,
+     "total_inr": 342000.0
+    },
+    {
+     "item_code": "BUSWAY-4000A-CU",
+     "qty": 120,
+     "unit_price_inr": 20200.0,
+     "total_inr": 2424000.0
+    }
+   ],
+   "freight_inr": 780000.0,
+   "total_inr": 37258400.0,
+   "lead_time_days": 168,
+   "valid_until": "2027-02-25",
+   "reliability": 0.9,
+   "status": "received",
+   "received_at": "2027-01-11T09:00:00+05:30",
+   "notes": "Mid-priced, 90% on-time; standard lead time is long because Line 1 is booked through Q2 2027; expedite slot available for a fee. Expedite available: -42 days for INR 2,600,000."
+  }
+ ],
+ "attempts_refresh": [
+  {
+   "vendor_id": "V1",
+   "attempt": 1,
+   "outcome": "ok",
+   "at": "2027-01-17T09:00:00+05:30",
+   "detail": "Q-V1-20270111-R1 re-confirmed unchanged"
+  },
+  {
+   "vendor_id": "V2",
+   "attempt": 2,
+   "outcome": "revised",
+   "at": "2027-01-17T09:00:00+05:30",
+   "detail": "Q-V2-20270117-R2: INR 38,651,400 -> 44,166,800 (+14.3%). Revision 2 of Q-V2-20270111-R1: Raw copper surcharge +11% (LME Cu up since RFQ); 3% early-order discount withdrawn because the 14-day offer validity lapsed"
+  },
+  {
+   "vendor_id": "V3",
+   "attempt": 1,
+   "outcome": "ok",
+   "at": "2027-01-17T09:00:00+05:30",
+   "detail": "Q-V3-20270111-R1 re-confirmed unchanged"
+  }
+ ],
+ "options_replan": [
+  {
+   "option_id": "O-V3X",
+   "vendor_id": "V3",
+   "vendor_name": "Anvil Electric India",
+   "total_inr": 39858400.0,
+   "lead_time_days": 126,
+   "delivery_date": "2027-07-01",
+   "float_days": 29,
+   "reliability": 0.9,
+   "expedite_fee_inr": 2600000.0,
+   "budget_verdict": "warn",
+   "meets_deadline": true,
+   "score": 0.654,
+   "recommended": true,
+   "rationale": "Anvil Electric India expedited (-42 d): committed INR 417.2 L (90.7% of budget, warn); delivers 2027-07-01 (+29 d float); on-time record 90%."
+  },
+  {
+   "option_id": "O-V1",
+   "vendor_id": "V1",
+   "vendor_name": "Voltaris Switchgear Pvt Ltd",
+   "total_inr": 35475400.0,
+   "lead_time_days": 140,
+   "delivery_date": "2027-07-15",
+   "float_days": 15,
+   "reliability": 0.82,
+   "expedite_fee_inr": 0.0,
+   "budget_verdict": "ok",
+   "meets_deadline": true,
+   "score": 0.579,
+   "recommended": false,
+   "rationale": "Voltaris Switchgear Pvt Ltd: committed INR 372.5 L (81.0% of budget, ok); delivers 2027-07-15 (+15 d float); on-time record 82%."
+  },
+  {
+   "option_id": "O-V2",
+   "vendor_id": "V2",
+   "vendor_name": "Kestrel Power Systems",
+   "total_inr": 44166800.0,
+   "lead_time_days": 112,
+   "delivery_date": "2027-06-17",
+   "float_days": 43,
+   "reliability": 0.93,
+   "expedite_fee_inr": 0.0,
+   "budget_verdict": "breach",
+   "meets_deadline": true,
+   "score": 0.542,
+   "recommended": false,
+   "rationale": "Kestrel Power Systems rev 2: committed INR 463.8 L (100.8% of budget, breach); delivers 2027-06-17 (+43 d float); on-time record 93%; INFEASIBLE: over budget."
+  },
+  {
+   "option_id": "O-V3",
+   "vendor_id": "V3",
+   "vendor_name": "Anvil Electric India",
+   "total_inr": 37258400.0,
+   "lead_time_days": 168,
+   "delivery_date": "2027-08-12",
+   "float_days": -13,
+   "reliability": 0.9,
+   "expedite_fee_inr": 0.0,
+   "budget_verdict": "ok",
+   "meets_deadline": false,
+   "score": 0.406,
+   "recommended": false,
+   "rationale": "Anvil Electric India: committed INR 391.2 L (85.0% of budget, ok); delivers 2027-08-12 (-13 d float); on-time record 90%; INFEASIBLE: misses required-on-site by 13 d."
+  }
+ ],
+ "budgets_replan": [
+  {
+   "vendor_id": "V1",
+   "quote_total_inr": 35475400.0,
+   "contingency_inr": 1773770.0,
+   "committed_inr": 37249170.0,
+   "budget_inr": 46000000.0,
+   "headroom_inr": 8750830.0,
+   "utilisation": 0.8098,
+   "verdict": "ok",
+   "reasons": [
+    "Quote Q-V1-20270111-R1 INR 35,475,400 + 5% contingency INR 1,773,770 = INR 37,249,170 committed vs budget INR 46,000,000 (81.0% utilised).",
+    "Healthy headroom of INR 8,750,830."
+   ]
+  },
+  {
+   "vendor_id": "V2",
+   "quote_total_inr": 44166800.0,
+   "contingency_inr": 2208340.0,
+   "committed_inr": 46375140.0,
+   "budget_inr": 46000000.0,
+   "headroom_inr": -375140.0,
+   "utilisation": 1.0082,
+   "verdict": "breach",
+   "reasons": [
+    "Quote Q-V2-20270117-R2 INR 44,166,800 + 5% contingency INR 2,208,340 = INR 46,375,140 committed vs budget INR 46,000,000 (100.8% utilised).",
+    "Over budget by INR 375,140; needs re-negotiation, an alternative vendor or a budget exception.",
+    "Quote is revision 2: Revision 2 of Q-V2-20270111-R1: Raw copper surcharge +11% (LME Cu up since RFQ); 3% early-order discount withdrawn because the 14-day offer validity lapsed"
+   ]
+  },
+  {
+   "vendor_id": "V3",
+   "quote_total_inr": 37258400.0,
+   "contingency_inr": 1862920.0,
+   "committed_inr": 39121320.0,
+   "budget_inr": 46000000.0,
+   "headroom_inr": 6878680.0,
+   "utilisation": 0.8505,
+   "verdict": "ok",
+   "reasons": [
+    "Quote Q-V3-20270111-R1 INR 37,258,400 + 5% contingency INR 1,862,920 = INR 39,121,320 committed vs budget INR 46,000,000 (85.0% utilised).",
+    "Healthy headroom of INR 6,878,680."
+   ]
+  }
+ ],
+ "schedules": {
+  "V1": {
+   "vendor_id": "V1",
+   "activities": [
+    {
+     "id": "PO",
+     "name": "PO issued",
+     "duration_days": 0,
+     "depends_on": [],
+     "early_start": 0,
+     "early_finish": 0,
+     "late_start": 0,
+     "late_finish": 0,
+     "slack_days": 0,
+     "critical": true
+    },
+    {
+     "id": "SUB",
+     "name": "Submittals / shop drawings",
+     "duration_days": 14,
+     "depends_on": [
+      "PO"
+     ],
+     "early_start": 0,
+     "early_finish": 14,
+     "late_start": 0,
+     "late_finish": 14,
+     "slack_days": 0,
+     "critical": true
+    },
+    {
+     "id": "APR",
+     "name": "Engineer approval",
+     "duration_days": 10,
+     "depends_on": [
+      "SUB"
+     ],
+     "early_start": 14,
+     "early_finish": 24,
+     "late_start": 14,
+     "late_finish": 24,
+     "slack_days": 0,
+     "critical": true
+    },
+    {
+     "id": "MFG",
+     "name": "Manufacture (vendor lead time)",
+     "duration_days": 140,
+     "depends_on": [
+      "APR"
+     ],
+     "early_start": 24,
+     "early_finish": 164,
+     "late_start": 24,
+     "late_finish": 164,
+     "slack_days": 0,
+     "critical": true
+    },
+    {
+     "id": "ITP",
+     "name": "FAT procedure & ITP approval",
+     "duration_days": 21,
+     "depends_on": [
+      "APR"
+     ],
+     "early_start": 24,
+     "early_finish": 45,
+     "late_start": 143,
+     "late_finish": 164,
+     "slack_days": 119,
+     "critical": false
+    },
+    {
+     "id": "FAT",
+     "name": "Factory acceptance test (witnessed)",
+     "duration_days": 5,
+     "depends_on": [
+      "MFG",
+      "ITP"
+     ],
+     "early_start": 164,
+     "early_finish": 169,
+     "late_start": 164,
+     "late_finish": 169,
+     "slack_days": 0,
+     "critical": true
+    },
+    {
+     "id": "SHP",
+     "name": "Shipping to site (domestic)",
+     "duration_days": 7,
+     "depends_on": [
+      "FAT"
+     ],
+     "early_start": 169,
+     "early_finish": 176,
+     "late_start": 169,
+     "late_finish": 176,
+     "slack_days": 0,
+     "critical": true
+    },
+    {
+     "id": "DEL",
+     "name": "Delivered to site",
+     "duration_days": 0,
+     "depends_on": [
+      "SHP"
+     ],
+     "early_start": 176,
+     "early_finish": 176,
+     "late_start": 176,
+     "late_finish": 176,
+     "slack_days": 0,
+     "critical": true
+    }
+   ],
+   "critical_path": [
+    "PO",
+    "SUB",
+    "APR",
+    "MFG",
+    "FAT",
+    "SHP",
+    "DEL"
+   ],
+   "po_issue_date": "2027-01-20",
+   "delivery_date": "2027-07-15",
+   "required_on_site": "2027-07-30",
+   "float_days": 15,
+   "meets_deadline": true
+  },
+  "V2": {
+   "vendor_id": "V2",
+   "activities": [
+    {
+     "id": "PO",
+     "name": "PO issued",
+     "duration_days": 0,
+     "depends_on": [],
+     "early_start": 0,
+     "early_finish": 0,
+     "late_start": 0,
+     "late_finish": 0,
+     "slack_days": 0,
+     "critical": true
+    },
+    {
+     "id": "SUB",
+     "name": "Submittals / shop drawings",
+     "duration_days": 14,
+     "depends_on": [
+      "PO"
+     ],
+     "early_start": 0,
+     "early_finish": 14,
+     "late_start": 0,
+     "late_finish": 14,
+     "slack_days": 0,
+     "critical": true
+    },
+    {
+     "id": "APR",
+     "name": "Engineer approval",
+     "duration_days": 10,
+     "depends_on": [
+      "SUB"
+     ],
+     "early_start": 14,
+     "early_finish": 24,
+     "late_start": 14,
+     "late_finish": 24,
+     "slack_days": 0,
+     "critical": true
+    },
+    {
+     "id": "MFG",
+     "name": "Manufacture (vendor lead time)",
+     "duration_days": 112,
+     "depends_on": [
+      "APR"
+     ],
+     "early_start": 24,
+     "early_finish": 136,
+     "late_start": 24,
+     "late_finish": 136,
+     "slack_days": 0,
+     "critical": true
+    },
+    {
+     "id": "ITP",
+     "name": "FAT procedure & ITP approval",
+     "duration_days": 21,
+     "depends_on": [
+      "APR"
+     ],
+     "early_start": 24,
+     "early_finish": 45,
+     "late_start": 115,
+     "late_finish": 136,
+     "slack_days": 91,
+     "critical": false
+    },
+    {
+     "id": "FAT",
+     "name": "Factory acceptance test (witnessed)",
+     "duration_days": 5,
+     "depends_on": [
+      "MFG",
+      "ITP"
+     ],
+     "early_start": 136,
+     "early_finish": 141,
+     "late_start": 136,
+     "late_finish": 141,
+     "slack_days": 0,
+     "critical": true
+    },
+    {
+     "id": "SHP",
+     "name": "Shipping to site (domestic)",
+     "duration_days": 7,
+     "depends_on": [
+      "FAT"
+     ],
+     "early_start": 141,
+     "early_finish": 148,
+     "late_start": 141,
+     "late_finish": 148,
+     "slack_days": 0,
+     "critical": true
+    },
+    {
+     "id": "DEL",
+     "name": "Delivered to site",
+     "duration_days": 0,
+     "depends_on": [
+      "SHP"
+     ],
+     "early_start": 148,
+     "early_finish": 148,
+     "late_start": 148,
+     "late_finish": 148,
+     "slack_days": 0,
+     "critical": true
+    }
+   ],
+   "critical_path": [
+    "PO",
+    "SUB",
+    "APR",
+    "MFG",
+    "FAT",
+    "SHP",
+    "DEL"
+   ],
+   "po_issue_date": "2027-01-20",
+   "delivery_date": "2027-06-17",
+   "required_on_site": "2027-07-30",
+   "float_days": 43,
+   "meets_deadline": true
+  },
+  "V3": {
+   "vendor_id": "V3",
+   "activities": [
+    {
+     "id": "PO",
+     "name": "PO issued",
+     "duration_days": 0,
+     "depends_on": [],
+     "early_start": 0,
+     "early_finish": 0,
+     "late_start": 0,
+     "late_finish": 0,
+     "slack_days": 0,
+     "critical": true
+    },
+    {
+     "id": "SUB",
+     "name": "Submittals / shop drawings",
+     "duration_days": 14,
+     "depends_on": [
+      "PO"
+     ],
+     "early_start": 0,
+     "early_finish": 14,
+     "late_start": 0,
+     "late_finish": 14,
+     "slack_days": 0,
+     "critical": true
+    },
+    {
+     "id": "APR",
+     "name": "Engineer approval",
+     "duration_days": 10,
+     "depends_on": [
+      "SUB"
+     ],
+     "early_start": 14,
+     "early_finish": 24,
+     "late_start": 14,
+     "late_finish": 24,
+     "slack_days": 0,
+     "critical": true
+    },
+    {
+     "id": "MFG",
+     "name": "Manufacture (vendor lead time)",
+     "duration_days": 168,
+     "depends_on": [
+      "APR"
+     ],
+     "early_start": 24,
+     "early_finish": 192,
+     "late_start": 24,
+     "late_finish": 192,
+     "slack_days": 0,
+     "critical": true
+    },
+    {
+     "id": "ITP",
+     "name": "FAT procedure & ITP approval",
+     "duration_days": 21,
+     "depends_on": [
+      "APR"
+     ],
+     "early_start": 24,
+     "early_finish": 45,
+     "late_start": 171,
+     "late_finish": 192,
+     "slack_days": 147,
+     "critical": false
+    },
+    {
+     "id": "FAT",
+     "name": "Factory acceptance test (witnessed)",
+     "duration_days": 5,
+     "depends_on": [
+      "MFG",
+      "ITP"
+     ],
+     "early_start": 192,
+     "early_finish": 197,
+     "late_start": 192,
+     "late_finish": 197,
+     "slack_days": 0,
+     "critical": true
+    },
+    {
+     "id": "SHP",
+     "name": "Shipping to site (domestic)",
+     "duration_days": 7,
+     "depends_on": [
+      "FAT"
+     ],
+     "early_start": 197,
+     "early_finish": 204,
+     "late_start": 197,
+     "late_finish": 204,
+     "slack_days": 0,
+     "critical": true
+    },
+    {
+     "id": "DEL",
+     "name": "Delivered to site",
+     "duration_days": 0,
+     "depends_on": [
+      "SHP"
+     ],
+     "early_start": 204,
+     "early_finish": 204,
+     "late_start": 204,
+     "late_finish": 204,
+     "slack_days": 0,
+     "critical": true
+    }
+   ],
+   "critical_path": [
+    "PO",
+    "SUB",
+    "APR",
+    "MFG",
+    "FAT",
+    "SHP",
+    "DEL"
+   ],
+   "po_issue_date": "2027-01-20",
+   "delivery_date": "2027-08-12",
+   "required_on_site": "2027-07-30",
+   "float_days": -13,
+   "meets_deadline": false
+  }
+ },
+ "expedite": {
+  "V3": {
+   "vendor_id": "V3",
+   "days_saved": 42,
+   "fee_inr": 2600000.0,
+   "description": "Priority slot on Line 2 + double-shift assembly + air-freighted ACB modules (−42 days)"
+  }
+ },
+ "memo": {
+  "memo_id": "MEMO-D139F50A",
+  "title": "Project Alpha - 480 V switchgear: vendor selection",
+  "situation": "Kestrel (V2) revised its quote on refresh and now breaches the ₹4.6 Cr ceiling.",
+  "options": [
+   {
+    "option_id": "O-V3X",
+    "vendor_id": "V3",
+    "vendor_name": "Anvil Electric India",
+    "total_inr": 39858400.0,
+    "lead_time_days": 126,
+    "delivery_date": "2027-07-01",
+    "float_days": 29,
+    "reliability": 0.9,
+    "expedite_fee_inr": 2600000.0,
+    "budget_verdict": "warn",
+    "meets_deadline": true,
+    "score": 0.654,
+    "recommended": true,
+    "rationale": "Anvil Electric India expedited (-42 d): committed INR 417.2 L (90.7% of budget, warn); delivers 2027-07-01 (+29 d float); on-time record 90%."
+   },
+   {
+    "option_id": "O-V1",
+    "vendor_id": "V1",
+    "vendor_name": "Voltaris Switchgear Pvt Ltd",
+    "total_inr": 35475400.0,
+    "lead_time_days": 140,
+    "delivery_date": "2027-07-15",
+    "float_days": 15,
+    "reliability": 0.82,
+    "expedite_fee_inr": 0.0,
+    "budget_verdict": "ok",
+    "meets_deadline": true,
+    "score": 0.579,
+    "recommended": false,
+    "rationale": "Voltaris Switchgear Pvt Ltd: committed INR 372.5 L (81.0% of budget, ok); delivers 2027-07-15 (+15 d float); on-time record 82%."
+   },
+   {
+    "option_id": "O-V2",
+    "vendor_id": "V2",
+    "vendor_name": "Kestrel Power Systems",
+    "total_inr": 44166800.0,
+    "lead_time_days": 112,
+    "delivery_date": "2027-06-17",
+    "float_days": 43,
+    "reliability": 0.93,
+    "expedite_fee_inr": 0.0,
+    "budget_verdict": "breach",
+    "meets_deadline": true,
+    "score": 0.542,
+    "recommended": false,
+    "rationale": "Kestrel Power Systems rev 2: committed INR 463.8 L (100.8% of budget, breach); delivers 2027-06-17 (+43 d float); on-time record 93%; INFEASIBLE: over budget."
+   },
+   {
+    "option_id": "O-V3",
+    "vendor_id": "V3",
+    "vendor_name": "Anvil Electric India",
+    "total_inr": 37258400.0,
+    "lead_time_days": 168,
+    "delivery_date": "2027-08-12",
+    "float_days": -13,
+    "reliability": 0.9,
+    "expedite_fee_inr": 0.0,
+    "budget_verdict": "ok",
+    "meets_deadline": false,
+    "score": 0.406,
+    "recommended": false,
+    "rationale": "Anvil Electric India: committed INR 391.2 L (85.0% of budget, ok); delivers 2027-08-12 (-13 d float); on-time record 90%; INFEASIBLE: misses required-on-site by 13 d."
+   }
+  ],
+  "recommendation": "O-V3X",
+  "reasoning": "Recommend O-V3X - Anvil Electric India with expedite (INR 26.0 L): total INR 398.6 L ex-GST, delivery 2027-07-01 (+29 d float), on-time record 90%, score 0.65. Versus O-V1 (Voltaris Switchgear Pvt Ltd, score 0.58): is INR 43.8 L cheaper but has 14 d less float and a 82% vs 90% on-time record. The INR 43.8 L saving buys schedule risk: missing the energisation window delays the data-hall handover, which costs far more than the delta. Rejected O-V2: Kestrel Power Systems rev 2: committed INR 463.8 L (100.8% of budget, breach); delivers 2027-06-17 (+43 d float); on-time record 93%; INFEASIBLE: over budget. Rejected O-V3: Anvil Electric India: committed INR 391.2 L (85.0% of budget, ok); delivers 2027-08-12 (-13 d float); on-time record 90%; INFEASIBLE: misses required-on-site by 13 d.",
+  "risks": [
+   "O-V3X: above the 90% budget warning line - little headroom for variations or copper price movement.",
+   "O-V3X: expedite fee INR 26.0 L must be tied to a contractual delivery date with LDs, payable only on milestone.",
+   "O-V1: Voltaris Switchgear Pvt Ltd on-time record is 82%; expect expediting effort and weekly progress audits."
+  ],
+  "asks": "Approve vendor selection for Project Alpha 480 V switchgear: confirm O-V3X or pick one of O-V3X, O-V1. Approval authorises a PO to be drafted for release by 2027-03-15."
+ },
+ "pos": {
+  "O-V3X": {
+   "po_number": "PO-ALPHA-SWGR-0001",
+   "vendor_id": "V3",
+   "vendor_name": "Anvil Electric India",
+   "project": "Project Alpha",
+   "lines": [
+    {
+     "line_no": 1,
+     "item_code": "SWGR-MAIN-4000A",
+     "description": "Main LV switchgear lineup, draw-out ACB incomer (4000 A, 65 kA)",
+     "qty": 4,
+     "unit_price_inr": 4836000.0,
+     "total_inr": 19344000.0
+    },
+    {
+     "line_no": 2,
+     "item_code": "BKR-TIE-4000A",
+     "description": "Bus-tie air circuit breaker, draw-out (4000 A, 65 kA)",
+     "qty": 2,
+     "unit_price_inr": 1363000.0,
+     "total_inr": 2726000.0
+    },
+    {
+     "line_no": 3,
+     "item_code": "BKR-FDR-1600A",
+     "description": "Feeder ACB, electronic trip LSIG (1600 A, 65 kA)",
+     "qty": 8,
+     "unit_price_inr": 570400.0,
+     "total_inr": 4563200.0
+    },
+    {
+     "line_no": 4,
+     "item_code": "BKR-FDR-800A",
+     "description": "Feeder MCCB, electronic trip LSI (800 A, 65 kA)",
+     "qty": 16,
+     "unit_price_inr": 175800.0,
+     "total_inr": 2812800.0
+    },
+    {
+     "line_no": 5,
+     "item_code": "ATS-1200A-4P",
+     "description": "Automatic transfer switch, 4-pole, open transition (1200 A)",
+     "qty": 4,
+     "unit_price_inr": 901600.0,
+     "total_inr": 3606400.0
+    },
+    {
+     "line_no": 6,
+     "item_code": "MTR-PQ-02S",
+     "description": "Power quality meter, Modbus TCP (Class 0.2S)",
+     "qty": 10,
+     "unit_price_inr": 66000.0,
+     "total_inr": 660000.0
+    },
+    {
+     "line_no": 7,
+     "item_code": "SPD-T1-200KA",
+     "description": "Surge protective device Type 1+2 (200 kA)",
+     "qty": 4,
+     "unit_price_inr": 85500.0,
+     "total_inr": 342000.0
+    },
+    {
+     "line_no": 8,
+     "item_code": "BUSWAY-4000A-CU",
+     "description": "Sandwich busway, copper, IP54 (4000 A)",
+     "qty": 120,
+     "unit_price_inr": 20200.0,
+     "total_inr": 2424000.0
+    }
+   ],
+   "subtotal_inr": 36478400.0,
+   "freight_inr": 780000.0,
+   "expedite_fee_inr": 2600000.0,
+   "gst_inr": 7174512.0,
+   "total_inr": 47032912.0,
+   "delivery_date": "2027-07-01",
+   "payment_terms": "Nil advance, 90% within 30 days of delivery, 10% retention released after SAT",
+   "incoterms": "DAP Project Alpha site, Chakan MIDC (Incoterms 2020)",
+   "terms": [
+    "Contractual delivery: on or before 2027-07-01 (required on site 2027-07-30).",
+    "Liquidated damages: 0.5% of order value per week (or part) of delay beyond the contractual delivery date, capped at 10% of order value.",
+    "Warranty: 24 months from energisation or 30 months from delivery, whichever is earlier; defects rectified at site within 72 h of notice.",
+    "Factory acceptance test: witnessed by Owner and Engineer (5 days) with 14 days' notice; despatch only after signed FAT report and release note.",
+    "Submittals: GA, SLD, wiring diagrams and protection coordination study within 14 days of PO; Engineer review 10 days; manufacture only on approved drawings.",
+    "Compliance: IEC 61439-1/-2 type-tested assemblies, 65 kA 1 s, arc-fault containment per IEC TR 61641; type-test certificates with the first submittal.",
+    "Bank guarantees: advance against ABG of equal value; 10% performance bank guarantee valid for the warranty period plus 3 months.",
+    "Price basis: firm, ex-GST; GST 18% charged on invoice per prevailing law.",
+    "Expedite fee INR 2,600,000.00 is payable only on delivery by the contractual date; forfeited in full if delivery is late (in addition to LDs).",
+    "Reference: vendor quote Q-V3-20270111-R1 rev 1; takeoff from project_alpha_480V_switchgear_spec.pdf."
+   ],
+   "status": "draft",
+   "issued_at": "2027-01-20T10:00:00",
+   "markdown": "# Purchase Order PO-ALPHA-SWGR-0001\n\n**Project:** Project Alpha - 480 V switchgear  \n**Status:** DRAFT  \n**PO date:** 2027-01-20  \n**Contractual delivery:** 2027-07-01  \n**Vendor quote:** Q-V3-20270111-R1 (rev 1)\n\n## Parties\n\n| | |\n|---|---|\n| **Vendor** | Anvil Electric India (V3), Chennai, Tamil Nadu - GSTIN 33AAACA0000C1Z3 - tenders@anvilelectric.example |\n| **Bill to** | Alpha Data Centres Pvt Ltd (synthetic), GSTIN 27AAACA0000Z1Z9, Pune, Maharashtra |\n| **Ship to** | Project Alpha site - 24 MW Tier-III Data Centre, Plot A-7, Chakan MIDC Phase II, Chakan, Pune 410501, Maharashtra, India |\n| **Incoterms** | DAP Project Alpha site, Chakan MIDC (Incoterms 2020) |\n| **Payment terms** | Nil advance, 90% within 30 days of delivery, 10% retention released after SAT |\n\n## Lines\n\n| # | Item code | Description | Qty | Unit price (INR) | Amount (INR) |\n|---:|---|---|---:|---:|---:|\n| 1 | `SWGR-MAIN-4000A` | Main LV switchgear lineup, draw-out ACB incomer (4000 A, 65 kA) | 4 | 4,836,000.00 | 19,344,000.00 |\n| 2 | `BKR-TIE-4000A` | Bus-tie air circuit breaker, draw-out (4000 A, 65 kA) | 2 | 1,363,000.00 | 2,726,000.00 |\n| 3 | `BKR-FDR-1600A` | Feeder ACB, electronic trip LSIG (1600 A, 65 kA) | 8 | 570,400.00 | 4,563,200.00 |\n| 4 | `BKR-FDR-800A` | Feeder MCCB, electronic trip LSI (800 A, 65 kA) | 16 | 175,800.00 | 2,812,800.00 |\n| 5 | `ATS-1200A-4P` | Automatic transfer switch, 4-pole, open transition (1200 A) | 4 | 901,600.00 | 3,606,400.00 |\n| 6 | `MTR-PQ-02S` | Power quality meter, Modbus TCP (Class 0.2S) | 10 | 66,000.00 | 660,000.00 |\n| 7 | `SPD-T1-200KA` | Surge protective device Type 1+2 (200 kA) | 4 | 85,500.00 | 342,000.00 |\n| 8 | `BUSWAY-4000A-CU` | Sandwich busway, copper, IP54 (4000 A) | 120 | 20,200.00 | 2,424,000.00 |\n\n## Totals\n\n| | INR |\n|---|---:|\n| Subtotal (equipment) | 36,478,400.00 |\n| Freight to site | 780,000.00 |\n| Expedite fee | 2,600,000.00 |\n| Taxable value | 39,858,400.00 |\n| GST @ 18% | 7,174,512.00 |\n| **Total payable** | **47,032,912.00** |\n\n## Terms & conditions\n\n1. Contractual delivery: on or before 2027-07-01 (required on site 2027-07-30).\n2. Liquidated damages: 0.5% of order value per week (or part) of delay beyond the contractual delivery date, capped at 10% of order value.\n3. Warranty: 24 months from energisation or 30 months from delivery, whichever is earlier; defects rectified at site within 72 h of notice.\n4. Factory acceptance test: witnessed by Owner and Engineer (5 days) with 14 days' notice; despatch only after signed FAT report and release note.\n5. Submittals: GA, SLD, wiring diagrams and protection coordination study within 14 days of PO; Engineer review 10 days; manufacture only on approved drawings.\n6. Compliance: IEC 61439-1/-2 type-tested assemblies, 65 kA 1 s, arc-fault containment per IEC TR 61641; type-test certificates with the first submittal.\n7. Bank guarantees: advance against ABG of equal value; 10% performance bank guarantee valid for the warranty period plus 3 months.\n8. Price basis: firm, ex-GST; GST 18% charged on invoice per prevailing law.\n9. Expedite fee INR 2,600,000.00 is payable only on delivery by the contractual date; forfeited in full if delivery is late (in addition to LDs).\n10. Reference: vendor quote Q-V3-20270111-R1 rev 1; takeoff from project_alpha_480V_switchgear_spec.pdf.\n\n## Approvals\n\n| Role | Name | Signature | Date |\n|---|---|---|---|\n| Prepared by | SiteMind procurement agent | (system) | 2027-01-20 |\n| Vendor selection approved | Project Manager, Project Alpha | | |\n| PO release approved | Project Director / Commercial Head | | |\n| Accepted by vendor | Anvil Electric India | | |\n\n_Budget ceiling for this package: INR 46,000,000 ex-GST. Generated deterministically by SiteMind; synthetic demo data._\n"
+  },
+  "O-V1": {
+   "po_number": "PO-ALPHA-SWGR-0001",
+   "vendor_id": "V1",
+   "vendor_name": "Voltaris Switchgear Pvt Ltd",
+   "project": "Project Alpha",
+   "lines": [
+    {
+     "line_no": 1,
+     "item_code": "SWGR-MAIN-4000A",
+     "description": "Main LV switchgear lineup, draw-out ACB incomer (4000 A, 65 kA)",
+     "qty": 4,
+     "unit_price_inr": 4628000.0,
+     "total_inr": 18512000.0
+    },
+    {
+     "line_no": 2,
+     "item_code": "BKR-TIE-4000A",
+     "description": "Bus-tie air circuit breaker, draw-out (4000 A, 65 kA)",
+     "qty": 2,
+     "unit_price_inr": 1319500.0,
+     "total_inr": 2639000.0
+    },
+    {
+     "line_no": 3,
+     "item_code": "BKR-FDR-1600A",
+     "description": "Feeder ACB, electronic trip LSIG (1600 A, 65 kA)",
+     "qty": 8,
+     "unit_price_inr": 558000.0,
+     "total_inr": 4464000.0
+    },
+    {
+     "line_no": 4,
+     "item_code": "BKR-FDR-800A",
+     "description": "Feeder MCCB, electronic trip LSI (800 A, 65 kA)",
+     "qty": 16,
+     "unit_price_inr": 170200.0,
+     "total_inr": 2723200.0
+    },
+    {
+     "line_no": 5,
+     "item_code": "ATS-1200A-4P",
+     "description": "Automatic transfer switch, 4-pole, open transition (1200 A)",
+     "qty": 4,
+     "unit_price_inr": 862400.0,
+     "total_inr": 3449600.0
+    },
+    {
+     "line_no": 6,
+     "item_code": "MTR-PQ-02S",
+     "description": "Power quality meter, Modbus TCP (Class 0.2S)",
+     "qty": 10,
+     "unit_price_inr": 64600.0,
+     "total_inr": 646000.0
+    },
+    {
+     "line_no": 7,
+     "item_code": "SPD-T1-200KA",
+     "description": "Surge protective device Type 1+2 (200 kA)",
+     "qty": 4,
+     "unit_price_inr": 88400.0,
+     "total_inr": 353600.0
+    },
+    {
+     "line_no": 8,
+     "item_code": "BUSWAY-4000A-CU",
+     "description": "Sandwich busway, copper, IP54 (4000 A)",
+     "qty": 120,
+     "unit_price_inr": 19400.0,
+     "total_inr": 2328000.0
+    }
+   ],
+   "subtotal_inr": 35115400.0,
+   "freight_inr": 360000.0,
+   "expedite_fee_inr": 0.0,
+   "gst_inr": 6385572.0,
+   "total_inr": 41860972.0,
+   "delivery_date": "2027-07-15",
+   "payment_terms": "10% advance against advance bank guarantee, 80% against delivery & inspection, 10% after SAT / energisation",
+   "incoterms": "DAP Project Alpha site, Chakan MIDC (Incoterms 2020)",
+   "terms": [
+    "Contractual delivery: on or before 2027-07-15 (required on site 2027-07-30).",
+    "Liquidated damages: 0.5% of order value per week (or part) of delay beyond the contractual delivery date, capped at 10% of order value.",
+    "Warranty: 24 months from energisation or 30 months from delivery, whichever is earlier; defects rectified at site within 72 h of notice.",
+    "Factory acceptance test: witnessed by Owner and Engineer (5 days) with 14 days' notice; despatch only after signed FAT report and release note.",
+    "Submittals: GA, SLD, wiring diagrams and protection coordination study within 14 days of PO; Engineer review 10 days; manufacture only on approved drawings.",
+    "Compliance: IEC 61439-1/-2 type-tested assemblies, 65 kA 1 s, arc-fault containment per IEC TR 61641; type-test certificates with the first submittal.",
+    "Bank guarantees: advance against ABG of equal value; 10% performance bank guarantee valid for the warranty period plus 3 months.",
+    "Price basis: firm, ex-GST; GST 18% charged on invoice per prevailing law.",
+    "Reference: vendor quote Q-V1-20270111-R1 rev 1; takeoff from project_alpha_480V_switchgear_spec.pdf."
+   ],
+   "status": "draft",
+   "issued_at": "2027-01-20T10:00:00",
+   "markdown": "# Purchase Order PO-ALPHA-SWGR-0001\n\n**Project:** Project Alpha - 480 V switchgear  \n**Status:** DRAFT  \n**PO date:** 2027-01-20  \n**Contractual delivery:** 2027-07-15  \n**Vendor quote:** Q-V1-20270111-R1 (rev 1)\n\n## Parties\n\n| | |\n|---|---|\n| **Vendor** | Voltaris Switchgear Pvt Ltd (V1), Nashik, Maharashtra - GSTIN 27AAACV0000A1Z1 - rfq@voltaris.example |\n| **Bill to** | Alpha Data Centres Pvt Ltd (synthetic), GSTIN 27AAACA0000Z1Z9, Pune, Maharashtra |\n| **Ship to** | Project Alpha site - 24 MW Tier-III Data Centre, Plot A-7, Chakan MIDC Phase II, Chakan, Pune 410501, Maharashtra, India |\n| **Incoterms** | DAP Project Alpha site, Chakan MIDC (Incoterms 2020) |\n| **Payment terms** | 10% advance against advance bank guarantee, 80% against delivery & inspection, 10% after SAT / energisation |\n\n## Lines\n\n| # | Item code | Description | Qty | Unit price (INR) | Amount (INR) |\n|---:|---|---|---:|---:|---:|\n| 1 | `SWGR-MAIN-4000A` | Main LV switchgear lineup, draw-out ACB incomer (4000 A, 65 kA) | 4 | 4,628,000.00 | 18,512,000.00 |\n| 2 | `BKR-TIE-4000A` | Bus-tie air circuit breaker, draw-out (4000 A, 65 kA) | 2 | 1,319,500.00 | 2,639,000.00 |\n| 3 | `BKR-FDR-1600A` | Feeder ACB, electronic trip LSIG (1600 A, 65 kA) | 8 | 558,000.00 | 4,464,000.00 |\n| 4 | `BKR-FDR-800A` | Feeder MCCB, electronic trip LSI (800 A, 65 kA) | 16 | 170,200.00 | 2,723,200.00 |\n| 5 | `ATS-1200A-4P` | Automatic transfer switch, 4-pole, open transition (1200 A) | 4 | 862,400.00 | 3,449,600.00 |\n| 6 | `MTR-PQ-02S` | Power quality meter, Modbus TCP (Class 0.2S) | 10 | 64,600.00 | 646,000.00 |\n| 7 | `SPD-T1-200KA` | Surge protective device Type 1+2 (200 kA) | 4 | 88,400.00 | 353,600.00 |\n| 8 | `BUSWAY-4000A-CU` | Sandwich busway, copper, IP54 (4000 A) | 120 | 19,400.00 | 2,328,000.00 |\n\n## Totals\n\n| | INR |\n|---|---:|\n| Subtotal (equipment) | 35,115,400.00 |\n| Freight to site | 360,000.00 |\n| Taxable value | 35,475,400.00 |\n| GST @ 18% | 6,385,572.00 |\n| **Total payable** | **41,860,972.00** |\n\n## Terms & conditions\n\n1. Contractual delivery: on or before 2027-07-15 (required on site 2027-07-30).\n2. Liquidated damages: 0.5% of order value per week (or part) of delay beyond the contractual delivery date, capped at 10% of order value.\n3. Warranty: 24 months from energisation or 30 months from delivery, whichever is earlier; defects rectified at site within 72 h of notice.\n4. Factory acceptance test: witnessed by Owner and Engineer (5 days) with 14 days' notice; despatch only after signed FAT report and release note.\n5. Submittals: GA, SLD, wiring diagrams and protection coordination study within 14 days of PO; Engineer review 10 days; manufacture only on approved drawings.\n6. Compliance: IEC 61439-1/-2 type-tested assemblies, 65 kA 1 s, arc-fault containment per IEC TR 61641; type-test certificates with the first submittal.\n7. Bank guarantees: advance against ABG of equal value; 10% performance bank guarantee valid for the warranty period plus 3 months.\n8. Price basis: firm, ex-GST; GST 18% charged on invoice per prevailing law.\n9. Reference: vendor quote Q-V1-20270111-R1 rev 1; takeoff from project_alpha_480V_switchgear_spec.pdf.\n\n## Approvals\n\n| Role | Name | Signature | Date |\n|---|---|---|---|\n| Prepared by | SiteMind procurement agent | (system) | 2027-01-20 |\n| Vendor selection approved | Project Manager, Project Alpha | | |\n| PO release approved | Project Director / Commercial Head | | |\n| Accepted by vendor | Voltaris Switchgear Pvt Ltd | | |\n\n_Budget ceiling for this package: INR 46,000,000 ex-GST. Generated deterministically by SiteMind; synthetic demo data._\n"
+  }
+ }
+}

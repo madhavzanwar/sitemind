@@ -42,7 +42,9 @@ scenes:
     actions:
       - { do: goto, path: "/" }
       - { do: wait_selector, testid: launch-button, timeout: 30 }
-      - { do: highlight, testid: launch-button, hold: 1.2 }
+      - { do: type, testid: goal-input, delay: 18, optional: true }
+      - { do: highlight, testid: budget-input, hold: 0.8, optional: true }
+      - { do: highlight, testid: launch-button, hold: 0.6 }
       - { do: launch }
 
   - id: 3
@@ -77,12 +79,13 @@ scenes:
       - { do: wait_run, until: "(s.vendor_attempts||[]).some(a => a.outcome === 'timeout')", timeout: 150 }
       - { do: highlight, testid: vendor-table, hold: 2.5 }
       - { do: wait_run, until: "(s.quotes||[]).some(q => q.status === 'revised' || q.revision > 1)", timeout: 150, optional: true }
-      - { do: highlight, testid: budget-chart, hold: 2.5 }
+      - { do: highlight, testid: revised-V2, hold: 1.5, optional: true }
+      - { do: highlight, testid: budget-chart, hold: 2.0 }
       # hold the narration first, then catch the re-plan and go straight to the kill (scene 6)
       # so the worker is still mid-run when it is killed
       - { do: hold_narration, early: 2.5 }
       - { do: wait_run, until: "(s.plan && s.plan.version >= 2) || (s.plan_history||[]).length >= 2", timeout: 180 }
-      - { do: highlight, testid: task-graph, hold: 1.8 }
+      - { do: highlight, testid: plan-diff, hold: 1.8, optional: true }
 
   - id: 6
     title: "Kill the worker"
@@ -109,9 +112,10 @@ scenes:
       - { do: wait_run, until: "s.status === 'running' || s.status === 'waiting_human' || s.status === 'completed'", timeout: 60 }
       - { do: wait_run, until: "(s.worker && s.worker.restarts >= 1) || s.status !== 'killed'", timeout: 30, optional: true }
       - { do: click, testid: tab-audit }
+      - { do: click, testid: audit-view-ledger }
       - { do: wait_run, until: "(s.ledger||[]).some(l => l.executions >= 2)", timeout: 90, optional: true }
-      - { do: highlight_text, text: "×2", fallback_testid: tab-audit, hold: 2.5 }
-      - { do: scroll, testid: tab-audit, dy: 400, optional: true }
+      - { do: pause, s: 1.2 }
+      - { do: highlight, testid: ledger-dedup, hold: 3.0 }
 
   - id: 8
     title: "A human signs off"

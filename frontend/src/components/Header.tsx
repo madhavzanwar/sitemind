@@ -3,6 +3,7 @@ import type { Health, RunSnapshot } from '../types'
 import { cx, simClock, simDay } from '../lib/format'
 import { Button } from './ui'
 import { Logo } from './Logo'
+import { IS_MOCK } from '../api'
 
 export function Header({
   snap,
@@ -40,7 +41,9 @@ export function Header({
           <div className="text-[17px] font-semibold tracking-tight text-ink-50">
             Site<span className="text-accent-400">Mind</span>
           </div>
-          <div className="mt-1 text-[10px] font-medium uppercase tracking-[0.16em] text-ink-400">Procurement agent</div>
+          <div className="mt-1 text-[10px] font-medium uppercase tracking-[0.16em] text-ink-400">
+            Procurement agent{IS_MOCK && <span className="ml-1.5 rounded bg-white/[0.06] px-1 text-ink-300">mock</span>}
+          </div>
         </div>
       </button>
 

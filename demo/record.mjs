@@ -11,6 +11,7 @@
 //   highlight {testid, hold}         glide the fake cursor to it + amber ring, hold seconds
 //   highlight_text {text, fallback_testid, hold}
 //   click {testid, optional}         glide + click
+//   type {testid, text?, delay}      retype a field (default: its current value)
 //   scroll {testid, dy}              wheel-scroll over an element
 //   launch / kill / resume           click the button (falls back to the REST API)
 //   approve                          approve the first pending approval (UI, else API)
@@ -193,6 +194,18 @@ async function doAction(page, a, warnings, ctx = {}) {
       await focus(page, tid(page, a.testid), a.hold ?? 0.4, { click: true }).catch((e) => fail(`click ${a.testid}: ${e.message.split('\n')[0]}`));
       await sleep(500);
       break;
+    case 'type': { // retype a field visibly (the value is usually prefilled from /api/demo/defaults)
+      const loc = tid(page, a.testid);
+      try {
+        await focus(page, loc, 0.3, { click: true });
+        let text = a.text;
+        if (!text) text = await loc.inputValue();
+        await loc.fill('');
+        await loc.pressSequentially(text, { delay: a.delay ?? 22 });
+        await sleep(400);
+      } catch (e) { fail(`type ${a.testid}: ${e.message.split('\n')[0]}`); }
+      break;
+    }
     case 'scroll': {
       const b = await tid(page, a.testid).boundingBox().catch(() => null);
       if (!b) { fail(`scroll ${a.testid}`); break; }
@@ -277,6 +290,7 @@ const context = await browser.newContext({
 });
 await context.addInitScript(OVERLAY);
 const page = await context.newPage();
+page.setDefaultTimeout(4000);
 T0 = Date.now(); // video timeline starts with the page
 await page.goto(BASE + '/', { waitUntil: 'load' }).catch((e) => log('goto failed', e.message));
 await page.mouse.move(cursor.x, cursor.y);

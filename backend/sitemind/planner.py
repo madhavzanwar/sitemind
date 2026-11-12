@@ -166,7 +166,10 @@ def ready_tasks(plan: Plan) -> list[PlanTask]:
 
 
 def is_complete(plan: Plan) -> bool:
-    return all(t.status in (TaskStatus.done, TaskStatus.skipped) for t in plan.tasks)
+    """No live work left (failed = rejected approvals already handled by a re-plan)."""
+    return all(
+        t.status in (TaskStatus.done, TaskStatus.skipped, TaskStatus.failed) for t in plan.tasks
+    )
 
 
 def descendants(plan: Plan, task_id: str) -> set[str]:
@@ -347,9 +350,9 @@ def make_plan(
     tasks: list[PlanTask] = []
     n = 1
 
-    def add(*a: Any, **kw: Any) -> PlanTask:
+    def add(action: str, title: str, deps: list[str], **kw: Any) -> PlanTask:
         nonlocal n
-        t = _mk(n, *a, deadlines=dl, version=1, **kw)
+        t = _mk(n, action, title, deps, dl, 1, **kw)
         tasks.append(t)
         n += 1
         return t
@@ -469,7 +472,9 @@ def replan(
         if parse_trigger(t)[0]
         in ("budget_breach", "quote_revised", "deadline_break", "vendor_unresponsive")
     ]
-    rejections = [parse_trigger(t)[1] for t in triggers if parse_trigger(t)[0] == "approval_rejected"]
+    rejections = [
+        parse_trigger(t)[1] for t in triggers if parse_trigger(t)[0] == "approval_rejected"
+    ]
 
     if eval_triggers:
         old_ranks = live("rank")

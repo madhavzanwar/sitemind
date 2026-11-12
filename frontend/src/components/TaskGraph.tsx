@@ -257,8 +257,9 @@ function Node({ task, x, y, frozen }: { task: PlanTask; x: number; y: number; fr
   const StIcon = STATUS_ICON[task.status]
   const skipped = task.status === 'skipped'
   const live = task.status === 'running' || task.status === 'waiting_human'
-  const meta =
-    task.status === 'done' && task.finished_at
+  const meta = skipped
+    ? 'superseded'
+    : task.status === 'done' && task.finished_at
       ? `done ${dayMonth(task.finished_at)}`
       : task.status === 'running'
         ? frozen

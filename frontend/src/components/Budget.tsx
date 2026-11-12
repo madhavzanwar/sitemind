@@ -172,7 +172,7 @@ function Chart({ snap }: { snap: RunSnapshot }) {
           <path d={`${fPath} V${T + ph} H${x(t0)} Z`} fill="url(#fArea)" />
           {over && <path d={fPath} fill="none" stroke="#F43F5E" strokeWidth={6} opacity={0.25} clipPath="url(#overBudget)" />}
           <line x1={L} x2={w - R} y1={y(b.budget_inr)} y2={y(b.budget_inr)} stroke={C_BUDGET} strokeWidth={1.5} strokeDasharray="5 4" />
-          <text x={w - R} y={y(b.budget_inr) - 5} textAnchor="end" className="fill-ink-200 text-[10px] font-medium">
+          <text x={L + 6} y={y(b.budget_inr) - 5} className="fill-ink-200 text-[10px] font-medium">
             Budget {inr(b.budget_inr)}
           </text>
           <path d={fPath} fill="none" stroke={C_FORECAST} strokeWidth={2} strokeLinejoin="round" />

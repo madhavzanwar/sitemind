@@ -116,7 +116,7 @@ function AuditTable({ rows }: { rows: AuditEntry[] }) {
           <th className="th w-52">Action</th>
           <th className="th">Summary</th>
           <th className="th w-28 text-right">Cost</th>
-          <th className="th w-24 text-right">Confidence</th>
+          <th className="th w-32 text-right">Confidence</th>
           <th className="th w-16 text-center">Plan</th>
         </tr>
       </thead>
@@ -152,7 +152,7 @@ function AuditTable({ rows }: { rows: AuditEntry[] }) {
                 <td className="td num text-right text-ink-200">{r.cost_inr ? inr(r.cost_inr) : <span className="text-ink-600">—</span>}</td>
                 <td className="td text-right">
                   {r.confidence != null ? (
-                    <span className="inline-flex items-center gap-2">
+                    <span className="inline-flex items-center gap-2 whitespace-nowrap">
                       <span className="h-1 w-10 overflow-hidden rounded-full bg-white/[0.06]">
                         <span className="block h-full rounded-full bg-sky-400" style={{ width: `${r.confidence * 100}%` }} />
                       </span>

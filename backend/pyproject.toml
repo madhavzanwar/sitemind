@@ -55,4 +55,4 @@ markers = [
   "llm: hits a real local LLM (ollama); skipped if unreachable",
   "slow: long-running integration tests",
 ]
-addopts = "-q"
+addopts = "-q -m 'not llm'"
