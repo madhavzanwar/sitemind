@@ -1,0 +1,145 @@
+# SiteMind demo video script.
+#
+# Each scene has:
+#   id / title      chapter tag shown top-left in the video
+#   card            (optional) title-card name rendered by demo/titlecards.py instead of the dashboard
+#   narration       list of sentences; each one is synthesised separately (exact subtitle timing).
+#                   `say:` overrides the spoken form (pronunciation), `text:` is what the subtitle shows.
+#   actions         dashboard actions performed by demo/record.mjs (see that file for the DSL)
+#   min_s           (optional) minimum scene length in seconds (default: narration length + pad)
+#
+# Run conditions (`until:`) are JavaScript expressions evaluated against the latest RunSnapshot `s`
+# (GET /api/runs/{id}); see backend/sitemind/models.py for its fields.
+
+meta:
+  voice: en_US-lessac-high
+  length_scale: 1.0          # >1 = slower speech
+  sentence_gap_s: 0.28       # silence between sentences
+  scene_lead_s: 0.35         # silence before narration starts in each scene
+  scene_tail_s: 0.6          # hold after narration ends
+  max_total_s: 178           # hard cap (Devpost allows 5 min; we aim for <= 3:00)
+  max_speedup: 6.0           # long agent waits are time-lapsed (labelled on screen) up to this factor
+  base_url: http://localhost:8000
+
+scenes:
+  - id: 1
+    title: "The problem"
+    card: title
+    narration:
+      - text: "This is SiteMind: a durable procurement agent for construction."
+        say: "This is SiteMind. A durable procurement agent for construction."
+      - text: "On a 24 MW data-centre job, long-lead 480 V switchgear is the number-one schedule risk."
+        say: "On a twenty four megawatt data centre job, long-lead, four-eighty volt switchgear is the number one schedule risk."
+      - text: "Today, coordinators juggle quotes, lead times and budgets in email and Excel, for weeks."
+        say: "Today, procurement coordinators juggle quotes, lead times and budgets in email and Excel, for weeks."
+
+  - id: 2
+    title: "A goal in plain English"
+    narration:
+      - text: "We hand SiteMind one goal, in plain English."
+      - text: "Order the 480 V switchgear for Project Alpha by 15 March 2027, within ₹4.6 crore."
+        say: "Get the four-eighty volt switchgear for Project Alpha ordered by the fifteenth of March, twenty twenty seven, within four point six crore rupees."
+    actions:
+      - { do: goto, path: "/" }
+      - { do: wait_selector, testid: launch-button, timeout: 30 }
+      - { do: highlight, testid: launch-button, hold: 1.2 }
+      - { do: launch }
+
+  - id: 3
+    title: "It plans the job"
+    narration:
+      - text: "A local model on this laptop drafts the plan: a task graph with deadlines, budget and risks."
+      - text: "Each step is assigned to a specialist agent, and the simulated clock starts on day one."
+    actions:
+      - { do: click, testid: tab-overview, optional: true }
+      - { do: wait_run, until: "s.plan && s.plan.tasks && s.plan.tasks.length > 0", timeout: 120 }
+      - { do: highlight, testid: task-graph, hold: 2.5 }
+      - { do: highlight, testid: sim-clock, hold: 1.5 }
+
+  - id: 4
+    title: "Specialists at work"
+    narration:
+      - text: "The takeoff specialist reads the switchgear spec PDF and extracts every line item, with its source."
+      - text: "Then requests for quotation go out to three mock vendors, each sent exactly once."
+    actions:
+      - { do: wait_run, until: "!!s.takeoff", timeout: 120 }
+      - { do: highlight, testid: timeline, hold: 2.0 }
+      - { do: wait_run, until: "(s.ledger||[]).filter(l => l.kind && l.kind.startsWith('rfq')).length >= 1 || (s.vendor_attempts||[]).length >= 1", timeout: 120 }
+      - { do: highlight, testid: vendor-table, hold: 2.5 }
+
+  - id: 5
+    title: "Things go wrong. It re-plans."
+    narration:
+      - text: "Real vendors are messy. Voltaris times out twice; the agent backs off and retries."
+      - text: "Kestrel then revises its price by eleven percent, which breaks the budget."
+      - text: "SiteMind notices, and re-plans to version two instead of blindly continuing."
+    actions:
+      - { do: wait_run, until: "(s.vendor_attempts||[]).some(a => a.outcome === 'timeout')", timeout: 150 }
+      - { do: highlight, testid: vendor-table, hold: 2.5 }
+      - { do: wait_run, until: "(s.quotes||[]).some(q => q.status === 'revised' || q.revision > 1)", timeout: 150, optional: true }
+      - { do: highlight, testid: budget-chart, hold: 2.5 }
+      - { do: wait_run, until: "(s.plan && s.plan.version >= 2) || (s.plan_history||[]).length >= 2", timeout: 180 }
+      - { do: highlight, testid: task-graph, hold: 2.5 }
+
+  - id: 6
+    title: "Kill the worker"
+    narration:
+      - text: "Now the hard part. We kill the worker process, mid-run, with SIGKILL."
+        say: "Now the hard part. We kill the worker process, mid-run, with sig-kill."
+      - text: "No graceful shutdown. The agent is simply gone."
+    actions:
+      - { do: wait_run, until: "s.status === 'running' && s.worker && s.worker.alive", timeout: 60, optional: true }
+      - { do: highlight, testid: worker-status, hold: 1.2 }
+      - { do: kill }
+      - { do: wait_run, until: "s.status === 'killed' || (s.worker && !s.worker.alive)", timeout: 30 }
+      - { do: highlight, testid: worker-status, hold: 2.0 }
+
+  - id: 7
+    title: "Resume from checkpoint"
+    narration:
+      - text: "A fresh worker resumes from the last LangGraph checkpoint, saved after every task."
+      - text: "The action ledger shows it: the interrupted step was requested twice, but executed only once."
+      - text: "No duplicate emails. No duplicate orders."
+    actions:
+      - { do: highlight, testid: resume-button, hold: 1.0 }
+      - { do: resume }
+      - { do: wait_run, until: "s.status === 'running' || s.status === 'waiting_human' || s.status === 'completed'", timeout: 60 }
+      - { do: wait_run, until: "(s.worker && s.worker.restarts >= 1) || s.status !== 'killed'", timeout: 30, optional: true }
+      - { do: click, testid: tab-audit }
+      - { do: wait_run, until: "(s.ledger||[]).some(l => l.executions >= 2)", timeout: 90, optional: true }
+      - { do: highlight_text, text: "×2", fallback_testid: tab-audit, hold: 2.5 }
+      - { do: scroll, testid: tab-audit, dy: 400, optional: true }
+
+  - id: 8
+    title: "A human signs off"
+    narration:
+      - text: "Before anything that can't be undone, SiteMind stops and asks a person."
+      - text: "The decision memo ranks every option on cost, delivery float and reliability, and recommends one."
+      - text: "The project manager approves it."
+    actions:
+      - { do: wait_run, until: "(s.approvals||[]).some(a => a.status === 'pending')", timeout: 180 }
+      - { do: click, testid: tab-approvals }
+      - { do: highlight, testid: approvals-inbox, hold: 3.0 }
+      - { do: scroll, testid: approvals-inbox, dy: 300, optional: true }
+      - { do: approve }
+
+  - id: 9
+    title: "Purchase order sent"
+    narration:
+      - text: "It drafts the purchase order, asks once more before release, then sends it exactly once."
+      - text: "Every decision, specialist call and rupee is in the audit trail."
+    actions:
+      - { do: approve_all, until: "(s.po && s.po.status === 'sent') || s.status === 'completed'", timeout: 180 }
+      - { do: click, testid: tab-po }
+      - { do: wait_selector, testid: po-package, timeout: 20 }
+      - { do: highlight, testid: po-package, hold: 2.5 }
+      - { do: scroll, testid: po-package, dy: 500, optional: true }
+      - { do: highlight, testid: run-status, hold: 1.5 }
+
+  - id: 10
+    title: "Impact"
+    card: closing
+    narration:
+      - text: "Weeks of chasing, down to minutes. Every decision audited."
+      - text: "It survives crashes without repeating itself, and it is open source, running on a laptop with a local model."
+      - text: "SiteMind."

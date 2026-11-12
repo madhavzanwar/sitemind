@@ -1,0 +1,145 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    @apply bg-ink-950 font-sans text-ink-100 antialiased;
+    font-feature-settings: 'cv11', 'ss01', 'ss03', 'tnum' 0;
+    background-image:
+      radial-gradient(1200px 600px at 15% -10%, rgba(255, 178, 36, 0.06), transparent 60%),
+      radial-gradient(900px 500px at 110% 10%, rgba(56, 189, 248, 0.045), transparent 60%);
+    background-attachment: fixed;
+  }
+  ::selection {
+    background: rgba(255, 178, 36, 0.3);
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
+  }
+  input,
+  textarea,
+  select {
+    color-scheme: dark;
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-2xl border border-white/[0.06] bg-ink-900/80 backdrop-blur-sm;
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.03),
+      0 1px 2px rgba(0, 0, 0, 0.4),
+      0 12px 32px -16px rgba(0, 0, 0, 0.7);
+  }
+  .num {
+    font-variant-numeric: tabular-nums;
+    @apply font-mono;
+  }
+  .field {
+    @apply w-full rounded-lg border border-white/10 bg-ink-950/60 px-3 py-2 text-sm text-ink-50 outline-none transition placeholder:text-ink-500 focus:border-accent-400/60 focus:ring-2 focus:ring-accent-400/20;
+  }
+  .striped {
+    background-image: repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.18) 0 6px, transparent 6px 12px);
+  }
+  .grid-bg {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  .th {
+    @apply px-3 py-2 text-left text-[10.5px] font-semibold uppercase tracking-[0.1em] text-ink-400;
+  }
+  .td {
+    @apply px-3 py-2.5 align-middle;
+  }
+}
+
+/* Rendered PO markdown */
+.po-md h1 {
+  @apply mb-1 text-2xl font-semibold tracking-tight text-ink-50;
+}
+.po-md h2 {
+  @apply mb-3 mt-8 border-b border-white/[0.06] pb-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-accent-300;
+}
+.po-md p {
+  @apply my-2 text-[13.5px] leading-relaxed text-ink-200;
+}
+.po-md strong {
+  @apply font-semibold text-ink-50;
+}
+.po-md ul {
+  @apply my-2 space-y-1.5 pl-0;
+}
+.po-md li {
+  @apply relative pl-5 text-[13px] leading-relaxed text-ink-200;
+}
+.po-md li::before {
+  content: '';
+  @apply absolute left-1 top-[0.6em] h-1.5 w-1.5 rounded-sm bg-accent-400/70;
+}
+.po-md table {
+  @apply my-3 w-full border-collapse overflow-hidden rounded-lg text-[12.5px];
+}
+.po-md thead th {
+  @apply border-b border-white/10 bg-white/[0.03] px-3 py-2 text-[10.5px] font-semibold uppercase tracking-[0.08em] text-ink-400;
+}
+.po-md td {
+  @apply border-b border-white/[0.05] px-3 py-2 text-ink-200;
+  font-variant-numeric: tabular-nums;
+}
+.po-md td:nth-last-child(-n + 3) {
+  @apply font-mono text-[12px];
+}
+.po-md tr:last-child td {
+  @apply border-b-0;
+}
+.po-md code {
+  @apply rounded bg-white/[0.05] px-1.5 py-0.5 font-mono text-[11.5px] text-accent-200;
+}
+.po-md blockquote {
+  @apply mt-6 rounded-lg border-l-2 border-accent-400/60 bg-accent-400/[0.05] px-4 py-2 text-ink-300;
+}
+.po-md blockquote p {
+  @apply text-[12.5px] text-ink-300;
+}
+.po-md em {
+  @apply text-ink-400;
+}
+
+@keyframes stamp-in {
+  0% {
+    opacity: 0;
+    transform: rotate(-14deg) scale(1.8);
+  }
+  60% {
+    opacity: 1;
+    transform: rotate(-14deg) scale(0.94);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(-14deg) scale(1);
+  }
+}
+.stamp {
+  animation: stamp-in 0.55s cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}

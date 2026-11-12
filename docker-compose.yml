@@ -1,0 +1,68 @@
+# One command: `docker compose up --build`  ->  dashboard on http://localhost:8000
+# First start downloads the qwen2.5:3b model (~1.9 GB) into the `ollama` volume.
+name: sitemind
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    restart: unless-stopped
+    volumes:
+      - ollama:/root/.ollama
+    ports:
+      - "11434:11434"
+    environment:
+      OLLAMA_KEEP_ALIVE: 24h
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+
+  # One-shot: pull the model into the shared volume, then exit.
+  ollama-pull:
+    image: ollama/ollama:latest
+    depends_on:
+      ollama:
+        condition: service_healthy
+    volumes:
+      - ollama:/root/.ollama
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+    entrypoint: ["/bin/sh", "-c"]
+    command: ["ollama pull ${SITEMIND_LLM_MODEL:-qwen2.5:3b}"]
+    restart: "no"
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: sitemind:latest
+    depends_on:
+      ollama:
+        condition: service_healthy
+      ollama-pull:
+        condition: service_completed_successfully
+    ports:
+      - "8000:8000"
+    environment:
+      OLLAMA_BASE_URL: http://ollama:11434
+      SITEMIND_LLM_PROVIDER: ${SITEMIND_LLM_PROVIDER:-ollama}
+      SITEMIND_LLM_MODEL: ${SITEMIND_LLM_MODEL:-qwen2.5:3b}
+      SITEMIND_STEP_DELAY: ${SITEMIND_STEP_DELAY:-1.5}
+      SITEMIND_DATA: /data
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_BASE_URL: ${OPENAI_BASE_URL:-}
+    volumes:
+      - sitemind-data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8000/api/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    restart: unless-stopped
+
+volumes:
+  ollama:
+  sitemind-data:

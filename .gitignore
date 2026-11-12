@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+build/
+dist/
+
+# Node / frontend
+node_modules/
+frontend/dist/
+frontend/dist-mock/
+test-results/
+playwright-report/
+e2e/test-results/
+
+# Runtime data
+.data/
+**/.data/
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+*.log
+.env
+
+# Demo pipeline (regenerable) — keep demo sources and the final video
+demo/voices/
+demo/build/
+demo/recordings/
+!submission/
+!submission/sitemind_demo.mp4
+
+# OS / editors
+.DS_Store
+.idea/
+.vscode/
