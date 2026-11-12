@@ -127,7 +127,7 @@ td .mono, td.mono { font-size: 19px; }
 .loop .ln.a { border-color: rgba(255,178,36,.5); color: var(--amber); }
 .loop .arr { flex: none; width: 20px; min-width: 0; }
 
-.reg td { padding-top: 9px; padding-bottom: 9px; font-size: 20px; white-space: nowrap; }
+.reg td { padding-top: 12px; padding-bottom: 12px; font-size: 20px; white-space: nowrap; }
 .reg td.mono { font-size: 17px; }
 /* ---------- slide 5 ---------- */
 .ledger { font-family: var(--mono); font-size: 18px; }
@@ -140,6 +140,7 @@ td .mono, td.mono { font-size: 19px; }
 .kline { display: grid; grid-template-columns: 110px 1fr; gap: 16px; padding: 9px 0; border-bottom: 1px solid var(--line); align-items: baseline; }
 .kline:last-child { border-bottom: 0; }
 .kline .t { font-family: var(--mono); font-size: 17px; color: var(--t3); }
+.kline .t.red { color: var(--red); } .kline .t.green { color: var(--green); }
 .kline .d { font-size: 21px; color: var(--t2); line-height: 1.35; }
 .proof { display: grid; grid-template-columns: repeat(5, 1fr); padding: 22px 0; }
 .proof .stat { padding: 0 28px; border-left: 1px solid var(--line); }
@@ -148,7 +149,7 @@ td .mono, td.mono { font-size: 19px; }
 .proof .k { font-size: 18px; }
 
 /* ---------- slide 6 ---------- */
-.ev { display: grid; grid-template-columns: 150px 1fr; gap: 24px; padding: 22px 28px; }
+.ev { display: grid; grid-template-columns: 150px 1fr; gap: 24px; padding: 22px 28px; flex: 1; align-items: center; }
 .ev .when { font-family: var(--mono); font-size: 18px; color: var(--t3); line-height: 1.5; }
 .ev h3 { font-size: 25px; margin-bottom: 8px; }
 .ev p { font-size: 21px; line-height: 1.42; }
@@ -167,7 +168,7 @@ td .mono, td.mono { font-size: 19px; }
 .gate .ln { font-size: 19px; padding: 9px 13px; border-radius: 9px; border: 1px solid var(--line2); background: var(--bg2); color: var(--t1); white-space: nowrap; }
 .gate .ln.a { border-color: rgba(255,178,36,.5); color: var(--amber); background: var(--amber-bg); }
 .gate .arr { flex: none; width: 22px; min-width: 0; }
-.trail .r { display: grid; grid-template-columns: 128px 108px 1fr; gap: 14px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 19px; line-height: 1.35; color: var(--t2); }
+.trail .r { display: grid; grid-template-columns: 128px 108px 1fr; gap: 14px; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 19px; line-height: 1.35; color: var(--t2); }
 .trail .r:last-child { border-bottom: 0; }
 .trail .r .mono { font-size: 16px; color: var(--t3); padding-top: 3px; }
 .trail .act { font-family: var(--mono); font-size: 16px; padding-top: 3px; }
@@ -188,9 +189,10 @@ ul.tight li::before { content: ""; position: absolute; left: 4px; top: 12px; wid
 .stack .kline { grid-template-columns: 150px 1fr; padding: 9px 0; }
 .stack .kline .d { font-size: 20px; }
 
+.wl .ln { font-size: 16px !important; padding: 5px 8px !important; } .wl .arr { width: 12px !important; margin: 0 4px; }
 /* ---------- slide 9 ---------- */
-.crit { display: grid; grid-template-columns: 250px 1fr; gap: 32px; padding: 22px 30px; align-items: center; }
-.crit .w { font-size: 58px; font-weight: 650; letter-spacing: -.03em; line-height: 1; color: var(--amber); }
+.crit { display: grid; grid-template-columns: 250px 1fr; gap: 32px; padding: 15px 30px; align-items: center; }
+.crit .w { font-size: 52px; font-weight: 650; letter-spacing: -.03em; line-height: 1; color: var(--amber); }
 .crit .nm { font-size: 24px; font-weight: 600; margin-top: 8px; }
 .crit .q { font-size: 17px; color: var(--t3); margin-top: 6px; line-height: 1.35; }
 .crit ul.tight li { margin-top: 5px; font-size: 21px; }
@@ -354,7 +356,7 @@ ul.tight li::before { content: ""; position: absolute; left: 4px; top: 12px; wid
           <div class="loop">
             <span class="ln">plan</span><i class="arr"></i><span class="ln a">execute</span><i class="arr"></i><span class="ln">monitor</span><i class="arr"></i><span class="ln">replan</span><i class="arr"></i><span class="ln">finish</span>
           </div>
-          <p style="font-size: 20px; margin-top: 14px">The monitor compares facts with the plan after every task. A trigger sends the run through <span class="mono">replan</span> and back to <span class="mono">execute</span>.</p>
+          <p style="font-size: 20px; margin-top: 12px">After every task the monitor compares facts with the plan. A trigger routes through <span class="mono">replan</span>.</p>
         </div>
         <div class="panel" style="flex: 1; padding: 22px 28px">
           <div class="label">Who decides what</div>
@@ -420,7 +422,7 @@ ul.tight li::before { content: ""; position: absolute; left: 4px; top: 12px; wid
       </div>
     </div>
   </div>
-  <div class="foot"><span class="brand"><svg><use href="#mark"/></svg>SiteMind · figures from <span style="color: var(--t2)">python -m sitemind.cli demo --provider off --kill-after 12</span> · screenshot: a dashboard run killed two tasks later</span><span>05 / 10</span></div>
+  <div class="foot"><span class="brand"><svg><use href="#mark"/></svg>SiteMind · figures from <span style="color: var(--t2)">python -m sitemind.cli demo --provider off --kill-after 12</span> · screenshot: a separate dashboard run, killed a few tasks later</span><span>05 / 10</span></div>
 </section>
 
 <!-- ============================== 6  FAILURES & RE-PLAN ============================== -->
@@ -498,6 +500,7 @@ ul.tight li::before { content: ""; position: absolute; left: 4px; top: 12px; wid
           <li>The option sits above the 90 % budget warning line.</li>
           <li>The ₹26 L expedite fee should be payable only against a delivery milestone with LDs.</li>
         </ul>
+        <p style="font-size: 20px; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--line)">Demo run: vendor approved on sim 2027-02-04, PO release approved on 2027-02-10.</p>
       </div>
       <div class="panel" style="padding: 22px 28px">
         <div class="label">Two approval gates · no process runs while the agent waits</div>
@@ -544,10 +547,10 @@ ul.tight li::before { content: ""; position: absolute; left: 4px; top: 12px; wid
         <div class="box"><div class="t">FastAPI <span class="mono dim" style="font-size: 17px">:8000</span></div><div class="d">Creates runs, records approvals, spawns and kills workers.</div></div>
         <div class="hz"><i class="arr"></i></div>
         <div class="box w" style="grid-row: span 2; display: flex; flex-direction: column">
-          <div class="t">Worker process <span class="mono dim" style="font-size: 16px; font-weight: 400">python -m sitemind.runner &lt;run_id&gt;</span></div>
-          <div class="d">One OS process per active run, with a per-run file lock.</div>
-          <div class="loop" style="margin-top: 14px; flex-wrap: wrap; row-gap: 8px">
-            <span class="ln" style="font-size: 17px; padding: 6px 10px">plan</span><i class="arr" style="width: 16px"></i><span class="ln a" style="font-size: 17px; padding: 6px 10px">execute</span><i class="arr" style="width: 16px"></i><span class="ln" style="font-size: 17px; padding: 6px 10px">monitor</span><i class="arr" style="width: 16px"></i><span class="ln" style="font-size: 17px; padding: 6px 10px">replan</span><i class="arr" style="width: 16px"></i><span class="ln" style="font-size: 17px; padding: 6px 10px">finish</span>
+          <div class="t">Worker process</div>
+          <div class="d"><span class="mono">python -m sitemind.runner &lt;run_id&gt;</span><br>One OS process per active run, with a per-run file lock.</div>
+          <div class="loop wl" style="margin-top: 14px">
+            <span class="ln">plan</span><i class="arr"></i><span class="ln a">execute</span><i class="arr"></i><span class="ln">monitor</span><i class="arr"></i><span class="ln">replan</span><i class="arr"></i><span class="ln">finish</span>
           </div>
           <div class="d" style="margin-top: 12px">LangGraph <span class="mono">StateGraph</span>. <span class="mono">interrupt()</span> parks the run for a human; <span class="mono">Command(resume=…)</span> continues it.</div>
         </div>
