@@ -53,9 +53,11 @@ Long agent waits are time-lapsed and labelled with the speed factor.
 - Record at 1920×1080. Keep the "synthetic data" label visible in every dashboard scene.
 - Scene 6: kill while the worker status reads alive and the run is `running`, not while it
   waits for a human.
-- Scene 7: the ledger's de-duplication summary (`ledger-dedup`) must be on screen when the ledger line is spoken. In the reference
-  run the ledger entries with `executions = 2` are the two `approval.requested` keys, which
-  appear in scenes 8 and 9. <!-- TODO verify: confirm a ×2 ledger row is visible at scene 7 with the kill timing used in the recording; if not, kill later (for example during an RFQ or negotiation step) or move the ledger shot after the first approval -->
+- Scene 7: the ledger's de-duplication summary (`ledger-dedup`) must be on screen when the ledger line is spoken. The recorder's `kill_when` action
+  parks the cursor on Kill and fires the instant `current_node` matches a side-effect task's
+  pacing window (negotiate / expedite / escalate). In the rendered video the kill lands in
+  `T18-escalate:pacing`, so after resume the ledger shows `T18-escalate:notify:pm` as
+  "×2 requested · executed once" (verified on frame `submission/frames/scene_07.png`).
 - Scene 8: the reviewer in the video is the project manager (`project.manager@alpha`).
 - Name the model in the description under the video: Qwen2.5-3B-Instruct via Ollama, local CPU.
 
@@ -73,4 +75,4 @@ Sentences in this script that are not yet in `demo/script.yaml`:
 | 8 | Added: "Anvil's expedited slot, twenty-six lakh extra, on site before the deadline. Voltaris is cheaper, but would arrive late." |
 | 9 | Added: "four point seven crore with GST, thirty-three days ahead of the order-by date." |
 
-<!-- TODO verify: copy these sentences into demo/script.yaml (owner: video) and confirm the rendered length stays under max_total_s: 178 -->
+These sentences are in `demo/script.yaml`; the rendered video is 2:47 (167 s), under the 178 s cap.

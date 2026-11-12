@@ -1,132 +1,132 @@
 1
-00:00:00,350 --> 00:00:04,288
+00:00:00,350 --> 00:00:04,413
 This is SiteMind: a durable procurement agent for construction.
 
 2
-00:00:04,318 --> 00:00:10,767
+00:00:04,443 --> 00:00:10,921
 On a 24 MW data-centre job, long-lead 480 V switchgear is the number-one
 schedule risk.
 
 3
-00:00:10,797 --> 00:00:17,336
+00:00:10,951 --> 00:00:16,919
 Today, coordinators juggle quotes, lead times and budgets in email and
 Excel, for weeks.
 
 4
-00:00:17,366 --> 00:00:23,061
+00:00:16,949 --> 00:00:22,746
 Project Alpha is a Tier-III build at Chakan, Pune, and one missed date
 slips energisation.
 
 5
-00:00:24,450 --> 00:00:27,377
+00:00:24,117 --> 00:00:27,137
 We hand SiteMind one goal, in plain English.
 
 6
-00:00:27,407 --> 00:00:35,283
+00:00:27,167 --> 00:00:35,049
 Order the 480 V switchgear for Project Alpha by 15 March 2027, within ₹4.6 crore.
 
 7
-00:00:36,250 --> 00:00:42,609
+00:00:36,017 --> 00:00:42,166
 A local model on this laptop drafts the plan: a task graph with deadlines,
 budget and risks.
 
 8
-00:00:42,639 --> 00:00:44,832
+00:00:42,196 --> 00:00:44,276
 Fourteen tasks, five risks.
 
 9
-00:00:44,862 --> 00:00:49,980
+00:00:44,306 --> 00:00:49,265
 Each step is assigned to a specialist agent, and the simulated clock
 starts on day one.
 
 10
-00:00:50,950 --> 00:00:57,093
+00:00:50,250 --> 00:00:56,524
 The takeoff specialist reads the switchgear spec PDF and extracts every
 line item, with its source.
 
 11
-00:00:57,123 --> 00:01:01,961
+00:00:56,554 --> 00:01:01,580
 It finds eight items, and flags one mismatch against the drawing for an RFI.
 
 12
-00:01:01,991 --> 00:01:07,194
+00:01:01,610 --> 00:01:06,703
 Then requests for quotation go out to three mock vendors, each sent
 exactly once.
 
 13
-00:01:07,224 --> 00:01:09,527
+00:01:06,733 --> 00:01:08,993
 The vendors and prices are synthetic.
 
 14
-00:01:10,517 --> 00:01:16,007
+00:01:09,983 --> 00:01:15,668
 Real vendors are messy. Voltaris times out twice; the agent backs off and retries.
 
 15
-00:01:16,037 --> 00:01:22,861
+00:01:15,698 --> 00:01:22,668
 Kestrel then revises its price up fourteen percent, a copper surcharge
 plus a lost discount, which breaks the budget.
 
 16
-00:01:22,891 --> 00:01:27,654
+00:01:22,698 --> 00:01:27,724
 SiteMind notices, and re-plans to version two instead of blindly continuing.
 
 17
-00:01:28,650 --> 00:01:32,908
+00:01:28,717 --> 00:01:32,862
 Now the hard part. We kill the worker process, mid-run, with SIGKILL.
 
 18
-00:01:32,938 --> 00:01:36,104
+00:01:32,892 --> 00:01:36,085
 No graceful shutdown. The agent is simply gone.
 
 19
-00:01:37,083 --> 00:01:42,363
+00:01:41,717 --> 00:01:46,628
 A fresh worker resumes from the last LangGraph checkpoint, saved after every task.
 
 20
-00:01:42,393 --> 00:01:49,484
+00:01:46,658 --> 00:01:53,574
 The action ledger shows it: every action appears once, and anything
 requested twice was still executed only once.
 
 21
-00:01:49,514 --> 00:01:52,863
+00:01:53,604 --> 00:01:56,935
 No duplicate emails. No duplicate orders.
 
 22
-00:01:53,850 --> 00:01:58,454
+00:01:57,917 --> 00:02:02,403
 Before anything that can't be undone, SiteMind stops and asks a person.
 
 23
-00:01:58,484 --> 00:02:09,520
+00:02:02,433 --> 00:02:13,649
 The decision memo ranks every option on cost, delivery float and
 reliability, and recommends one: Anvil's expedited slot, ₹26 lakh extra,
 on site before the deadline.
 
 24
-00:02:09,550 --> 00:02:12,354
+00:02:13,679 --> 00:02:16,436
 Voltaris is cheaper, but would arrive late.
 
 25
-00:02:12,384 --> 00:02:14,514
+00:02:16,466 --> 00:02:18,486
 The project manager approves it.
 
 26
-00:02:15,483 --> 00:02:25,821
+00:02:19,450 --> 00:02:29,837
 It drafts the purchase order, asks once more before release, then sends it
 exactly once: ₹4.7 crore with GST, 33 days ahead of the order-by date.
 
 27
-00:02:25,851 --> 00:02:29,587
+00:02:29,867 --> 00:02:33,707
 Every decision, specialist call and rupee is in the audit trail.
 
 28
-00:02:30,583 --> 00:02:34,133
+00:02:34,683 --> 00:02:38,424
 Weeks of chasing, down to minutes. Every decision audited.
 
 29
-00:02:34,163 --> 00:02:40,581
+00:02:38,454 --> 00:02:45,041
 It survives crashes without repeating itself, and it is open source,
 running on a laptop with a local model.
 
 30
-00:02:40,611 --> 00:02:41,575
+00:02:45,071 --> 00:02:46,119
 SiteMind.

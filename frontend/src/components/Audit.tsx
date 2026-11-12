@@ -66,7 +66,7 @@ export function Audit({ snap }: { snap: RunSnapshot }) {
           )}
           {view === 'ledger' && dedup > 0 && (
             <Badge tone="success">
-              <ShieldCheck className="h-3 w-3" /> {dedup} keys deduplicated on resume
+              <ShieldCheck className="h-3 w-3" /> {dedup} {dedup === 1 ? 'key' : 'keys'} deduplicated on resume
             </Badge>
           )}
           <div className="relative">
