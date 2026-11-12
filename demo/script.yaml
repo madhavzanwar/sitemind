@@ -78,8 +78,11 @@ scenes:
       - { do: highlight, testid: vendor-table, hold: 2.5 }
       - { do: wait_run, until: "(s.quotes||[]).some(q => q.status === 'revised' || q.revision > 1)", timeout: 150, optional: true }
       - { do: highlight, testid: budget-chart, hold: 2.5 }
+      # hold the narration first, then catch the re-plan and go straight to the kill (scene 6)
+      # so the worker is still mid-run when it is killed
+      - { do: hold_narration, early: 2.5 }
       - { do: wait_run, until: "(s.plan && s.plan.version >= 2) || (s.plan_history||[]).length >= 2", timeout: 180 }
-      - { do: highlight, testid: task-graph, hold: 2.5 }
+      - { do: highlight, testid: task-graph, hold: 1.8 }
 
   - id: 6
     title: "Kill the worker"
@@ -88,8 +91,8 @@ scenes:
         say: "Now the hard part. We kill the worker process, mid-run, with sig-kill."
       - text: "No graceful shutdown. The agent is simply gone."
     actions:
-      - { do: wait_run, until: "s.status === 'running' && s.worker && s.worker.alive", timeout: 60, optional: true }
-      - { do: highlight, testid: worker-status, hold: 1.2 }
+      - { do: wait_run, until: "s.status === 'running' && s.worker && s.worker.alive", timeout: 8, optional: true }
+      - { do: highlight, testid: worker-status, hold: 0.8 }
       - { do: kill }
       - { do: wait_run, until: "s.status === 'killed' || (s.worker && !s.worker.alive)", timeout: 30 }
       - { do: highlight, testid: worker-status, hold: 2.0 }

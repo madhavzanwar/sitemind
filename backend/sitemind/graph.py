@@ -83,7 +83,7 @@ DURATION_DAYS: dict[str, float] = {
 }
 RFQ_WINDOW_DAYS = 2.0
 RFQ_MAX_ATTEMPTS = 3
-PO_BUFFER_DAYS = 5.0  # schedule-risk buffer on the projected PO issue date
+PO_BUFFER_DAYS = 3.0  # schedule-risk buffer on the projected PO issue date
 REPLAN_HOURS = 3.0
 PROCESS_COST_INR: dict[str, float] = {
     "takeoff": 21_000.0,
@@ -1181,9 +1181,8 @@ def _save_projection(
 
 def _load(state: RunState) -> tuple[Plan | None, dict[str, Any], datetime]:
     plan = Plan.model_validate(state["plan"]) if state.get("plan") else None
-    facts = dict(state.get("facts") or {})
-    # deep-ish copy so in-node mutation never touches the checkpointed object
-    facts = Plan.model_construct().__class__ and _deepcopy(facts)
+    # deep copy so in-node mutation never touches the checkpointed object
+    facts: dict[str, Any] = _deepcopy(dict(state.get("facts") or {}))
     return plan, facts, datetime.fromisoformat(state["sim_now"])
 
 

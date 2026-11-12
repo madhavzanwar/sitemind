@@ -17,6 +17,7 @@
 //   approve_all {until, timeout}     keep approving pending approvals until `until` holds
 //   wait_run {until, timeout, optional}  poll GET /api/runs/{id} until JS expr on `s` is true
 //   pause {s}
+//   hold_narration {early}         sleep until the scene's narration is (nearly) over
 // Every scene lasts at least its narration length (demo/build/narration.json) + scene_tail_s.
 import { createRequire } from 'node:module';
 import fs from 'node:fs';
@@ -168,7 +169,7 @@ async function approveOnce(page) {
   return true;
 }
 
-async function doAction(page, a, warnings) {
+async function doAction(page, a, warnings, ctx = {}) {
   const opt = !!a.optional;
   const fail = (msg) => { if (!opt) { warnings.push(msg); log('  WARN', msg); } else log('  (optional)', msg); };
   switch (a.do) {
@@ -247,6 +248,11 @@ async function doAction(page, a, warnings) {
     case 'pause':
       await sleep((a.s || 1) * 1000);
       break;
+    case 'hold_narration': { // wait until the scene has lasted its narration (minus `early` seconds)
+      const remain = ctx.minS - (a.early || 0) - ((Date.now() - T0) / 1000 - ctx.start);
+      if (remain > 0) await sleep(remain * 1000);
+      break;
+    }
     default:
       fail(`unknown action ${a.do}`);
   }
@@ -284,7 +290,7 @@ for (const sc of SCRIPT.scenes) {
   const warnings = [];
   log(`scene ${sc.id} "${sc.title}" (min ${minS.toFixed(1)}s)`);
   for (const a of sc.actions || []) {
-    try { await doAction(page, a, warnings); } catch (e) { warnings.push(`${a.do}: ${e.message}`); log('  ERR', a.do, e.message); }
+    try { await doAction(page, a, warnings, { start, minS }); } catch (e) { warnings.push(`${a.do}: ${e.message}`); log('  ERR', a.do, e.message); }
   }
   const remain = minS - ((Date.now() - T0) / 1000 - start);
   if (remain > 0) await sleep(remain * 1000);
