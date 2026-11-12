@@ -108,8 +108,8 @@ def render_segment(seg: dict, video: Path | None, out: Path) -> None:
     if seg["speed"] > 1.15 and FONT_BOLD:
         label = f"TIME-LAPSE  {seg['speed']:.1f}x"
         vf.append(
-            f"drawtext=fontfile={FONT_BOLD}:text='{label}':fontsize=26:fontcolor=0x06080C:"
-            "x=w-tw-48:y=40:box=1:boxcolor=0xFFB224@0.92:boxborderw=14")
+            f"drawtext=fontfile={FONT_BOLD}:text='{label}':fontsize=24:fontcolor=0x06080C:"
+            "x=(w-tw)/2:y=h-th-150:box=1:boxcolor=0xFFB224@0.92:boxborderw=12")
     run(["ffmpeg", "-y", "-v", "error", "-ss", f"{seg['start']:.3f}", "-t",
          f"{seg['src_dur']:.3f}", "-i", str(video), "-vf", ",".join(vf), "-t", f"{d:.3f}",
          *enc(), "-an", str(out)])

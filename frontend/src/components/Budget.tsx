@@ -96,7 +96,7 @@ function Chart({ snap }: { snap: RunSnapshot }) {
     return () => ro.disconnect()
   }, [])
   const b = snap.budget
-  const pts = b.points.map((p) => ({ t: parseTime(p.sim_time), f: p.forecast_inr, c: p.committed_inr, iso: p.sim_time }))
+  const pts = b.points.map((p) => ({ t: parseTime(p.sim_time), f: p.forecast_inr, c: p.committed_inr, iso: p.sim_time })).filter((p) => p.f > 0 || p.c > 0)
   const nowT = parseTime(snap.sim_now)
   const t0 = parseTime(snap.sim_start)
   const t1 = Math.max(nowT, t0 + 86_400_000 * 7, ...pts.map((p) => p.t))

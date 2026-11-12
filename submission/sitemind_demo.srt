@@ -1,0 +1,109 @@
+1
+00:00:00,350 --> 00:00:04,174
+This is SiteMind: a durable procurement agent for construction.
+
+2
+00:00:04,204 --> 00:00:10,672
+On a 24 MW data-centre job, long-lead 480 V switchgear is the number-one
+schedule risk.
+
+3
+00:00:10,702 --> 00:00:16,691
+Today, coordinators juggle quotes, lead times and budgets in email and
+Excel, for weeks.
+
+4
+00:00:18,083 --> 00:00:21,202
+We hand SiteMind one goal, in plain English.
+
+5
+00:00:21,232 --> 00:00:28,963
+Order the 480 V switchgear for Project Alpha by 15 March 2027, within ₹4.6 crore.
+
+6
+00:00:29,950 --> 00:00:36,328
+A local model on this laptop drafts the plan: a task graph with deadlines,
+budget and risks.
+
+7
+00:00:36,358 --> 00:00:41,406
+Each step is assigned to a specialist agent, and the simulated clock
+starts on day one.
+
+8
+00:00:53,483 --> 00:00:59,448
+The takeoff specialist reads the switchgear spec PDF and extracts every
+line item, with its source.
+
+9
+00:00:59,478 --> 00:01:04,475
+Then requests for quotation go out to three mock vendors, each sent
+exactly once.
+
+10
+00:01:05,450 --> 00:01:11,179
+Real vendors are messy. Voltaris times out twice; the agent backs off and retries.
+
+11
+00:01:11,209 --> 00:01:15,716
+Kestrel then revises its price by eleven percent, which breaks the budget.
+
+12
+00:01:15,746 --> 00:01:20,637
+SiteMind notices, and re-plans to version two instead of blindly continuing.
+
+13
+00:01:38,683 --> 00:01:42,871
+Now the hard part. We kill the worker process, mid-run, with SIGKILL.
+
+14
+00:01:42,901 --> 00:01:46,053
+No graceful shutdown. The agent is simply gone.
+
+15
+00:01:47,050 --> 00:01:52,208
+A fresh worker resumes from the last LangGraph checkpoint, saved after every task.
+
+16
+00:01:52,238 --> 00:01:57,807
+The action ledger shows it: the interrupted step was requested twice, but
+executed only once.
+
+17
+00:01:57,837 --> 00:02:01,239
+No duplicate emails. No duplicate orders.
+
+18
+00:02:07,850 --> 00:02:12,572
+Before anything that can't be undone, SiteMind stops and asks a person.
+
+19
+00:02:12,602 --> 00:02:18,812
+The decision memo ranks every option on cost, delivery float and
+reliability, and recommends one.
+
+20
+00:02:18,842 --> 00:02:20,884
+The project manager approves it.
+
+21
+00:02:24,217 --> 00:02:30,099
+It drafts the purchase order, asks once more before release, then sends it
+exactly once.
+
+22
+00:02:30,129 --> 00:02:33,988
+Every decision, specialist call and rupee is in the audit trail.
+
+23
+00:02:34,983 --> 00:02:38,676
+Weeks of chasing, down to minutes. Every decision audited.
+
+24
+00:02:38,706 --> 00:02:45,315
+It survives crashes without repeating itself, and it is open source,
+running on a laptop with a local model.
+
+25
+00:02:45,345 --> 00:02:46,347
+SiteMind.

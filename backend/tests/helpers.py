@@ -32,7 +32,5 @@ def wait_for(
         if snap.status.value == "failed":
             raise AssertionError(f"run failed: {snap.error}")
         if time.monotonic() > deadline:
-            raise AssertionError(
-                f"timeout waiting; status={snap.status} node={snap.current_node}"
-            )
+            raise AssertionError(f"timeout waiting; status={snap.status} node={snap.current_node}")
         time.sleep(poll)

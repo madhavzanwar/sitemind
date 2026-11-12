@@ -42,15 +42,19 @@ const STATUS_ICON: Record<PlanTask['status'], LucideIcon> = {
 }
 
 const NODE_W = 150
-const NODE_H = 62
+const NODE_H = 58
+const SKIP_H = 40
 const COL_GAP = 26
-const ROW_GAP = 14
+const SUB_GAP = 12
+const ROW_GAP = 12
 const PAD = 8
+const MAX_ROWS = 3
 
 interface Placed {
   task: PlanTask
   x: number
   y: number
+  h: number
 }
 
 function layout(plan: Plan) {
@@ -69,34 +73,39 @@ function layout(plan: Plan) {
     return d
   }
   plan.tasks.forEach((t) => visit(t.id, new Set()))
-  const cols = new Map<number, PlanTask[]>()
-  plan.tasks.forEach((t) => {
-    const d = depth.get(t.id) ?? 0
-    cols.set(d, [...(cols.get(d) ?? []), t])
-  })
-  const nCols = Math.max(0, ...cols.keys()) + 1
-  let activeRows = 1
-  let skippedRows = 0
-  cols.forEach((ts) => {
-    activeRows = Math.max(activeRows, ts.filter((t) => t.status !== 'skipped').length)
-    skippedRows = Math.max(skippedRows, ts.filter((t) => t.status === 'skipped').length)
-  })
+  const nDepth = Math.max(0, ...depth.values()) + 1
+  // Each depth becomes one or more sub-columns of at most MAX_ROWS active tasks.
+  const active: PlanTask[][] = Array.from({ length: nDepth }, () => [])
+  const skipped: PlanTask[][] = Array.from({ length: nDepth }, () => [])
+  plan.tasks.forEach((t) => (t.status === 'skipped' ? skipped : active)[depth.get(t.id) ?? 0]!.push(t))
+  const subCols = active.map((ts, d) => Math.max(1, Math.ceil(ts.length / MAX_ROWS), Math.ceil(skipped[d]!.length / 2)))
+  const activeRows = Math.max(1, ...active.map((ts, d) => Math.ceil(ts.length / subCols[d]!)))
+  const skippedRows = Math.max(0, ...skipped.map((ts, d) => Math.ceil(ts.length / subCols[d]!)))
+  const bandGap = skippedRows ? 22 : 0
+  const activeH = activeRows * (NODE_H + ROW_GAP) - ROW_GAP
   const placed: Placed[] = []
-  const bandGap = skippedRows ? 26 : 0
-  cols.forEach((ts, d) => {
-    const active = ts.filter((t) => t.status !== 'skipped')
-    const skipped = ts.filter((t) => t.status === 'skipped')
-    const x = PAD + d * (NODE_W + COL_GAP)
-    // vertically centre the active tasks in the active band
-    const offset = ((activeRows - active.length) * (NODE_H + ROW_GAP)) / 2
-    active.forEach((t, i) => placed.push({ task: t, x, y: PAD + offset + i * (NODE_H + ROW_GAP) }))
-    skipped.forEach((t, i) =>
-      placed.push({ task: t, x, y: PAD + activeRows * (NODE_H + ROW_GAP) + bandGap + i * (NODE_H + ROW_GAP) }),
-    )
-  })
-  const width = PAD * 2 + nCols * NODE_W + (nCols - 1) * COL_GAP
-  const height = PAD * 2 + (activeRows + skippedRows) * (NODE_H + ROW_GAP) - ROW_GAP + bandGap
-  const bandY = skippedRows ? PAD + activeRows * (NODE_H + ROW_GAP) + bandGap / 2 - ROW_GAP / 2 : null
+  let x = PAD
+  for (let d = 0; d < nDepth; d++) {
+    const n = subCols[d]!
+    const perCol = Math.ceil(active[d]!.length / n) || 1
+    for (let c = 0; c < n; c++) {
+      const col = active[d]!.slice(c * perCol, (c + 1) * perCol)
+      const off = (activeH - (col.length * (NODE_H + ROW_GAP) - ROW_GAP)) / 2
+      const cx = x + c * (NODE_W + SUB_GAP)
+      col.forEach((t, i) => placed.push({ task: t, x: cx, y: PAD + off + i * (NODE_H + ROW_GAP), h: NODE_H }))
+    }
+    const sk = skipped[d]!
+    const skPer = Math.ceil(sk.length / n) || 1
+    sk.forEach((t, i) => {
+      const c = Math.floor(i / skPer)
+      const r = i % skPer
+      placed.push({ task: t, x: x + c * (NODE_W + SUB_GAP), y: PAD + activeH + ROW_GAP + bandGap + r * (SKIP_H + ROW_GAP), h: SKIP_H })
+    })
+    x += n * NODE_W + (n - 1) * SUB_GAP + COL_GAP
+  }
+  const width = x - COL_GAP + PAD
+  const height = PAD * 2 + activeH + (skippedRows ? ROW_GAP + bandGap + skippedRows * (SKIP_H + ROW_GAP) - ROW_GAP : 0)
+  const bandY = skippedRows ? PAD + activeH + ROW_GAP / 2 + bandGap / 2 : null
   return { placed, width, height, bandY }
 }
 
@@ -212,14 +221,14 @@ export function TaskGraph({ snap, className }: { snap: RunSnapshot; className?: 
                   </text>
                 </g>
               )}
-              {lay.placed.flatMap(({ task, x, y }) =>
+              {lay.placed.flatMap(({ task, x, y, h }) =>
                 task.depends_on.map((dep) => {
                   const src = pos.get(dep)
                   if (!src) return null
                   const x1 = src.x + NODE_W
-                  const y1 = src.y + NODE_H / 2
+                  const y1 = src.y + src.h / 2
                   const x2 = x
-                  const y2 = y + NODE_H / 2
+                  const y2 = y + h / 2
                   const mx = (x1 + x2) / 2
                   const skipped = task.status === 'skipped'
                   const live = task.status === 'running' || task.status === 'waiting_human'
@@ -239,8 +248,8 @@ export function TaskGraph({ snap, className }: { snap: RunSnapshot; className?: 
                 }),
               )}
             </svg>
-            {lay.placed.map(({ task, x, y }) => (
-              <Node key={task.id} task={task} x={x} y={y} frozen={killed} />
+            {lay.placed.map(({ task, x, y, h }) => (
+              <Node key={task.id} task={task} x={x} y={y} h={h} frozen={killed} />
             ))}
           </div>
         ) : (
@@ -251,7 +260,7 @@ export function TaskGraph({ snap, className }: { snap: RunSnapshot; className?: 
   )
 }
 
-function Node({ task, x, y, frozen }: { task: PlanTask; x: number; y: number; frozen: boolean }) {
+function Node({ task, x, y, h, frozen }: { task: PlanTask; x: number; y: number; h: number; frozen: boolean }) {
   const tone = TONE[TASK_TONE[task.status]]
   const SIcon = SPECIALIST_ICON[task.specialist] ?? Network
   const StIcon = STATUS_ICON[task.status]
@@ -276,7 +285,7 @@ function Node({ task, x, y, frozen }: { task: PlanTask; x: number; y: number; fr
       data-status={task.status}
       title={`${task.id} · ${TASK_LABEL[task.status]}${task.note ? ` — ${task.note}` : ''}`}
       className={cx(
-        'absolute flex flex-col justify-between rounded-xl border px-2.5 py-2 transition-all duration-500',
+        cx('absolute flex flex-col justify-between rounded-xl border px-2.5 transition-all duration-500', skipped ? 'py-1' : 'py-1.5'),
         skipped
           ? 'border-dashed border-white/10 bg-ink-950/40 opacity-60'
           : task.status === 'pending'
@@ -288,13 +297,23 @@ function Node({ task, x, y, frozen }: { task: PlanTask; x: number; y: number; fr
         left: x,
         top: y,
         width: NODE_W,
-        height: NODE_H,
+        height: h,
         boxShadow:
           !skipped && task.status !== 'pending'
             ? `inset 0 0 0 1px ${tone.hex}${live ? '99' : '40'}${live && !frozen ? `, 0 0 22px -6px ${tone.hex}` : ''}`
             : undefined,
       }}
     >
+      {skipped ? (
+        <div className="flex h-full items-center gap-2">
+          <Ban className="h-3.5 w-3.5 shrink-0 text-ink-500" />
+          <div className="min-w-0">
+            <div className="truncate text-[11.5px] font-medium leading-tight text-ink-400 line-through decoration-ink-400/70">{task.title}</div>
+            <div className="truncate font-mono text-[9px] text-ink-500">{task.id} · superseded</div>
+          </div>
+        </div>
+      ) : (
+      <>
       <div className="flex items-center gap-1.5">
         <SIcon className={cx('h-3 w-3 shrink-0', skipped ? 'text-ink-500' : 'text-ink-300')} strokeWidth={2} />
         <span className="truncate font-mono text-[9.5px] uppercase tracking-[0.08em] text-ink-400">{task.specialist}</span>
@@ -306,13 +325,15 @@ function Node({ task, x, y, frozen }: { task: PlanTask; x: number; y: number; fr
           strokeWidth={2.25}
         />
       </div>
-      <div className={cx('truncate text-[12.5px] font-semibold leading-tight', skipped ? 'text-ink-400 line-through decoration-ink-400/70' : 'text-ink-50')}>
+      <div className={cx('truncate text-[12.5px] font-semibold leading-[1.3]', skipped ? 'text-ink-400 line-through decoration-ink-400/70' : 'text-ink-50')}>
         {task.title}
       </div>
       <div className="flex items-center justify-between">
         <span className={cx('font-mono text-[9.5px]', live ? tone.text : 'text-ink-400')}>{meta}</span>
         {task.attempts > 1 && <span className="font-mono text-[9.5px] text-orange-300">×{task.attempts}</span>}
       </div>
+      </>
+      )}
     </div>
   )
 }

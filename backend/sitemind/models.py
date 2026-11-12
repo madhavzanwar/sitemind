@@ -8,7 +8,7 @@ exchange these pydantic models. The frontend mirrors them in
 from __future__ import annotations
 
 from datetime import date, datetime
-from enum import Enum
+from enum import StrEnum
 from typing import Any, Literal
 
 from pydantic import BaseModel, Field
@@ -49,7 +49,7 @@ class SpecialistSpec(BaseModel):
 # --------------------------------------------------------------------------- plan
 
 
-class TaskStatus(str, Enum):
+class TaskStatus(StrEnum):
     pending = "pending"
     ready = "ready"
     running = "running"
@@ -244,7 +244,7 @@ class PurchaseOrder(BaseModel):
 # --------------------------------------------------------------------------- HITL
 
 
-class ApprovalStatus(str, Enum):
+class ApprovalStatus(StrEnum):
     pending = "pending"
     approved = "approved"
     rejected = "rejected"
@@ -311,7 +311,7 @@ class LedgerEntry(BaseModel):
 # --------------------------------------------------------------------------- run snapshot
 
 
-class RunStatus(str, Enum):
+class RunStatus(StrEnum):
     created = "created"
     running = "running"
     waiting_human = "waiting_human"

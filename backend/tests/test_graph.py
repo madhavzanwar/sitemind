@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
+from helpers import demo_request
+
 from sitemind.models import ApprovalDecision, ApprovalStatus, TaskStatus
 from sitemind.planner import task_action
 from sitemind.runner import create_run, decide_approval, get_store, run_worker, snapshot
-
-from helpers import demo_request
 
 
 def drive(run_id: str, decisions: list[ApprovalDecision] | None = None) -> None:
@@ -32,8 +32,16 @@ def test_demo_run_end_to_end() -> None:
     rec = next(o for o in snap.options if o.recommended)
     assert rec.option_id == "O-V3X"
     actions = [a.action for a in snap.audit]
-    for a in ("plan.created", "rfq.timeout", "quote.revised", "trigger.detected", "replan",
-              "escalation", "approval.approved", "run.completed"):
+    for a in (
+        "plan.created",
+        "rfq.timeout",
+        "quote.revised",
+        "trigger.detected",
+        "replan",
+        "escalation",
+        "approval.approved",
+        "run.completed",
+    ):
         assert a in actions, a
     # timeline spans weeks of sim time and is sorted
     times = [e.sim_time for e in snap.timeline]

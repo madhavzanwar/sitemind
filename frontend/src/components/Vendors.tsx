@@ -13,14 +13,15 @@ interface Row {
   attempts: VendorAttempt[]
 }
 
-function vendorRows(snap: RunSnapshot): Row[] {
+function vendorRows(snap: RunSnapshot, selected: string | null | undefined): Row[] {
   const ids = new Set<string>()
   snap.quotes.forEach((q) => ids.add(q.vendor_id))
   snap.options.forEach((o) => ids.add(o.vendor_id))
   snap.vendor_attempts.forEach((a) => ids.add(a.vendor_id))
   return [...ids].sort().map((id) => {
     const quote = snap.quotes.find((q) => q.vendor_id === id)
-    const option = snap.options.find((o) => o.vendor_id === id)
+    const mine = snap.options.filter((o) => o.vendor_id === id)
+    const option = mine.find((o) => o.option_id === selected) ?? mine.find((o) => o.recommended) ?? mine[0]
     return {
       id,
       name: quote?.vendor_name ?? option?.vendor_name ?? id,
@@ -32,13 +33,13 @@ function vendorRows(snap: RunSnapshot): Row[] {
 }
 
 export function Vendors({ snap, className }: { snap: RunSnapshot; className?: string }) {
-  const rows = vendorRows(snap)
+  const selected = snap.approvals.find((a) => a.kind === 'vendor_selection' && a.status === 'approved')?.decided_option
+  const rows = vendorRows(snap, selected)
   // Remember the first-seen revision-1 total per vendor to show revision deltas.
   const firstTotals = useRef<Record<string, number>>({})
   snap.quotes.forEach((q) => {
     if (q.revision === 1 && firstTotals.current[q.vendor_id] == null) firstTotals.current[q.vendor_id] = q.total_inr
   })
-  const selected = snap.approvals.find((a) => a.kind === 'vendor_selection' && a.status === 'approved')?.decided_option
   return (
     <Card
       testId="vendor-table"
@@ -53,7 +54,7 @@ export function Vendors({ snap, className }: { snap: RunSnapshot; className?: st
       ) : (
         <div className="flex flex-col gap-2.5">
           {rows.map((r) => (
-            <VendorCard key={r.id} row={r} firstTotal={firstTotals.current[r.id]} chosen={selected === r.option?.option_id} />
+            <VendorCard key={r.id} row={r} firstTotal={firstTotals.current[r.id]} chosen={!!selected && selected === r.option?.option_id} />
           ))}
         </div>
       )}
@@ -87,9 +88,11 @@ function VendorCard({ row, firstTotal, chosen }: { row: Row; firstTotal?: number
           {row.id}
         </span>
         <div className="min-w-0 flex-1">
-          <div className="truncate text-[13px] font-semibold text-ink-50">{row.name}</div>
+          <div className={cx('truncate text-[13px] font-semibold', waiting && row.name === row.id ? 'italic text-ink-400' : 'text-ink-50')}>
+            {waiting && row.name === row.id ? 'Awaiting quote…' : row.name}
+          </div>
           <div className="truncate font-mono text-[10.5px] text-ink-400">
-            {q ? `${q.quote_id} · rev ${q.revision}` : 'awaiting quote'}
+            {q ? `${q.quote_id} · rev ${q.revision}` : `RFQ attempts: ${row.attempts.length}`}
           </div>
         </div>
         {chosen ? (

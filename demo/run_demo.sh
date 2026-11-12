@@ -2,14 +2,14 @@
 # One command: fresh backend (real local model) -> narration -> title cards -> recording -> render.
 #   demo/run_demo.sh                    # starts its own backend on :8000
 #   SITEMIND_URL=http://host:8000 NO_SERVER=1 demo/run_demo.sh   # use a running backend
-# Env: SITEMIND_STEP_DELAY (pacing per agent step, default 2.0), SITEMIND_LLM_MODEL, PORT.
+# Env: SITEMIND_STEP_DELAY (pacing per agent step, default 3.0), SITEMIND_LLM_MODEL, PORT.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 PY="${PYTHON:-python3}"
 PORT="${PORT:-8000}"
 export SITEMIND_URL="${SITEMIND_URL:-http://localhost:$PORT}"
-export SITEMIND_STEP_DELAY="${SITEMIND_STEP_DELAY:-2.0}"
+export SITEMIND_STEP_DELAY="${SITEMIND_STEP_DELAY:-3.0}"
 export SITEMIND_LLM_PROVIDER="${SITEMIND_LLM_PROVIDER:-ollama}"
 export SITEMIND_LLM_MODEL="${SITEMIND_LLM_MODEL:-qwen2.5:3b}"
 export OLLAMA_BASE_URL="${OLLAMA_BASE_URL:-http://localhost:11434}"
@@ -32,8 +32,13 @@ if [ -z "${NO_SERVER:-}" ]; then
   if curl -fsS "$SITEMIND_URL/api/health" >/dev/null 2>&1; then
     echo "!! something already listens on $SITEMIND_URL - stop it or set NO_SERVER=1"; exit 1
   fi
-  # warm the model so the first plan call is not slowed by model load
+  # make sure Ollama is up, then warm the model so the first plan call is not slowed by model load
   if [ "$SITEMIND_LLM_PROVIDER" = "ollama" ]; then
+    if ! curl -fsS "$OLLAMA_BASE_URL/api/tags" >/dev/null 2>&1 && command -v ollama >/dev/null; then
+      echo "==> starting ollama serve"
+      (ollama serve >"$BUILD/ollama.log" 2>&1 &)
+      for _ in $(seq 1 30); do curl -fsS "$OLLAMA_BASE_URL/api/tags" >/dev/null 2>&1 && break; sleep 1; done
+    fi
     curl -fsS "$OLLAMA_BASE_URL/api/generate" -d "{\"model\":\"$SITEMIND_LLM_MODEL\",\"prompt\":\"ok\",\"stream\":false,\"keep_alive\":\"30m\"}" >/dev/null || echo "!! ollama warm-up failed (agent will use fallback templates)"
   fi
   export SITEMIND_DATA="$BUILD/data"

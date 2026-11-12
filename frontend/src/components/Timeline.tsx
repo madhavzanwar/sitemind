@@ -10,6 +10,8 @@ const IST = 5.5 * 3600_000
 const LABEL_W = 82
 const AXIS_H = 26
 
+const short = (l: string) => (l.length > 34 ? `${l.slice(0, 32).trimEnd()}…` : l)
+
 function istMidnight(t: number) {
   return Math.floor((t + IST) / DAY) * DAY - IST
 }
@@ -45,7 +47,7 @@ export function Timeline({ snap, className }: { snap: RunSnapshot; className?: s
   const laneH = Math.max(18, (h - AXIS_H - 6) / lanes.length)
   const xOf = (t: number) => LABEL_W + ((t - start) / (end - start)) * plotW
   const yOf = (lane: string) => AXIS_H + lanes.indexOf(lane) * laneH + laneH / 2
-  const tickEvery = plotW / days < 44 ? 2 : 1
+  const tickEvery = Math.max(1, Math.ceil(48 / Math.max(1, plotW / days)))
 
   // Direct labels: each lane has three label tracks (inline, above, below); a label takes the
   // first track where it doesn't collide. Inline labels must also stop before the next dot.
@@ -54,7 +56,7 @@ export function Timeline({ snap, className }: { snap: RunSnapshot; className?: s
     const out = new Map<number, number>()
     const items = snap.timeline.map((e, i) => ({ e, i, x: xOf(parseTime(e.sim_time)) })).sort((a, b) => a.x - b.x)
     items.forEach(({ e, i, x }, k) => {
-      const width = e.label.length * 5.6 + 12
+      const width = short(e.label).length * 5.6 + 12
       const next = items.slice(k + 1).find((o) => o.e.lane === e.lane && o.x > x + 2)
       for (let t = 0; t < 3; t++) {
         const key = `${e.lane}:${t}`
@@ -181,7 +183,7 @@ export function Timeline({ snap, className }: { snap: RunSnapshot; className?: s
                       y={labelled.get(i) === 0 ? y + 3.5 : labelled.get(i) === 1 ? y - 10 : y + 17}
                       className={cx('text-[10.5px]', strong ? 'fill-ink-100' : 'fill-ink-300')}
                     >
-                      {e.label}
+                      {short(e.label)}
                     </text>
                   )}
                 </g>

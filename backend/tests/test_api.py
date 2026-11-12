@@ -21,8 +21,9 @@ def test_health_registry_defaults() -> None:
 
 def test_create_without_start_list_get_and_errors() -> None:
     req = demo_request().model_copy(update={"auto_start": False})
-    snap = RunSnapshot.model_validate(client.post("/api/runs", json=req.model_dump(mode="json"))
-                                      .json())
+    snap = RunSnapshot.model_validate(
+        client.post("/api/runs", json=req.model_dump(mode="json")).json()
+    )
     assert snap.status.value == "created" and snap.plan is None
     assert snap.sim_start.isoformat().startswith("2027-01-11T09:00")
     runs = client.get("/api/runs").json()

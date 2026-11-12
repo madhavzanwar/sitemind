@@ -188,7 +188,7 @@ function Overview({ snap }: { snap: RunSnapshot }) {
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-4">
       <Hero snap={snap} />
-      <TaskGraph snap={snap} className="h-[272px] shrink-0" />
+      <TaskGraph snap={snap} className={snap.status === 'killed' ? 'h-[214px] shrink-0' : 'h-[272px] shrink-0'} />
       <div className="grid min-h-[440px] flex-1 grid-cols-12 grid-rows-[minmax(0,1fr)] gap-4">
         <Timeline snap={snap} className="col-span-5" />
         <Vendors snap={snap} className="col-span-4" />

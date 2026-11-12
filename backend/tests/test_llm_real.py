@@ -6,9 +6,9 @@ import time
 
 import httpx
 import pytest
+from helpers import demo_request
 from test_graph import drive
 
-from helpers import demo_request
 from sitemind.runner import create_run, get_store, snapshot
 
 pytestmark = pytest.mark.llm

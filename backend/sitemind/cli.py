@@ -26,13 +26,15 @@ def demo(args: argparse.Namespace) -> int:
         os.environ["SITEMIND_LLM_PROVIDER"] = args.provider
     from .api import DEMO_DEFAULTS
 
-    req = DEMO_DEFAULTS.model_copy(update={"scenario": args.scenario, "step_delay_s": args.delay})
+    delay = args.delay if args.delay or not args.kill_during else 1.0
+    req = DEMO_DEFAULTS.model_copy(update={"scenario": args.scenario, "step_delay_s": delay})
     snap = create_run(CreateRunRequest.model_validate(req.model_dump()))
     rid = snap.run_id
     print(f"SiteMind run {rid}  scenario={args.scenario}  goal: {req.goal_text}")
     printed: set[tuple[str, str, str]] = set()
     seen = 0
     killed = False
+    kill_tid = ""
     t0 = time.monotonic()
     while True:
         snap = snapshot(rid)
@@ -55,6 +57,27 @@ def demo(args: argparse.Namespace) -> int:
             resume_run(rid)
             killed = True
             continue
+        node = snap.current_node or ""
+        if (
+            args.kill_during
+            and not killed
+            and snap.status.value == "running"
+            and node.startswith(f"execute:{args.kill_during}")
+            and node.endswith(":pacing")
+        ):
+            tid = node.split(":")[1]
+            done = [e for e in snap.ledger if f":{tid}:" in e.idempotency_key]
+            print(
+                f"  >>> kill -9 worker pid {snap.worker.pid} during {tid} "
+                f"(after {len(done)} ledgered side effect(s), before its checkpoint)"
+            )
+            kill_run(rid)
+            time.sleep(0.5)
+            print("  >>> resume from checkpoint (side effects will be replayed from the ledger)")
+            resume_run(rid)
+            killed = True
+            kill_tid = tid
+            continue
         st = snap.status.value
         if st == "waiting_human":
             pending = [a for a in snap.approvals if a.status == ApprovalStatus.pending]
@@ -71,7 +94,7 @@ def demo(args: argparse.Namespace) -> int:
             break
         elif st == "killed":
             resume_run(rid)
-        time.sleep(0.3)
+        time.sleep(0.1)
     dt = time.monotonic() - t0
     po = snap.po
     print(
@@ -79,6 +102,10 @@ def demo(args: argparse.Namespace) -> int:
         f"checkpoints={snap.checkpoints}  restarts={snap.worker.restarts}  wall={dt:.1f}s  "
         f"llm={json.dumps(snap.llm)}"
     )
+    if kill_tid:
+        for le in snap.ledger:
+            if f":{kill_tid}:" in le.idempotency_key:
+                print(f"  ledger {le.idempotency_key}: kind={le.kind} executions={le.executions}")
     if po:
         print(
             f"PO {po.po_number} -> {po.vendor_name}: {_inr(po.total_inr)} incl. GST ({po.status})"
@@ -97,6 +124,13 @@ def main(argv: list[str] | None = None) -> int:
     d.add_argument("--delay", type=float, default=0.0, help="wall seconds per step")
     d.add_argument("--provider", default=None, help="ollama | openai | off")
     d.add_argument("--kill-after", type=int, default=0, help="SIGKILL after N timeline events")
+    d.add_argument(
+        "--kill-during",
+        default="",
+        metavar="TASK_ID_PREFIX",
+        help="SIGKILL the worker inside that task's pacing window (after its side effects, "
+        "before its checkpoint), e.g. T2-rfq or T3-levelling; implies --delay 1 if unset",
+    )
     d.add_argument("--out", default=None, help="write final RunSnapshot JSON here")
     args = ap.parse_args(argv)
     if args.cmd == "demo":

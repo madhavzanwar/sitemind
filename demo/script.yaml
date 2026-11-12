@@ -141,7 +141,7 @@ scenes:
       - { do: wait_selector, testid: po-package, timeout: 20 }
       - { do: highlight, testid: po-package, hold: 2.5 }
       - { do: scroll, testid: po-package, dy: 500, optional: true }
-      - { do: highlight, testid: run-status, hold: 1.5 }
+      - { do: highlight, testid: run-status, hold: 1.5, optional: true }
 
   - id: 10
     title: "Impact"

@@ -35,8 +35,16 @@ def test_plan_is_valid_dag_with_expected_structure() -> None:
     validate_plan(p)
     actions = [task_action(t)[0] for t in p.tasks]
     assert actions[0] == "takeoff" and actions[-1] == "send-po"
-    for a in ("rfq", "levelling", "schedule", "budget", "rank", "approve-vendor", "draft-po",
-              "approve-po"):
+    for a in (
+        "rfq",
+        "levelling",
+        "schedule",
+        "budget",
+        "rank",
+        "approve-vendor",
+        "draft-po",
+        "approve-po",
+    ):
         assert a in actions
     assert sum(1 for a in actions if a == "schedule") == 3
     order = topo_order(p)
@@ -108,8 +116,11 @@ def test_replan_after_rejection_clones_downstream() -> None:
     validate_plan(p2)
     live = [task_action(t)[0] for t in p2.tasks if t.status == TaskStatus.pending]
     assert live == ["rank", "approve-vendor", "draft-po", "approve-po", "send-po"]
-    assert all(t.status == TaskStatus.skipped for t in p2.tasks
-               if t.plan_version == 1 and task_action(t)[0] in ("draft-po", "send-po"))
+    assert all(
+        t.status == TaskStatus.skipped
+        for t in p2.tasks
+        if t.plan_version == 1 and task_action(t)[0] in ("draft-po", "send-po")
+    )
 
 
 def test_validate_rejects_cycles_and_unknown_deps() -> None:
@@ -118,8 +129,9 @@ def test_validate_rejects_cycles_and_unknown_deps() -> None:
     with pytest.raises(PlanError):
         validate_plan(p)
     p = plan_v1()
-    p.tasks.append(PlanTask(id="T99-rank", title="x", specialist="approvals",
-                            depends_on=["T404-nope"]))
+    p.tasks.append(
+        PlanTask(id="T99-rank", title="x", specialist="approvals", depends_on=["T404-nope"])
+    )
     with pytest.raises(PlanError):
         validate_plan(p)
 

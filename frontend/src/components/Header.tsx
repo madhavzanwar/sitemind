@@ -27,6 +27,8 @@ export function Header({
   const calls = snap?.llm.calls
   const reachable = health?.llm.reachable ?? true
   const w = snap?.worker
+  const parked = !!w && !w.alive && snap?.status === 'waiting_human'
+  const ok = !!w && (w.alive || parked || finished)
 
   return (
     <header
@@ -87,17 +89,18 @@ export function Header({
           <div
             data-testid="worker-status"
             data-alive={w.alive ? 'true' : 'false'}
+            title={parked ? 'Worker exited cleanly at the approval interrupt; it is respawned when you decide.' : undefined}
             className={cx(
               'flex items-center gap-2.5 rounded-lg px-3 py-1.5 text-[12px] ring-1 ring-inset transition-colors',
-              w.alive ? 'bg-emerald-400/[0.06] ring-emerald-400/20' : 'bg-rose-500/10 ring-rose-500/40',
+              w.alive ? 'bg-emerald-400/[0.06] ring-emerald-400/20' : parked ? 'bg-violet-400/[0.07] ring-violet-400/25' : ok ? 'bg-white/[0.03] ring-white/10' : 'bg-rose-500/10 ring-rose-500/40',
             )}
           >
             <span className="relative flex h-2 w-2">
               {w.alive && !finished && <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />}
-              <span className={cx('relative inline-flex h-2 w-2 rounded-full', w.alive ? 'bg-emerald-400' : 'bg-rose-500')} />
+              <span className={cx('relative inline-flex h-2 w-2 rounded-full', w.alive ? 'bg-emerald-400' : parked ? 'bg-violet-400' : ok ? 'bg-ink-300' : 'bg-rose-500')} />
             </span>
-            <span className={cx('font-semibold', w.alive ? 'text-emerald-300' : 'text-rose-300')}>
-              {w.alive ? 'Worker alive' : finished ? 'Worker exited' : 'Worker offline'}
+            <span className={cx('font-semibold', w.alive ? 'text-emerald-300' : parked ? 'text-violet-300' : ok ? 'text-ink-200' : 'text-rose-300')}>
+              {w.alive ? 'Worker alive' : parked ? 'Worker parked' : finished ? 'Worker exited' : 'Worker offline'}
             </span>
             <span className="num text-ink-400">pid {w.pid ?? '—'}</span>
             <span className="h-3 w-px bg-white/10" />

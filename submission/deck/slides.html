@@ -1,0 +1,679 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SiteMind pitch deck</title>
+<meta name="viewport" content="width=1920">
+<style>
+@font-face { font-family: "Inter Var"; src: url("fonts/inter-latin-wght-normal.woff2") format("woff2"); font-weight: 100 900; font-display: block; }
+@font-face { font-family: "JetBrains Mono Var"; src: url("fonts/jetbrains-mono-latin-wght-normal.woff2") format("woff2"); font-weight: 100 800; font-display: block; }
+
+:root {
+  --bg: #0b0f17; --bg2: #0e121a; --panel: #121722; --panel2: #171d2a; --line: #252e40; --line2: #323d52;
+  --t1: #f2f5f9; --t2: #b7c0cf; --t3: #8a95a8; --t4: #5c687d;
+  --amber: #ffb224; --amber-d: #c77a06; --amber-bg: rgba(255,178,36,.10);
+  --green: #3ecf8e; --green-bg: rgba(62,207,142,.10);
+  --red: #f4627a; --red-bg: rgba(244,63,94,.11);
+  --blue: #6cb2ff; --blue-bg: rgba(108,178,255,.10);
+  --sans: "Inter Var", Inter, "Helvetica Neue", Arial, sans-serif;
+  --mono: "JetBrains Mono Var", "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@page { size: 1920px 1080px; margin: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #05070b; }
+body { font-family: var(--sans); color: var(--t1); -webkit-font-smoothing: antialiased; font-feature-settings: "tnum" 1, "cv11" 1; }
+.slide {
+  width: 1920px; height: 1080px; position: relative; overflow: hidden;
+  background: var(--bg);
+  padding: 76px 96px 96px; display: flex; flex-direction: column;
+  page-break-after: always; break-after: page;
+}
+.slide::before { /* faint grid, like the dashboard */
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image: linear-gradient(rgba(255,255,255,.022) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.022) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 90% 80% at 80% 0%, #000 0%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse 90% 80% at 80% 0%, #000 0%, transparent 75%);
+}
+.slide > * { position: relative; }
+@media screen { .slide { margin: 24px auto; } }
+
+.eyebrow { font-family: var(--mono); font-size: 19px; letter-spacing: .14em; text-transform: uppercase; color: var(--amber); font-weight: 500; }
+h1 { font-size: 150px; line-height: 1; font-weight: 700; letter-spacing: -.045em; }
+h2 { font-size: 54px; line-height: 1.12; font-weight: 650; letter-spacing: -.025em; margin-top: 16px; max-width: 1560px; text-wrap: balance; }
+h3 { font-size: 26px; font-weight: 650; letter-spacing: -.01em; }
+p, li { font-size: 24px; line-height: 1.45; color: var(--t2); }
+b, strong { color: var(--t1); font-weight: 600; }
+.mono { font-family: var(--mono); }
+.amber { color: var(--amber); } .green { color: var(--green); } .red { color: var(--red); } .blue { color: var(--blue); } .dim { color: var(--t3); }
+.body { flex: 1; margin-top: 44px; min-height: 0; display: flex; gap: 32px; }
+.col { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
+
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 28px 32px; }
+.panel.hi { border-color: rgba(255,178,36,.45); background: linear-gradient(180deg, rgba(255,178,36,.07), rgba(255,178,36,.02) 60%), var(--panel); }
+.label { font-family: var(--mono); font-size: 17px; letter-spacing: .12em; text-transform: uppercase; color: var(--t3); font-weight: 500; }
+.chip { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 18px; padding: 5px 12px; border-radius: 8px; border: 1px solid var(--line2); color: var(--t2); background: var(--bg2); white-space: nowrap; }
+.chip.a { color: var(--amber); border-color: rgba(255,178,36,.4); background: var(--amber-bg); }
+.chip.g { color: var(--green); border-color: rgba(62,207,142,.35); background: var(--green-bg); }
+.chip.r { color: var(--red); border-color: rgba(244,98,122,.4); background: var(--red-bg); }
+.chip.b { color: var(--blue); border-color: rgba(108,178,255,.35); background: var(--blue-bg); }
+.dot { width: 9px; height: 9px; border-radius: 50%; background: currentColor; display: inline-block; }
+
+.foot { position: absolute; left: 96px; right: 96px; bottom: 36px; display: flex; justify-content: space-between; align-items: center; font-family: var(--mono); font-size: 16px; color: var(--t4); letter-spacing: .04em; }
+.foot .brand { display: flex; align-items: center; gap: 12px; color: var(--t3); }
+.foot svg { width: 22px; height: 22px; }
+
+table { border-collapse: collapse; width: 100%; }
+th { font-family: var(--mono); font-size: 16px; letter-spacing: .1em; text-transform: uppercase; color: var(--t3); font-weight: 500; text-align: left; padding: 0 14px 12px 0; border-bottom: 1px solid var(--line2); white-space: nowrap; }
+td { font-size: 21px; color: var(--t2); padding: 11px 14px 11px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+td.n, th.n { text-align: right; padding-right: 0; padding-left: 14px; white-space: nowrap; }
+td .mono, td.mono { font-size: 19px; }
+
+.stat .v { font-size: 56px; font-weight: 650; letter-spacing: -.03em; line-height: 1; color: var(--t1); }
+.stat .k { font-size: 19px; color: var(--t3); margin-top: 10px; line-height: 1.3; }
+
+/* ---------- slide 1 ---------- */
+.s1 { padding-top: 96px; }
+.s1 .logo { display: flex; align-items: center; gap: 28px; margin-top: 92px; }
+.s1 .logo svg { width: 132px; height: 132px; }
+.s1 .tag { font-size: 50px; line-height: 1.18; font-weight: 600; letter-spacing: -.025em; margin-top: 48px; max-width: 1060px; text-wrap: balance; }
+.s1 .sub { font-size: 27px; color: var(--t2); margin-top: 26px; max-width: 980px; line-height: 1.45; }
+.s1 .goal { position: absolute; right: 96px; top: 190px; width: 600px; }
+.s1 .goal .q { font-family: var(--mono); font-size: 23px; line-height: 1.5; color: var(--t1); margin-top: 14px; }
+.s1 .tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 28px; margin-top: 26px; padding-top: 26px; border-top: 1px solid var(--line); }
+.s1 .meta { position: absolute; left: 96px; bottom: 96px; display: flex; gap: 12px; flex-wrap: wrap; }
+
+/* ---------- slide 2 ---------- */
+.steps { display: flex; flex-direction: column; }
+.steps .st { display: grid; grid-template-columns: 44px 1fr auto; gap: 18px; align-items: center; padding: 13px 0; border-bottom: 1px solid var(--line); }
+.steps .st:last-child { border-bottom: 0; }
+.steps .num { font-family: var(--mono); font-size: 18px; color: var(--t4); }
+.steps .what { font-size: 24px; color: var(--t1); }
+.big3 { display: grid; grid-template-rows: repeat(3, 1fr); gap: 20px; flex: 1; }
+.big3 .panel { display: grid; grid-template-columns: 250px 1fr; align-items: center; gap: 28px; }
+.big3 .v { font-size: 60px; font-weight: 650; letter-spacing: -.03em; line-height: 1; }
+.big3 .u { font-family: var(--mono); font-size: 17px; color: var(--t3); margin-top: 10px; letter-spacing: .08em; text-transform: uppercase; }
+
+/* ---------- slide 3 ---------- */
+.goalbox { font-family: var(--mono); font-size: 34px; line-height: 1.4; color: var(--t1); padding: 30px 36px; }
+.goalbox .pr { color: var(--amber); margin-right: 14px; }
+.six { display: grid; grid-template-columns: repeat(6, 1fr); gap: 18px; }
+.six .panel { padding: 24px 24px 26px; }
+.six .n { font-family: var(--mono); font-size: 18px; color: var(--amber); }
+.six h3 { margin: 10px 0 10px; font-size: 25px; }
+.six p { font-size: 20px; line-height: 1.4; }
+.outcome { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; padding: 26px 0; }
+.outcome .stat { padding: 0 32px; border-left: 1px solid var(--line); }
+.outcome .stat:first-child { border-left: 0; }
+.outcome .v { font-size: 44px; }
+
+/* ---------- slide 4 ---------- */
+.dag { display: flex; align-items: center; gap: 0; }
+.node { width: 142px; flex: none; background: var(--bg2); border: 1px solid var(--line2); border-radius: 12px; padding: 12px 12px 13px; }
+.node .id { font-family: var(--mono); font-size: 16px; color: var(--t3); }
+.node .nm { font-size: 21px; font-weight: 600; color: var(--t1); margin-top: 3px; line-height: 1.15; }
+.node .sp { font-family: var(--mono); font-size: 15px; margin-top: 7px; color: var(--blue); }
+.node.h { border-color: rgba(255,178,36,.55); background: var(--amber-bg); }
+.node.h .sp { color: var(--amber); }
+.node.s { width: 112px; padding: 9px 10px; }
+.node.s .nm { font-size: 18px; }
+.arr { flex: 1; min-width: 20px; height: 2px; background: var(--line2); position: relative; margin: 0 5px; }
+.arr::after { content: ""; position: absolute; right: -1px; top: -5px; border-left: 9px solid var(--line2); border-top: 6px solid transparent; border-bottom: 6px solid transparent; }
+.fan { display: grid; grid-template-columns: repeat(3, 112px); gap: 8px; flex: none; padding: 10px; border: 1px dashed var(--line2); border-radius: 14px; }
+.loop { display: flex; align-items: center; gap: 0; margin-top: 18px; }
+.loop .ln { font-family: var(--mono); font-size: 19px; padding: 8px 14px; border-radius: 9px; border: 1px solid var(--line2); background: var(--bg2); color: var(--t1); white-space: nowrap; }
+.loop .ln.a { border-color: rgba(255,178,36,.5); color: var(--amber); }
+.loop .arr { flex: none; width: 26px; min-width: 0; }
+
+/* ---------- slide 5 ---------- */
+.ledger { font-family: var(--mono); font-size: 18px; }
+.ledger .r { display: grid; grid-template-columns: 1fr 150px 44px; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--line); color: var(--t2); white-space: nowrap; }
+.ledger .r:last-child { border-bottom: 0; }
+.ledger .r span:nth-child(2) { color: var(--t3); }
+.ledger .r span:nth-child(3) { text-align: right; color: var(--t3); }
+.ledger .r.x span:nth-child(3) { color: var(--amber); font-weight: 600; }
+.ledger .pre { color: var(--t4); }
+.kline { display: grid; grid-template-columns: 150px 1fr; gap: 16px; padding: 11px 0; border-bottom: 1px solid var(--line); align-items: baseline; }
+.kline:last-child { border-bottom: 0; }
+.kline .t { font-family: var(--mono); font-size: 17px; color: var(--t3); }
+.kline .d { font-size: 21px; color: var(--t2); line-height: 1.35; }
+.proof { display: grid; grid-template-columns: repeat(5, 1fr); padding: 22px 0; }
+.proof .stat { padding: 0 28px; border-left: 1px solid var(--line); }
+.proof .stat:first-child { border-left: 0; }
+.proof .v { font-size: 44px; }
+.proof .k { font-size: 18px; }
+
+/* ---------- slide 6 ---------- */
+.ev { display: grid; grid-template-columns: 150px 1fr; gap: 24px; padding: 22px 28px; }
+.ev .when { font-family: var(--mono); font-size: 18px; color: var(--t3); line-height: 1.5; }
+.ev h3 { font-size: 25px; margin-bottom: 8px; }
+.ev p { font-size: 21px; line-height: 1.42; }
+.ev .resp { margin-top: 10px; font-size: 20px; color: var(--t2); display: flex; gap: 10px; align-items: baseline; }
+.ev .resp .mono { font-size: 17px; color: var(--amber); white-space: nowrap; }
+.diff { font-family: var(--mono); font-size: 19px; line-height: 1.75; }
+.diff .p { color: var(--green); } .diff .m { color: var(--t4); text-decoration: line-through; } .diff .c { color: var(--amber); }
+.bar { display: grid; grid-template-columns: 150px 1fr 78px; gap: 14px; align-items: center; margin-top: 12px; font-size: 19px; color: var(--t2); }
+.bar .track { height: 16px; border-radius: 4px; background: var(--bg2); border: 1px solid var(--line); position: relative; }
+.bar .fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px; }
+.bar .lim { position: absolute; top: -6px; bottom: -6px; width: 2px; background: var(--t1); }
+.bar .pc { font-family: var(--mono); font-size: 18px; text-align: right; }
+
+/* ---------- slide 7 ---------- */
+.gate { display: flex; align-items: center; gap: 0; margin-top: 16px; }
+.gate .ln { font-size: 19px; padding: 9px 13px; border-radius: 9px; border: 1px solid var(--line2); background: var(--bg2); color: var(--t1); white-space: nowrap; }
+.gate .ln.a { border-color: rgba(255,178,36,.5); color: var(--amber); background: var(--amber-bg); }
+.gate .arr { flex: none; width: 22px; min-width: 0; }
+.trail .r { display: grid; grid-template-columns: 128px 108px 1fr; gap: 14px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 19px; line-height: 1.35; color: var(--t2); }
+.trail .r:last-child { border-bottom: 0; }
+.trail .r .mono { font-size: 16px; color: var(--t3); padding-top: 3px; }
+.trail .act { font-family: var(--mono); font-size: 16px; padding-top: 3px; }
+ul.tight { list-style: none; }
+ul.tight li { font-size: 21px; padding-left: 26px; position: relative; margin-top: 8px; line-height: 1.38; }
+ul.tight li::before { content: ""; position: absolute; left: 4px; top: 12px; width: 8px; height: 8px; border-radius: 2px; background: var(--amber); }
+
+/* ---------- slide 8 ---------- */
+.arch { display: grid; grid-template-columns: 250px 34px 250px 34px 1fr; grid-template-rows: auto auto; gap: 18px 0; align-items: stretch; }
+.box { background: var(--bg2); border: 1px solid var(--line2); border-radius: 12px; padding: 16px 18px; }
+.box .t { font-size: 22px; font-weight: 600; color: var(--t1); line-height: 1.2; }
+.box .d { font-size: 18px; color: var(--t3); margin-top: 6px; line-height: 1.35; }
+.box .d .mono { font-size: 16px; }
+.box.w { border-color: rgba(255,178,36,.5); }
+.hz { display: flex; align-items: center; }
+.hz .arr { margin: 0 4px; }
+.stack { display: flex; flex-direction: column; }
+.stack .kline { grid-template-columns: 132px 1fr; padding: 10px 0; }
+.stack .kline .d { font-size: 20px; }
+
+/* ---------- slide 9 ---------- */
+.crit { display: grid; grid-template-columns: 250px 1fr; gap: 32px; padding: 22px 30px; align-items: center; }
+.crit .w { font-size: 58px; font-weight: 650; letter-spacing: -.03em; line-height: 1; color: var(--amber); }
+.crit .nm { font-size: 24px; font-weight: 600; margin-top: 8px; }
+.crit .q { font-size: 17px; color: var(--t3); margin-top: 6px; line-height: 1.35; }
+.crit ul.tight li { margin-top: 5px; font-size: 21px; }
+.crit ul.tight li:first-child { margin-top: 0; }
+
+/* ---------- slide 10 ---------- */
+.next { counter-reset: n; list-style: none; }
+.next li { counter-increment: n; display: grid; grid-template-columns: 48px 1fr; gap: 12px; padding: 13px 0; border-bottom: 1px solid var(--line); font-size: 22px; line-height: 1.38; }
+.next li:last-child { border-bottom: 0; }
+.next li::before { content: "0" counter(n); font-family: var(--mono); font-size: 18px; color: var(--amber); padding-top: 4px; }
+.cred td { font-size: 19px; padding: 8px 12px 8px 0; }
+.cred td:first-child { color: var(--t1); font-weight: 600; white-space: nowrap; }
+.cred td:nth-child(2) { font-family: var(--mono); font-size: 16px; color: var(--t3); white-space: nowrap; }
+.shot { border: 1px solid var(--line2); border-radius: 12px; overflow: hidden; background: #000; }
+.shot img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top left; }
+</style>
+</head>
+<body>
+
+<!-- reusable mark -->
+<svg width="0" height="0" style="position:absolute"><defs>
+  <symbol id="mark" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#0E121A" stroke="#252E40"/><path d="M8 21l8-12 8 12" fill="none" stroke="#FFB224" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16" cy="22" r="2.5" fill="#FFB224"/></symbol>
+</defs></svg>
+
+<!-- ============================== 1  TITLE ============================== -->
+<section class="slide s1" data-title="SiteMind">
+  <div class="eyebrow">Kaya AI Grand Challenge · Edition 2 · Students division</div>
+  <div class="logo"><svg><use href="#mark"/></svg><h1>SiteMind</h1></div>
+  <div class="tag">A procurement agent that stays with a construction job for weeks.</div>
+  <p class="sub">It plans the job, calls specialist agents, survives <span class="mono amber">kill -9</span>, never sends the same RFQ or PO twice, and asks a human before anything that cannot be undone.</p>
+
+  <div class="panel hi goal">
+    <div class="label">The goal, as typed</div>
+    <div class="q">Get the 480 V switchgear package for Project Alpha ordered by 2027-03-15 within budget ₹4.6 Cr.</div>
+    <div class="tiles">
+      <div class="stat"><div class="v">30</div><div class="k">simulated days, one run</div></div>
+      <div class="stat"><div class="v">39</div><div class="k">checkpoints, one per task</div></div>
+      <div class="stat"><div class="v">1</div><div class="k">SIGKILL mid-run, resumed</div></div>
+      <div class="stat"><div class="v">0</div><div class="k">duplicate RFQs or POs</div></div>
+    </div>
+  </div>
+
+  <div class="meta">
+    <span class="chip a">Track 01 · Amber General Intelligence</span>
+    <span class="chip a">Challenge 1.3 · Work that takes days, not minutes</span>
+    <span class="chip">also shows 1.2 · the conductor</span>
+    <span class="chip">MIT licence</span>
+  </div>
+  <div class="foot"><span class="brand">Demo vendors, prices and project data are synthetic</span><span>01 / 10</span></div>
+</section>
+
+<!-- ============================== 2  PROBLEM ============================== -->
+<section class="slide" data-title="The problem">
+  <div class="eyebrow">The problem</div>
+  <h2>On a data-centre job, one switchgear package sets the energisation date.</h2>
+  <div class="body">
+    <div class="col" style="flex: 0 0 800px">
+      <div class="big3">
+        <div class="panel"><div><div class="v">4–6</div><div class="u">months lead time</div></div>
+          <p>A 480 V switchgear package is manufactured to order. The hall cannot be energised without it.</p></div>
+        <div class="panel"><div><div class="v">Weeks</div><div class="u">of email and Excel</div></div>
+          <p>Procurement for that one package runs across mail threads and a tracker that someone has to keep current.</p></div>
+        <div class="panel"><div><div class="v amber">1</div><div class="u">dropped step</div></div>
+          <p>A missed date slips energisation. A duplicated email or order costs money and credibility.</p></div>
+      </div>
+    </div>
+    <div class="col" style="flex: 1">
+      <div class="panel" style="flex: 1; display: flex; flex-direction: column">
+        <div class="label">What those weeks contain, and where they break</div>
+        <div class="steps" style="margin-top: 12px; flex: 1; justify-content: space-between">
+          <div class="st"><span class="num">01</span><span class="what">Takeoff from the spec</span><span class="chip">quantity disagrees with drawing</span></div>
+          <div class="st"><span class="num">02</span><span class="what">RFQs to several vendors</span><span class="chip r">sent twice after a hand-over</span></div>
+          <div class="st"><span class="num">03</span><span class="what">Chase the ones that go quiet</span><span class="chip r">follow-up nobody sends</span></div>
+          <div class="st"><span class="num">04</span><span class="what">Re-check prices before award</span><span class="chip r">revision nobody re-budgets</span></div>
+          <div class="st"><span class="num">05</span><span class="what">Lead time vs required-on-site date</span><span class="chip r">float found negative too late</span></div>
+          <div class="st"><span class="num">06</span><span class="what">Two sign-offs</span><span class="chip">approver on leave</span></div>
+          <div class="st"><span class="num">07</span><span class="what">Issue the purchase order</span><span class="chip r">ordered twice, or not at all</span></div>
+        </div>
+      </div>
+      <p style="font-size: 26px; color: var(--t1); line-height: 1.4">Each step is easy. Staying with all of them for weeks, through restarts and hand-overs, is where the job fails.</p>
+    </div>
+  </div>
+  <div class="foot"><span class="brand"><svg><use href="#mark"/></svg>SiteMind · Track 01 / 1.3</span><span>02 / 10</span></div>
+</section>
+
+<!-- ============================== 3  GOAL & WHAT IT DOES ============================== -->
+<section class="slide" data-title="The goal and what SiteMind does">
+  <div class="eyebrow">What SiteMind does</div>
+  <h2>One sentence in. A sent purchase order out, with a trail a project manager can follow.</h2>
+  <div class="body col" style="gap: 22px">
+    <div class="panel hi goalbox"><span class="pr">&gt;</span>Get the 480 V switchgear package for Project Alpha ordered by 2027-03-15 within budget ₹4.6 Cr.
+      <div style="display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap">
+        <span class="chip">need-by 2027-03-15</span><span class="chip">budget ₹4,60,00,000 ex-GST</span><span class="chip">required on site 2027-07-30</span><span class="chip">Project Alpha · 24 MW Tier-III data centre, Chakan MIDC, Pune · synthetic demo job</span>
+      </div>
+    </div>
+    <div class="six">
+      <div class="panel"><div class="n">01</div><h3>Plans</h3><p>A 14-task dependency graph with deadlines, cost allowances and 5 risks.</p></div>
+      <div class="panel"><div class="n">02</div><h3>Calls specialists</h3><p>Takeoff, quotes, schedule (CPM), budget, approvals, PO. One per task.</p></div>
+      <div class="panel"><div class="n">03</div><h3>Monitors</h3><p>Checks the facts after every task and issues plan v2 when they break the plan.</p></div>
+      <div class="panel"><div class="n">04</div><h3>Survives restarts</h3><p>Resumes from the last checkpoint. A ledger stops repeated actions.</p></div>
+      <div class="panel"><div class="n">05</div><h3>Asks a human</h3><p>Ranked decision memo, then waits. Vendor choice and PO release are gated.</p></div>
+      <div class="panel"><div class="n">06</div><h3>Issues the PO</h3><p>Drafts the package, gets the second sign-off, sends it exactly once.</p></div>
+    </div>
+    <div class="panel" style="padding: 0 0">
+      <div class="outcome">
+        <div class="stat"><div class="label" style="margin-bottom: 12px">Demo run outcome</div><div class="v">PO sent</div><div class="k">sim 2027-02-10, to Anvil Electric India (synthetic vendor)</div></div>
+        <div class="stat"><div class="label" style="margin-bottom: 12px">Against the order-by date</div><div class="v green">33 days early</div><div class="k">need-by was 2027-03-15</div></div>
+        <div class="stat"><div class="label" style="margin-bottom: 12px">PO value</div><div class="v">₹4,70,32,912</div><div class="k">incl. 18 % GST · ₹3,98,58,400 ex-GST</div></div>
+        <div class="stat"><div class="label" style="margin-bottom: 12px">Delivery</div><div class="v">2027-07-22</div><div class="k">8 days ahead of the required-on-site date</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span class="brand"><svg><use href="#mark"/></svg>SiteMind · Track 01 / 1.3 · synthetic demo data</span><span>03 / 10</span></div>
+</section>
+
+<!-- ============================== 4  HOW IT WORKS ============================== -->
+<section class="slide" data-title="How it works: planner DAG and specialist registry">
+  <div class="eyebrow">How it works</div>
+  <h2>A planner owns the task graph. Registered specialists do each step.</h2>
+  <div class="body col" style="gap: 22px; margin-top: 36px">
+    <div class="panel" style="padding: 22px 26px 24px">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px">
+        <div class="label">Plan v1 · 14 tasks · deadlines scheduled backward from the need-by date</div>
+        <div style="display: flex; gap: 10px"><span class="chip b"><i class="dot"></i>specialist task</span><span class="chip a"><i class="dot"></i>human approval</span></div>
+      </div>
+      <div class="dag">
+        <div class="node"><div class="id">T1</div><div class="nm">Takeoff</div><div class="sp">takeoff</div></div><i class="arr"></i>
+        <div class="node"><div class="id">T2</div><div class="nm">RFQ ×3 vendors</div><div class="sp">quotes</div></div><i class="arr"></i>
+        <div class="node"><div class="id">T3</div><div class="nm">Bid levelling</div><div class="sp">quotes</div></div><i class="arr"></i>
+        <div class="fan">
+          <div class="node s"><div class="id">T4</div><div class="nm">CPM V1</div></div>
+          <div class="node s"><div class="id">T5</div><div class="nm">CPM V2</div></div>
+          <div class="node s"><div class="id">T6</div><div class="nm">CPM V3</div></div>
+          <div class="node s"><div class="id">T7</div><div class="nm">Budget V1</div></div>
+          <div class="node s"><div class="id">T8</div><div class="nm">Budget V2</div></div>
+          <div class="node s"><div class="id">T9</div><div class="nm">Budget V3</div></div>
+        </div><i class="arr"></i>
+        <div class="node"><div class="id">T10</div><div class="nm">Rank + memo</div><div class="sp">approvals</div></div><i class="arr"></i>
+        <div class="node h"><div class="id">T11</div><div class="nm">Approve vendor</div><div class="sp">human</div></div><i class="arr"></i>
+        <div class="node"><div class="id">T12</div><div class="nm">Draft PO</div><div class="sp">po</div></div><i class="arr"></i>
+        <div class="node h"><div class="id">T13</div><div class="nm">Approve PO</div><div class="sp">human</div></div><i class="arr"></i>
+        <div class="node"><div class="id">T14</div><div class="nm">Send PO</div><div class="sp">po</div></div>
+      </div>
+    </div>
+    <div style="display: flex; gap: 22px; flex: 1; min-height: 0">
+      <div class="panel" style="flex: 1; padding: 22px 28px">
+        <div class="label" style="margin-bottom: 14px">Specialist registry · each is also an MCP tool</div>
+        <table>
+          <tr><th>Specialist</th><th>Takes</th><th>Returns</th><th>MCP tool</th></tr>
+          <tr><td><b>takeoff</b></td><td>spec PDF</td><td>lines with source, confidence, warnings</td><td class="mono">takeoff_from_pdf</td></tr>
+          <tr><td><b>quotes</b></td><td>lines, vendors, sim time</td><td>quotes and a per-attempt log</td><td class="mono">request_vendor_quotes</td></tr>
+          <tr><td><b>schedule</b></td><td>lead time, PO date, on-site date</td><td>critical path and float</td><td class="mono">compute_schedule</td></tr>
+          <tr><td><b>budget</b></td><td>quote, ceiling, contingency, fees</td><td>ok / warn / breach</td><td class="mono">check_budget</td></tr>
+          <tr><td><b>approvals</b></td><td>quotes, schedules, budget checks</td><td>ranked options, decision memo</td><td class="mono">rank_vendor_options</td></tr>
+          <tr><td><b>po</b></td><td>goal, chosen option, quote</td><td>purchase order package</td><td class="mono">draft_purchase_order</td></tr>
+        </table>
+      </div>
+      <div class="col" style="flex: 0 0 600px; gap: 22px">
+        <div class="panel" style="padding: 22px 28px">
+          <div class="label">Run loop · one task per step</div>
+          <div class="loop">
+            <span class="ln">plan</span><i class="arr"></i><span class="ln a">execute</span><i class="arr"></i><span class="ln">monitor</span><i class="arr"></i><span class="ln">replan</span><i class="arr"></i><span class="ln">finish</span>
+          </div>
+          <p style="font-size: 20px; margin-top: 14px">The monitor compares facts with the plan after every task. A trigger sends the run through <span class="mono">replan</span> and back to <span class="mono">execute</span>.</p>
+        </div>
+        <div class="panel" style="flex: 1; padding: 22px 28px">
+          <div class="label">Who decides what</div>
+          <ul class="tight" style="margin-top: 6px">
+            <li><b>Code</b> builds the graph and does every quantity, price, date and score.</li>
+            <li><b>The local model</b> words the rationale and the memo. It never produces a number.</li>
+            <li><b>Specialists are pure functions</b>, so a replay gives identical output.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span class="brand"><svg><use href="#mark"/></svg>SiteMind · Track 01 / 1.3</span><span>04 / 10</span></div>
+</section>
+
+<!-- ============================== 5  DURABILITY ============================== -->
+<section class="slide" data-title="Durability: checkpoints, idempotency ledger, kill -9 and resume">
+  <div class="eyebrow">Durability</div>
+  <h2>Kill the worker at any point. It resumes, and nothing is sent twice.</h2>
+  <div class="body col" style="gap: 22px; margin-top: 36px">
+    <div style="display: flex; gap: 22px; flex: 1; min-height: 0">
+      <div class="panel" style="flex: 0 0 470px">
+        <div class="label">1 · Checkpoint per task</div>
+        <h3 style="margin-top: 12px">The plan is saved after every task</h3>
+        <p style="font-size: 21px; margin-top: 12px">LangGraph <span class="mono">StateGraph</span> with <span class="mono">SqliteSaver</span>. Each step runs exactly one plan task, then persists the plan, the facts and the simulated time.</p>
+        <p style="font-size: 21px; margin-top: 12px">The worker is its own OS process. The API and the worker share nothing in memory, so a dead worker loses nothing.</p>
+        <div style="margin-top: 18px; display: flex; gap: 10px; flex-wrap: wrap"><span class="chip">thread_id = run_id</span><span class="chip">SQLite WAL</span></div>
+      </div>
+      <div class="panel" style="flex: 1">
+        <div style="display: flex; justify-content: space-between; align-items: baseline">
+          <div class="label">2 · Idempotency ledger · rows from the killed-and-resumed demo run</div>
+          <div class="label">requested</div>
+        </div>
+        <div class="ledger" style="margin-top: 12px">
+          <div class="r"><span><span class="pre">&lt;run&gt;:</span>T2-rfq:rfq:V1:a1</span><span>rfq.sent</span><span>×1</span></div>
+          <div class="r"><span><span class="pre">&lt;run&gt;:</span>T2-rfq:rfq:V1:a2</span><span>rfq.sent</span><span>×1</span></div>
+          <div class="r"><span><span class="pre">&lt;run&gt;:</span>T2-rfq:rfq:V1:a3</span><span>rfq.sent</span><span>×1</span></div>
+          <div class="r x"><span><span class="pre">&lt;run&gt;:</span>T3-levelling:refresh:V1:r1</span><span>quote.refresh</span><span>×2</span></div>
+          <div class="r x"><span><span class="pre">&lt;run&gt;:</span>T3-levelling:refresh:V2:r1</span><span>quote.refresh</span><span>×2</span></div>
+          <div class="r"><span><span class="pre">&lt;run&gt;:</span>T3-levelling:refresh:V3:r1</span><span>quote.refresh</span><span>×1</span></div>
+          <div class="r x"><span><span class="pre">&lt;run&gt;:</span>T11-approve-vendor:approval:requested</span><span>approval</span><span>×2</span></div>
+          <div class="r"><span><span class="pre">&lt;run&gt;:</span>T14-send-po:po:PO-ALPHA-20270207-V3-01</span><span>po.sent</span><span>×1</span></div>
+        </div>
+        <p style="font-size: 20px; margin-top: 14px">Every side effect goes through <span class="mono">perform_once(key, …)</span>. The key is the table's primary key. <span class="amber mono">×2</span> means requested by two workers and <b>executed once</b>: the second request got the stored result.</p>
+      </div>
+      <div class="panel" style="flex: 0 0 480px">
+        <div class="label">3 · kill -9, then resume</div>
+        <div style="margin-top: 8px">
+          <div class="kline"><span class="t">sim 01-17</span><span class="d">Worker A finishes the RFQ round. Checkpoint 7 written.</span></div>
+          <div class="kline"><span class="t red">SIGKILL</span><span class="d">Worker A dies inside <span class="mono">T3-levelling</span>, after two quote refreshes went out.</span></div>
+          <div class="kline"><span class="t green">resume</span><span class="d">Worker B starts from checkpoint 7 and replays T3 from its start.</span></div>
+          <div class="kline"><span class="t">ledger</span><span class="d">The two refreshes return stored results. Only the third runs.</span></div>
+          <div class="kline"><span class="t">result</span><span class="d">Same plan, same PO, same simulated timestamps.</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="panel" style="padding: 0">
+      <div class="proof">
+        <div class="stat"><div class="v">39</div><div class="k">checkpoints in the run</div></div>
+        <div class="stat"><div class="v">17</div><div class="k">ledger keys, each executed once</div></div>
+        <div class="stat"><div class="v">5</div><div class="k">RFQs delivered: V1 ×3 attempts, V2, V3</div></div>
+        <div class="stat"><div class="v">1</div><div class="k">PO delivered to the vendor outbox</div></div>
+        <div class="stat"><div class="label" style="margin-bottom: 8px">Stated boundary</div><div class="k" style="margin-top: 0; color: var(--t2)">A worker that dies between an external effect and its ledger write retries that action; the outbox row carries the same key for the receiver to deduplicate.</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span class="brand"><svg><use href="#mark"/></svg>SiteMind · figures from <span style="color: var(--t2)">python -m sitemind.cli demo --provider off --kill-after 12</span></span><span>05 / 10</span></div>
+</section>
+
+<!-- ============================== 6  FAILURES & RE-PLAN ============================== -->
+<section class="slide" data-title="Failure handling and the re-plan">
+  <div class="eyebrow">Failure handling</div>
+  <h2>Three things go wrong in the demo. The agent recovers from each and re-plans once.</h2>
+  <div class="body" style="margin-top: 36px; gap: 24px">
+    <div class="col" style="flex: 1; gap: 18px">
+      <div class="panel ev">
+        <div class="when">sim<br>01-11 → 01-17<br><span class="chip" style="margin-top: 10px">V1 Voltaris</span></div>
+        <div><h3>Vendor goes silent, twice</h3>
+          <p>RFQ attempts 1 and 2 time out. Attempt 3 is answered: <b>₹3,54,75,400</b>, 140 days lead.</p>
+          <div class="resp"><span class="mono">retry ×3</span><span>Each attempt has its own ledger key and audit entry. No re-plan needed.</span></div></div>
+      </div>
+      <div class="panel ev">
+        <div class="when">sim<br>01-18 → 01-22<br><span class="chip" style="margin-top: 10px">V2 Kestrel</span></div>
+        <div><h3>Price moves after the quote</h3>
+          <p>Revision 2 adds an 11 % raw-copper surcharge and withdraws the 3 % early-order discount: <b>₹3,86,51,400 → ₹4,41,66,800</b> (+14.3 %). With 5 % contingency that is ₹4,63,75,140, <b class="red">100.8 % of budget</b>, ₹3,75,140 over.</p>
+          <div class="resp"><span class="mono">budget_breach:V2</span><span>Negotiate. V2 holds its price, so the option is ruled out.</span></div></div>
+      </div>
+      <div class="panel ev">
+        <div class="when">sim<br>01-21 → 01-28<br><span class="chip" style="margin-top: 10px">V3 Anvil</span></div>
+        <div><h3>Lead time breaks the on-site date</h3>
+          <p>168 days lead puts standard delivery on 2027-08-29, <b class="red">30 days late</b>. No in-budget option keeps 14 days of float.</p>
+          <div class="resp"><span class="mono">deadline_break:V3</span><span>Evaluate Anvil's expedite offer: 42 days saved for ₹26,00,000. New option <b>O-V3X</b> lands inside the date at 90.7 % of budget.</span></div></div>
+      </div>
+    </div>
+    <div class="col" style="flex: 0 0 620px; gap: 18px">
+      <div class="panel" style="padding: 24px 28px">
+        <div class="label">Plan v1 → v2 · sim 2027-01-22</div>
+        <div class="diff" style="margin-top: 10px">
+          <div class="p">+ T15-negotiate-V2</div>
+          <div class="p">+ T16-expedite-V3</div>
+          <div class="p">+ T17-rank <span class="dim">(new decision memo)</span></div>
+          <div class="p">+ T18-escalate <span class="dim">(notify the PM)</span></div>
+          <div class="m">  T10-rank</div>
+          <div class="c">~ T11-approve-vendor <span class="dim">now waits on T18</span></div>
+        </div>
+        <p style="font-size: 20px; margin-top: 12px">The monitor waits until every schedule and budget check is in, so both triggers produce one new plan. Final plan: 18 tasks, 17 done, 1 superseded and kept as <span class="mono">skipped</span>.</p>
+      </div>
+      <div class="panel" style="flex: 1; padding: 24px 28px">
+        <div class="label">Committed cost as % of the ₹4.6 Cr ceiling</div>
+        <div class="bar" style="margin-top: 18px"><span>V1 Voltaris</span><div class="track"><div class="fill" style="width: 73.6%; background: var(--green)"></div><div class="lim" style="left: 90.9%"></div></div><span class="pc">81.0 %</span></div>
+        <div class="bar"><span>V2 first quote</span><div class="track"><div class="fill" style="width: 80.2%; background: var(--green)"></div><div class="lim" style="left: 90.9%"></div></div><span class="pc">88.2 %</span></div>
+        <div class="bar"><span><b>V2 revision 2</b></span><div class="track"><div class="fill" style="width: 91.6%; background: var(--red)"></div><div class="lim" style="left: 90.9%"></div></div><span class="pc red">100.8 %</span></div>
+        <div class="bar"><span>V3 standard</span><div class="track"><div class="fill" style="width: 77.3%; background: var(--green)"></div><div class="lim" style="left: 90.9%"></div></div><span class="pc">85.0 %</span></div>
+        <div class="bar"><span><b>V3 expedited</b></span><div class="track"><div class="fill" style="width: 82.5%; background: var(--amber)"></div><div class="lim" style="left: 90.9%"></div></div><span class="pc amber">90.7 %</span></div>
+        <p style="font-size: 17px; margin-top: 14px; color: var(--t3)">White line = 100 % of budget. Quote + 5 % contingency + fees, ex-GST. Warn from 90 %, breach above 100 %.</p>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span class="brand"><svg><use href="#mark"/></svg>SiteMind · V1, V2, V3 are synthetic vendors written for the demo scenario</span><span>06 / 10</span></div>
+</section>
+
+<!-- ============================== 7  HUMAN IN THE LOOP & AUDIT ============================== -->
+<section class="slide" data-title="Human in the loop and the audit trail">
+  <div class="eyebrow">Human in the loop · audit trail</div>
+  <h2>Before anything irreversible, the agent writes a memo and stops.</h2>
+  <div class="body" style="margin-top: 36px; gap: 24px">
+    <div class="col" style="flex: 1; gap: 18px">
+      <div class="panel hi" style="flex: 1; padding: 24px 28px">
+        <div style="display: flex; justify-content: space-between; align-items: center">
+          <div class="label">Decision memo · sim 2027-01-29 · plan v2</div><span class="chip a">waiting for approval</span>
+        </div>
+        <table style="margin-top: 14px">
+          <tr><th>Option</th><th class="n">Budget use</th><th class="n">Delivery</th><th class="n">Float</th><th class="n">On-time</th><th style="padding-left: 18px">Result</th></tr>
+          <tr><td><b>O-V3X</b> Anvil, expedited</td><td class="n amber">90.7 %</td><td class="n">2027-07-24</td><td class="n green">+6 d</td><td class="n">90 %</td><td style="padding-left: 18px"><b class="amber">recommended</b></td></tr>
+          <tr><td>O-V2 Kestrel, rev 2</td><td class="n red">100.8 %</td><td class="n">2027-07-10</td><td class="n">+20 d</td><td class="n">93 %</td><td style="padding-left: 18px" class="dim">over budget</td></tr>
+          <tr><td>O-V1 Voltaris</td><td class="n">81.0 %</td><td class="n">2027-08-07</td><td class="n red">−8 d</td><td class="n">82 %</td><td style="padding-left: 18px" class="dim">late</td></tr>
+          <tr><td>O-V3 Anvil, standard</td><td class="n">85.0 %</td><td class="n">2027-09-04</td><td class="n red">−36 d</td><td class="n">90 %</td><td style="padding-left: 18px" class="dim">late</td></tr>
+        </table>
+        <div class="label" style="margin-top: 20px">Risks the memo lists against its own recommendation</div>
+        <ul class="tight">
+          <li>6 days of float is thin.</li>
+          <li>The option sits above the 90 % budget warning line.</li>
+          <li>The ₹26 L expedite fee should be payable only against a delivery milestone with LDs.</li>
+        </ul>
+      </div>
+      <div class="panel" style="padding: 22px 28px">
+        <div class="label">Two approval gates · no process runs while the agent waits</div>
+        <div class="gate">
+          <span class="ln">memo</span><i class="arr"></i><span class="ln a">approve vendor</span><i class="arr"></i><span class="ln">draft PO</span><i class="arr"></i><span class="ln a">approve PO release</span><i class="arr"></i><span class="ln">send once</span>
+        </div>
+        <p style="font-size: 20px; margin-top: 14px">The person can approve, pick another option, or reject. A rejection is a trigger: the planner re-ranks without that option and asks again.</p>
+      </div>
+    </div>
+    <div class="col" style="flex: 0 0 720px; gap: 18px">
+      <div class="panel" style="flex: 1; padding: 24px 28px">
+        <div class="label">Audit trail · 36 entries in the demo run</div>
+        <div class="trail" style="margin-top: 8px">
+          <div class="r"><span class="mono">01-11 17:00</span><span class="act blue">takeoff</span><span>8 line items from the spec PDF, confidence 0.92. RFI raised: schedule lists 4 SPDs, drawing p3 shows 3.</span></div>
+          <div class="r"><span class="mono">01-15 23:00</span><span class="act blue">quotes</span><span>V1 silent after 2 days (attempt 2/3), retrying.</span></div>
+          <div class="r"><span class="mono">01-17 23:00</span><span class="act red">system</span><span>Worker killed (SIGKILL) at T3-levelling. Resumed from checkpoint 7.</span></div>
+          <div class="r"><span class="mono">01-22 11:00</span><span class="act amber">planner</span><span>Re-plan v2: +4 tasks, 1 superseded.</span></div>
+          <div class="r"><span class="mono">01-29 14:00</span><span class="act blue">approvals</span><span>Recommend O-V3X. 1 of 4 options feasible. Escalated to PM.</span></div>
+          <div class="r"><span class="mono">02-04 02:00</span><span class="act amber">human</span><span>Approved O-V3X Anvil Electric India.</span></div>
+          <div class="r"><span class="mono">02-10 02:00</span><span class="act blue">po</span><span>PO-ALPHA-20270207-V3-01 release approved and sent.</span></div>
+        </div>
+      </div>
+      <div class="panel" style="padding: 22px 28px">
+        <div class="label">Every entry records</div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px">
+          <span class="chip">actor</span><span class="chip">action</span><span class="chip">reasoning summary</span><span class="chip">inputs</span><span class="chip">outputs</span><span class="chip">cost</span><span class="chip">confidence</span><span class="chip">plan version</span>
+        </div>
+        <p style="font-size: 20px; margin-top: 14px">Each takeoff line cites its source, for example <span class="mono" style="font-size: 17px; color: var(--t1)">…switchgear_spec.pdf p4 table 1 row 1</span>.</p>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span class="brand"><svg><use href="#mark"/></svg>SiteMind · live-run figures; vendors and prices are synthetic</span><span>07 / 10</span></div>
+</section>
+
+<!-- ============================== 8  ARCHITECTURE ============================== -->
+<section class="slide" data-title="Architecture and stack">
+  <div class="eyebrow">Architecture · stack</div>
+  <h2>Two SQLite files hold the whole run. Everything else can be restarted.</h2>
+  <div class="body" style="margin-top: 36px; gap: 24px">
+    <div class="panel" style="flex: 1; padding: 26px 28px; display: flex; flex-direction: column; gap: 18px">
+      <div class="arch">
+        <div class="box"><div class="t">React dashboard</div><div class="d">Vite, TypeScript, Tailwind. Polls every second.</div></div>
+        <div class="hz"><i class="arr"></i></div>
+        <div class="box"><div class="t">FastAPI <span class="mono dim" style="font-size: 17px">:8000</span></div><div class="d">Creates runs, records approvals, spawns and kills workers.</div></div>
+        <div class="hz"><i class="arr"></i></div>
+        <div class="box w" style="grid-row: span 2; display: flex; flex-direction: column">
+          <div class="t">Worker process <span class="mono dim" style="font-size: 16px; font-weight: 400">python -m sitemind.runner &lt;run_id&gt;</span></div>
+          <div class="d">One OS process per active run, with a per-run file lock.</div>
+          <div class="loop" style="margin-top: 14px; flex-wrap: wrap; row-gap: 8px">
+            <span class="ln" style="font-size: 17px; padding: 6px 10px">plan</span><i class="arr" style="width: 16px"></i><span class="ln a" style="font-size: 17px; padding: 6px 10px">execute</span><i class="arr" style="width: 16px"></i><span class="ln" style="font-size: 17px; padding: 6px 10px">monitor</span><i class="arr" style="width: 16px"></i><span class="ln" style="font-size: 17px; padding: 6px 10px">replan</span><i class="arr" style="width: 16px"></i><span class="ln" style="font-size: 17px; padding: 6px 10px">finish</span>
+          </div>
+          <div class="d" style="margin-top: 12px">LangGraph <span class="mono">StateGraph</span>. <span class="mono">interrupt()</span> parks the run for a human; <span class="mono">Command(resume=…)</span> continues it.</div>
+        </div>
+        <div class="box"><div class="t">Amber, or any MCP client</div><div class="d">Calls the specialists directly.</div></div>
+        <div class="hz"><i class="arr"></i></div>
+        <div class="box"><div class="t">MCP server</div><div class="d">Official Python SDK. stdio or streamable HTTP. 7 tools.</div></div>
+        <div></div>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px; flex: 1">
+        <div class="box" style="border-color: rgba(108,178,255,.4)"><div class="t">Specialist registry</div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px"><span class="chip b">takeoff</span><span class="chip b">quotes</span><span class="chip b">schedule</span><span class="chip b">budget</span><span class="chip b">approvals</span><span class="chip b">po</span></div>
+          <div class="d" style="margin-top: 10px">Pure Python. No clock, network or model inside. Quotes come from a mock vendor network (synthetic scenario file).</div></div>
+        <div class="box" style="border-color: rgba(62,207,142,.4)"><div class="t">SQLite, WAL mode</div>
+          <div class="d" style="margin-top: 8px"><span class="mono" style="color: var(--t1)">checkpoints.sqlite</span><br>LangGraph SqliteSaver, one checkpoint per task</div>
+          <div class="d" style="margin-top: 8px"><span class="mono" style="color: var(--t1)">sitemind.sqlite</span><br>runs, audit, ledger, approvals, timeline, outbox</div></div>
+      </div>
+      <div class="box" style="display: flex; align-items: center; gap: 20px"><div class="t" style="white-space: nowrap">Ollama · <span class="mono">qwen2.5:3b</span></div><div class="d" style="margin-top: 0">Local, temperature 0, wording only. Each call is cached in the ledger. If the model is unreachable a template is used and the audit entry says so.</div></div>
+    </div>
+    <div class="col" style="flex: 0 0 560px; gap: 18px">
+      <div class="panel" style="padding: 22px 28px">
+        <div class="label">Stack</div>
+        <div class="stack" style="margin-top: 6px">
+          <div class="kline"><span class="t">agent</span><span class="d">LangGraph + langgraph-checkpoint-sqlite</span></div>
+          <div class="kline"><span class="t">contract</span><span class="d">Pydantic v2 models, JSON in and out</span></div>
+          <div class="kline"><span class="t">api</span><span class="d">FastAPI, Uvicorn</span></div>
+          <div class="kline"><span class="t">ui</span><span class="d">React 18, Vite, Tailwind</span></div>
+          <div class="kline"><span class="t">agent-to-agent</span><span class="d">MCP Python SDK</span></div>
+          <div class="kline"><span class="t">model</span><span class="d">Qwen2.5-3B-Instruct on Ollama, via pydantic-ai</span></div>
+          <div class="kline"><span class="t">documents</span><span class="d">pdfplumber, ReportLab</span></div>
+        </div>
+      </div>
+      <div class="panel" style="flex: 1; padding: 24px 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px 24px; align-content: center">
+        <div class="stat"><div class="v" style="font-size: 48px">₹0</div><div class="k">API fees per run</div></div>
+        <div class="stat"><div class="v" style="font-size: 48px">3</div><div class="k">model calls per run</div></div>
+        <div class="stat"><div class="v" style="font-size: 48px">5.4 s</div><div class="k">full run, model off, no pacing</div></div>
+        <div class="stat"><div class="v" style="font-size: 48px">1</div><div class="k">command: <span class="mono" style="font-size: 16px">docker compose up --build</span></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span class="brand"><svg><use href="#mark"/></svg>SiteMind · Track 01 / 1.3</span><span>08 / 10</span></div>
+</section>
+
+<!-- ============================== 9  IMPACT & JUDGING FIT ============================== -->
+<section class="slide" data-title="Impact and judging-criteria fit">
+  <div class="eyebrow">Impact · judging criteria</div>
+  <h2>Built against what challenge 1.3 asks for, and what the judges score.</h2>
+  <div class="body" style="margin-top: 36px; gap: 24px">
+    <div class="col" style="flex: 1; gap: 14px">
+      <div class="panel crit"><div><div class="w">40 %</div><div class="nm">Accuracy</div><div class="q">Does it get the job right on realistic examples?</div></div>
+        <ul class="tight"><li>Every quantity, price, date and score comes from deterministic code and is reproduced by the unit tests.</li><li>A killed and resumed run ends with the same PO as an uninterrupted one.</li></ul></div>
+      <div class="panel crit"><div><div class="w">30 %</div><div class="nm">Customer value</div><div class="q">Would a procurement manager use it tomorrow?</div></div>
+        <ul class="tight"><li>It does the chasing, re-checking and escalating a coordinator does by hand.</li><li>The demo PO goes out 33 days ahead of the order-by date, with a memo a PM can sign.</li></ul></div>
+      <div class="panel crit"><div><div class="w">20 %</div><div class="nm">Trustworthiness</div><div class="q">Sources cited, sensible confidence, nothing made up.</div></div>
+        <ul class="tight"><li>Takeoff lines cite page, table and row. Confidence 0.92, with an RFI where the drawing disagrees.</li><li>The memo lists the risks of its own recommendation. Synthetic data is labelled everywhere.</li></ul></div>
+      <div class="panel crit"><div><div class="w">10 %</div><div class="nm">Build quality</div><div class="q">Easy to run, cost and speed per run, code quality.</div></div>
+        <ul class="tight"><li>One command to start. ₹0 per run on a laptop CPU. 5.4 s with the model off.</li><li>Typed contract, deterministic test suite with kill-and-resume tests, MIT licence.</li></ul></div>
+    </div>
+    <div class="col" style="flex: 0 0 600px; gap: 18px">
+      <div class="panel hi" style="padding: 24px 28px">
+        <div class="label">Challenge 1.3 · “good looks like”</div>
+        <div class="kline" style="grid-template-columns: 1fr; gap: 4px; margin-top: 6px"><span class="d" style="color: var(--t1)">“recovers from setbacks on its own where it can”</span><span class="t">3 RFQ attempts, negotiation, expedite, plan v2</span></div>
+        <div class="kline" style="grid-template-columns: 1fr; gap: 4px"><span class="d" style="color: var(--t1)">“never does the same thing twice”</span><span class="t">17 ledger keys, 5 RFQs and 1 PO, each once</span></div>
+        <div class="kline" style="grid-template-columns: 1fr; gap: 4px"><span class="d" style="color: var(--t1)">“picks up correctly after a restart”</span><span class="t">SIGKILL, resume from checkpoint 7</span></div>
+        <div class="kline" style="grid-template-columns: 1fr; gap: 4px"><span class="d" style="color: var(--t1)">“leaves a trail a project manager can follow”</span><span class="t">36 audit entries, versioned plan, timeline</span></div>
+      </div>
+      <div class="panel" style="flex: 1; padding: 24px 28px">
+        <div class="label">Required of every entry</div>
+        <ul class="tight" style="margin-top: 4px">
+          <li><b>Structured output.</b> Pydantic models, JSON throughout.</li>
+          <li><b>Callable by another agent.</b> MCP server, 7 tools.</li>
+          <li><b>Sources and confidence.</b> On every takeoff line and audit entry.</li>
+          <li><b>Hand-off to a human.</b> Two approval gates.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span class="brand"><svg><use href="#mark"/></svg>SiteMind · criteria and weights from the challenge Resources page, Round 1</span><span>09 / 10</span></div>
+</section>
+
+<!-- ============================== 10  NEXT & CREDITS ============================== -->
+<section class="slide" data-title="What's next and open-source credits">
+  <div class="eyebrow">What's next · credits</div>
+  <h2>The harness is the product. Procurement is the first job on it.</h2>
+  <div class="body" style="margin-top: 36px; gap: 24px">
+    <div class="col" style="flex: 1; gap: 18px">
+      <div class="panel" style="flex: 1; padding: 22px 30px">
+        <div class="label">Next</div>
+        <ol class="next" style="margin-top: 4px">
+          <li><span><b>Email and ERP adapters</b> behind the same ledger, passing the idempotency key to the receiving system.</span></li>
+          <li><span><b>More job types</b> on the same harness: submittal chasing, RFI follow-up, delivery tracking.</span></li>
+          <li><span><b>Lead-time ranges</b> from vendor history in place of single values.</span></li>
+          <li><span><b>Takeoff from real drawing sets</b>, with a review screen where a person accepts each line.</span></li>
+          <li><span><b>Postgres, authentication, approver roles</b> and delegation.</span></li>
+          <li><span><b>A kill-at-every-step benchmark</b> that asserts zero duplicate actions across the run.</span></li>
+        </ol>
+      </div>
+      <div class="panel" style="padding: 20px 30px">
+        <div class="label">Limits today</div>
+        <p style="font-size: 20px; margin-top: 8px">Synthetic vendors and prices. Simulated clock. RFQs and POs go to a mock outbox, with no real email or ERP. One package type and one spec format. Single tenant.</p>
+      </div>
+    </div>
+    <div class="col" style="flex: 0 0 800px; gap: 18px">
+      <div class="panel" style="padding: 22px 30px">
+        <div class="label">Built on open source</div>
+        <table class="cred" style="margin-top: 8px">
+          <tr><td>LangGraph + checkpoint-sqlite</td><td>MIT</td><td>durable graph, checkpoints, interrupt()</td></tr>
+          <tr><td>MCP Python SDK</td><td>MIT</td><td>specialists as MCP tools</td></tr>
+          <tr><td>Pydantic v2 · Pydantic AI</td><td>MIT</td><td>data contract, structured model output</td></tr>
+          <tr><td>FastAPI · Uvicorn · HTTPX</td><td>MIT / BSD-3</td><td>REST API</td></tr>
+          <tr><td>Ollama</td><td>MIT</td><td>local model serving</td></tr>
+          <tr><td>Qwen2.5-3B-Instruct</td><td>Qwen Research</td><td>wording only; non-commercial licence</td></tr>
+          <tr><td>React · Vite · Tailwind</td><td>MIT</td><td>dashboard</td></tr>
+          <tr><td>pdfplumber · ReportLab</td><td>MIT / BSD-3</td><td>read and generate the sample spec PDF</td></tr>
+        </table>
+      </div>
+      <div class="panel" style="flex: 1; padding: 22px 30px">
+        <div class="label">Ideas borrowed · no code copied</div>
+        <table class="cred" style="margin-top: 8px">
+          <tr><td>bytedance/deer-flow</td><td>MIT</td><td>lead agent plus specialist sub-agents</td></tr>
+          <tr><td>Kentucky-ai/opentakeoff</td><td>AGPL-3.0</td><td>takeoff as an agent tool, source on every line</td></tr>
+          <tr><td>DDC Skills for AI Agents</td><td>MIT</td><td>construction workflow vocabulary</td></tr>
+        </table>
+        <p style="font-size: 18px; margin-top: 10px; color: var(--t3)">SiteMind is original work under the MIT licence. Full list with links in <span class="mono">CREDITS.md</span>.</p>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span class="brand"><svg><use href="#mark"/></svg>SiteMind · Kaya AI Grand Challenge Ed. 2 · Students · Track 01 / 1.3</span><span>10 / 10</span></div>
+</section>
+
+</body>
+</html>

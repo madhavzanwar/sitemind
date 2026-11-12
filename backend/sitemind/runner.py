@@ -16,6 +16,7 @@ import secrets
 import signal
 import subprocess
 import sys
+import time
 import traceback
 from datetime import datetime
 from pathlib import Path
@@ -109,11 +110,18 @@ def run_worker(run_id: str, resume_value: dict[str, Any] | None = None) -> str:
         raise SystemExit(f"unknown run {run_id}")
     lock_path = settings.locks_dir / f"{run_id}.lock"
     lock = open(lock_path, "w")  # noqa: SIM115 - held for the life of the worker
-    try:
-        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
-    except BlockingIOError:
-        print(f"[worker] another worker holds {run_id}; exiting", flush=True)
-        return run.status
+    # A previous worker may still be exiting (e.g. just after interrupt()); wait for it.
+    deadline = time.monotonic() + 60.0
+    while True:
+        try:
+            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            break
+        except BlockingIOError:
+            if time.monotonic() > deadline:
+                print(f"[worker] another worker holds {run_id}; exiting", flush=True)
+                return run.status
+            time.sleep(0.1)
+    run = store.get_run(run_id) or run
     restarts = run.restarts
     store.update_run(
         run_id, pid=os.getpid(), status="running", worker_started_at=utcnow(), error=None

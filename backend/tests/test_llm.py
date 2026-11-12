@@ -17,8 +17,7 @@ class Out(BaseModel):
 
 def test_off_provider_uses_template_and_caches() -> None:
     st = Store(get_settings().db_path)
-    st.create_run("r", Goal(text="g", need_by=date(2027, 3, 15), budget_inr=1e6), "demo",
-                  SIM_START)
+    st.create_run("r", Goal(text="g", need_by=date(2027, 3, 15), budget_inr=1e6), "demo", SIM_START)
     llm = LLM(store=st, run_id="r")
     a = llm.complete_json("p", Out, "T1:llm:x", fallback=Out(text="tmpl"))
     b = llm.complete_json("p", Out, "T1:llm:x", fallback=Out(text="other"))

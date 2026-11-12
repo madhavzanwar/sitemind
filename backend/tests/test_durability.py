@@ -18,6 +18,10 @@ from sitemind.runner import get_store
 from sitemind.store import pid_alive
 
 
+def store_refreshes(rid: str) -> list[str]:
+    return sorted(m["ref"] for m in get_store().list_outbox(rid, "refresh"))
+
+
 def _done(snap: RunSnapshot, action: str) -> bool:
     return snap.plan is not None and any(
         task_action(t)[0] == action and t.status == TaskStatus.done for t in snap.plan.tasks
@@ -32,13 +36,18 @@ def _pending_approval(snap: RunSnapshot) -> bool:
 
 def test_kill_resume_exactly_once() -> None:
     client = TestClient(app)
-    r = client.post("/api/runs", json=demo_request(delay=0.25).model_dump(mode="json"))
+    r = client.post("/api/runs", json=demo_request(delay=0.4).model_dump(mode="json"))
     assert r.status_code == 200
     rid = r.json()["run_id"]
 
-    # 1) mid-run: quotes collected + levelled, evaluation in progress, before any approval
-    snap = wait_for(rid, lambda s: _done(s, "levelling") and not _done(s, "rank"), timeout=60)
+    # 1) mid-run: quotes collected; kill INSIDE the bid-levelling node after its vendor
+    #    refresh requests were sent (ledgered) but before the node's checkpoint was written.
+    snap = wait_for(
+        rid, lambda s: (s.current_node or "").startswith("execute:T3-levelling:pacing"), 60
+    )
     assert not snap.approvals
+    sent_before = store_refreshes(rid)
+    assert len(sent_before) == 3
     pid1 = snap.worker.pid
     assert pid1 and pid_alive(pid1)
     killed = RunSnapshot.model_validate(client.post(f"/api/runs/{rid}/kill").json())
@@ -83,6 +92,10 @@ def test_kill_resume_exactly_once() -> None:
     rfq = Counter((m["vendor_id"], m["payload"]["attempt"]) for m in store.list_outbox(rid, "rfq"))
     assert all(n == 1 for n in rfq.values()), f"duplicate RFQs: {rfq}"
     assert set(rfq) == {("V1", 1), ("V1", 2), ("V1", 3), ("V2", 1), ("V3", 1)}
+    assert store_refreshes(rid) == sent_before, "refresh requests were not re-sent on resume"
+    refresh_rows = [e for e in store.list_ledger(rid) if e.kind == "quote.refresh"]
+    assert len(refresh_rows) == 3
+    assert all(e.executions >= 2 for e in refresh_rows), "replayed node reused stored results"
     for ch in ("refresh", "negotiate", "expedite", "email"):
         msgs = Counter(m["ref"] for m in store.list_outbox(rid, ch))
         assert all(n == 1 for n in msgs.values()), (ch, msgs)

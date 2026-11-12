@@ -45,7 +45,11 @@ export function Approvals({
         )}
       </Card>
       <div className="min-h-0 overflow-auto">
-        {sel ? <Detail key={sel.id} a={sel} snap={snap} onDecide={onDecide} busy={busy} /> : <Card><Empty icon={Inbox} title="No approval selected" /></Card>}
+        {sel ? (
+          <div data-testid="approval-detail" data-kind={sel.kind} data-status={sel.status}>
+            <Detail key={sel.id} a={sel} snap={snap} onDecide={onDecide} busy={busy} />
+          </div>
+        ) : <Card><Empty icon={Inbox} title="No approval selected" /></Card>}
       </div>
     </div>
   )
@@ -106,7 +110,6 @@ function Detail({
         </Badge>
       }
       bodyClassName="p-6"
-      testId="approval-detail"
     >
       <div className="grid grid-cols-[minmax(0,1fr)_340px] gap-8">
         <div className="min-w-0 space-y-6">
