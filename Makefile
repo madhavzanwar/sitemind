@@ -29,7 +29,7 @@ test: ## backend unit tests (deterministic, no LLM)
 	cd backend && SITEMIND_LLM_PROVIDER=off $(PY) -m pytest
 
 lint:
-	cd backend && ruff check . && mypy sitemind
+	cd backend && ruff check . && ruff format --check . && $(PY) -m mypy sitemind
 
 docker-up: ## docker compose up --build (ollama + app on :8000)
 	docker compose up --build -d && docker compose ps
