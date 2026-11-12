@@ -60,7 +60,10 @@ if [ -z "${NO_SERVER:-}" ]; then
 fi
 
 echo "==> [3/4] recording the dashboard"
-node demo/record.mjs --base "$SITEMIND_URL" --out "$BUILD/rec"
+# Screen recording (Chromium + Playwright's VP8 encoder) competes with the local model for CPU;
+# give the model priority, otherwise LLM calls time out and fall back to templates.
+for p in $(pgrep -f "ollama (runner|serve)" 2>/dev/null); do renice -n -10 -p "$p" >/dev/null 2>&1 || true; done
+nice -n 15 node demo/record.mjs --base "$SITEMIND_URL" --out "$BUILD/rec"
 
 echo "==> [4/4] render"
 "$PY" demo/render.py --rec "$BUILD/rec" --out "$ROOT/submission/sitemind_demo.mp4"
