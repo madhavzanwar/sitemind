@@ -1,0 +1,3776 @@
+{
+  "run_id": "run-20261112-234535-dd21",
+  "goal": {
+    "text": "Get the 480 V switchgear package for Project Alpha ordered by 2027-03-15 within budget ₹4.6 Cr",
+    "project": "Project Alpha",
+    "package": "480 V switchgear",
+    "need_by": "2027-03-15",
+    "required_on_site": "2027-07-30",
+    "budget_inr": 46000000.0,
+    "currency": "INR"
+  },
+  "status": "completed",
+  "sim_now": "2027-02-10T14:00:00+05:30",
+  "sim_start": "2027-01-11T09:00:00+05:30",
+  "plan": {
+    "version": 2,
+    "tasks": [
+      {
+        "id": "T1-takeoff",
+        "title": "Take off 480 V switchgear quantities from the spec PDF",
+        "specialist": "takeoff",
+        "depends_on": [],
+        "deadline": "2027-01-12",
+        "budget_inr": 25000.0,
+        "status": "done",
+        "attempts": 1,
+        "plan_version": 1,
+        "started_at": "2027-01-11T11:00:00+05:30",
+        "finished_at": "2027-01-11T23:00:00+05:30",
+        "output_ref": "takeoff",
+        "note": null
+      },
+      {
+        "id": "T2-rfq",
+        "title": "Send RFQs to 3 vendors and collect quotes (retry ≤3)",
+        "specialist": "quotes",
+        "depends_on": [
+          "T1-takeoff"
+        ],
+        "deadline": "2027-01-21",
+        "budget_inr": 18000.0,
+        "status": "done",
+        "attempts": 1,
+        "plan_version": 1,
+        "started_at": "2027-01-11T23:00:00+05:30",
+        "finished_at": "2027-01-17T23:00:00+05:30",
+        "output_ref": "rfq",
+        "note": null
+      },
+      {
+        "id": "T3-levelling",
+        "title": "Bid levelling: refresh and confirm every quote",
+        "specialist": "quotes",
+        "depends_on": [
+          "T2-rfq"
+        ],
+        "deadline": "2027-01-25",
+        "budget_inr": 20000.0,
+        "status": "done",
+        "attempts": 1,
+        "plan_version": 1,
+        "started_at": "2027-01-17T23:00:00+05:30",
+        "finished_at": "2027-01-20T23:00:00+05:30",
+        "output_ref": "levelling",
+        "note": null
+      },
+      {
+        "id": "T4-schedule-V1",
+        "title": "CPM schedule check for V1",
+        "specialist": "schedule",
+        "depends_on": [
+          "T3-levelling"
+        ],
+        "deadline": "2027-02-26",
+        "budget_inr": 6000.0,
+        "status": "done",
+        "attempts": 1,
+        "plan_version": 1,
+        "started_at": "2027-01-20T23:00:00+05:30",
+        "finished_at": "2027-01-21T05:00:00+05:30",
+        "output_ref": "schedule:V1",
+        "note": null
+      },
+      {
+        "id": "T5-schedule-V2",
+        "title": "CPM schedule check for V2",
+        "specialist": "schedule",
+        "depends_on": [
+          "T3-levelling"
+        ],
+        "deadline": "2027-02-26",
+        "budget_inr": 6000.0,
+        "status": "done",
+        "attempts": 1,
+        "plan_version": 1,
+        "started_at": "2027-01-21T05:00:00+05:30",
+        "finished_at": "2027-01-21T11:00:00+05:30",
+        "output_ref": "schedule:V2",
+        "note": null
+      },
+      {
+        "id": "T6-schedule-V3",
+        "title": "CPM schedule check for V3",
+        "specialist": "schedule",
+        "depends_on": [
+          "T3-levelling"
+        ],
+        "deadline": "2027-02-26",
+        "budget_inr": 6000.0,
+        "status": "done",
+        "attempts": 1,
+        "plan_version": 1,
+        "started_at": "2027-01-21T11:00:00+05:30",
+        "finished_at": "2027-01-21T17:00:00+05:30",
+        "output_ref": "schedule:V3",
+        "note": null
+      },
+      {
+        "id": "T7-budget-V1",
+        "title": "Budget check for V1",
+        "specialist": "budget",
+        "depends_on": [
+          "T3-levelling"
+        ],
+        "deadline": "2027-02-26",
+        "budget_inr": 4000.0,
+        "status": "done",
+        "attempts": 1,
+        "plan_version": 1,
+        "started_at": "2027-01-21T17:00:00+05:30",
+        "finished_at": "2027-01-21T23:00:00+05:30",
+        "output_ref": "budget:V1",
+        "note": null
+      },
+      {
+        "id": "T8-budget-V2",
+        "title": "Budget check for V2",
+        "specialist": "budget",
+        "depends_on": [
+          "T3-levelling"
+        ],
+        "deadline": "2027-02-26",
+        "budget_inr": 4000.0,
+        "status": "done",
+        "attempts": 1,
+        "plan_version": 1,
+        "started_at": "2027-01-21T23:00:00+05:30",
+        "finished_at": "2027-01-22T05:00:00+05:30",
+        "output_ref": "budget:V2",
+        "note": null
+      },
+      {
+        "id": "T9-budget-V3",
+        "title": "Budget check for V3",
+        "specialist": "budget",
+        "depends_on": [
+          "T3-levelling"
+        ],
+        "deadline": "2027-02-26",
+        "budget_inr": 4000.0,
+        "status": "done",
+        "attempts": 1,
+        "plan_version": 1,
+        "started_at": "2027-01-22T05:00:00+05:30",
+        "finished_at": "2027-01-22T11:00:00+05:30",
+        "output_ref": "budget:V3",
+        "note": null
+      },
+      {
+        "id": "T10-rank",
+        "title": "Rank vendor options and write the decision memo",
+        "specialist": "approvals",
+        "depends_on": [
+          "T4-schedule-V1",
+          "T5-schedule-V2",
+          "T6-schedule-V3",
+          "T7-budget-V1",
+          "T8-budget-V2",
+          "T9-budget-V3"
+        ],
+        "deadline": "2027-03-03",
+        "budget_inr": 10000.0,
+        "status": "skipped",
+        "attempts": 0,
+        "plan_version": 1,
+        "started_at": null,
+        "finished_at": null,
+        "output_ref": "rank",
+        "note": "superseded by plan v2: options changed (deadline_break:V3, budget_breach:V2)"
+      },
+      {
+        "id": "T11-approve-vendor",
+        "title": "Human approval: vendor selection",
+        "specialist": "approvals",
+        "depends_on": [
+          "T18-escalate"
+        ],
+        "deadline": "2027-03-08",
+        "budget_inr": 0.0,
+        "status": "done",
+        "attempts": 1,
+        "plan_version": 1,
+        "started_at": "2027-01-30T02:00:00+05:30",
+        "finished_at": "2027-02-04T02:00:00+05:30",
+        "output_ref": "approve-vendor",
+        "note": null
+      },
+      {
+        "id": "T12-draft-po",
+        "title": "Draft the purchase order for the selected vendor",
+        "specialist": "po",
+        "depends_on": [
+          "T11-approve-vendor"
+        ],
+        "deadline": "2027-03-10",
+        "budget_inr": 15000.0,
+        "status": "done",
+        "attempts": 1,
+        "plan_version": 1,
+        "started_at": "2027-02-04T02:00:00+05:30",
+        "finished_at": "2027-02-07T02:00:00+05:30",
+        "output_ref": "draft-po",
+        "note": null
+      },
+      {
+        "id": "T13-approve-po",
+        "title": "Human approval: PO release",
+        "specialist": "approvals",
+        "depends_on": [
+          "T12-draft-po"
+        ],
+        "deadline": "2027-03-13",
+        "budget_inr": 0.0,
+        "status": "done",
+        "attempts": 1,
+        "plan_version": 1,
+        "started_at": "2027-02-07T02:00:00+05:30",
+        "finished_at": "2027-02-10T02:00:00+05:30",
+        "output_ref": "approve-po",
+        "note": null
+      },
+      {
+        "id": "T14-send-po",
+        "title": "Transmit the PO to the vendor (idempotent)",
+        "specialist": "po",
+        "depends_on": [
+          "T13-approve-po"
+        ],
+        "deadline": "2027-03-15",
+        "budget_inr": 2000.0,
+        "status": "done",
+        "attempts": 1,
+        "plan_version": 1,
+        "started_at": "2027-02-10T02:00:00+05:30",
+        "finished_at": "2027-02-10T14:00:00+05:30",
+        "output_ref": "send-po",
+        "note": null
+      },
+      {
+        "id": "T15-negotiate-V2",
+        "title": "Re-quote / negotiate V2's revised price back inside budget",
+        "specialist": "quotes",
+        "depends_on": [
+          "T3-levelling"
+        ],
+        "deadline": "2027-02-28",
+        "budget_inr": 15000.0,
+        "status": "done",
+        "attempts": 1,
+        "plan_version": 2,
+        "started_at": "2027-01-22T14:00:00+05:30",
+        "finished_at": "2027-01-26T14:00:00+05:30",
+        "output_ref": "negotiate:V2",
+        "note": "trigger budget_breach:V2"
+      },
+      {
+        "id": "T16-expedite-V3",
+        "title": "Evaluate V3 expedite offer (−42 d for ₹26.0 L)",
+        "specialist": "schedule",
+        "depends_on": [
+          "T3-levelling"
+        ],
+        "deadline": "2027-02-28",
+        "budget_inr": 2600000.0,
+        "status": "done",
+        "attempts": 1,
+        "plan_version": 2,
+        "started_at": "2027-01-26T14:00:00+05:30",
+        "finished_at": "2027-01-28T14:00:00+05:30",
+        "output_ref": "expedite:V3",
+        "note": "trigger deadline_break:V3"
+      },
+      {
+        "id": "T17-rank",
+        "title": "Re-rank options with negotiated / expedited figures; rewrite decision memo",
+        "specialist": "approvals",
+        "depends_on": [
+          "T15-negotiate-V2",
+          "T16-expedite-V3"
+        ],
+        "deadline": "2027-03-03",
+        "budget_inr": 10000.0,
+        "status": "done",
+        "attempts": 1,
+        "plan_version": 2,
+        "started_at": "2027-01-28T14:00:00+05:30",
+        "finished_at": "2027-01-29T14:00:00+05:30",
+        "output_ref": "rank",
+        "note": null
+      },
+      {
+        "id": "T18-escalate",
+        "title": "Escalate budget / deadline trade-off to the project manager",
+        "specialist": "approvals",
+        "depends_on": [
+          "T17-rank"
+        ],
+        "deadline": "2027-03-05",
+        "budget_inr": 2000.0,
+        "status": "done",
+        "attempts": 1,
+        "plan_version": 2,
+        "started_at": "2027-01-29T14:00:00+05:30",
+        "finished_at": "2027-01-30T02:00:00+05:30",
+        "output_ref": "escalate",
+        "note": null
+      }
+    ],
+    "risks": [
+      {
+        "id": "R1-lead-time",
+        "title": "Switchgear manufacturing lead time (16-24 weeks) vs on-site date 2027-07-30",
+        "likelihood": "high",
+        "impact": "high",
+        "mitigation": "Compute CPM float per vendor; prefer on-time options and price expedite offers before deciding."
+      },
+      {
+        "id": "R2-price-volatility",
+        "title": "Copper-linked price volatility and short quote validity",
+        "likelihood": "medium",
+        "impact": "high",
+        "mitigation": "Refresh every quote before evaluation and re-check budget on any revision."
+      },
+      {
+        "id": "R3-vendor-non-response",
+        "title": "Vendor non-response to RFQ",
+        "likelihood": "medium",
+        "impact": "medium",
+        "mitigation": "Retry RFQs up to 3 times with escalating follow-up; never block on one vendor."
+      },
+      {
+        "id": "R4-spec-ambiguity",
+        "title": "Drawing vs equipment-schedule discrepancies in the spec",
+        "likelihood": "low",
+        "impact": "medium",
+        "mitigation": "Schedule governs; surface takeoff warnings as RFIs with the source page."
+      },
+      {
+        "id": "R5-approval-latency",
+        "title": "Human approvals close to the order-by date",
+        "likelihood": "medium",
+        "impact": "medium",
+        "mitigation": "Request vendor selection approval by 2027-03-08 with a ranked decision memo."
+      },
+      {
+        "id": "R6-budget-breach",
+        "title": "Revised quote pushes committed cost over the budget ceiling",
+        "likelihood": "high",
+        "impact": "high",
+        "mitigation": "Negotiate the surcharge, compare against alternates, and escalate a budget exception only with a ranked memo."
+      },
+      {
+        "id": "R7-expedite",
+        "title": "Expedited manufacturing slot may slip",
+        "likelihood": "medium",
+        "impact": "high",
+        "mitigation": "Tie the expedite fee to a liquidated-damages clause and weekly works-progress reports."
+      }
+    ],
+    "rationale": "Plan v2 reacts to budget_breach:V2, deadline_break:V3: add T15-negotiate-V2; add T16-expedite-V3; skip T10-rank; rewire T11-approve-vendor -> T18-escalate; add T17-rank; add T18-escalate. Completed work is kept; only the affected decision path is redone.",
+    "created_at": "2027-01-22T11:00:00+05:30"
+  },
+  "plan_history": [
+    {
+      "version": 1,
+      "tasks": [
+        {
+          "id": "T1-takeoff",
+          "title": "Take off 480 V switchgear quantities from the spec PDF",
+          "specialist": "takeoff",
+          "depends_on": [],
+          "deadline": "2027-01-12",
+          "budget_inr": 25000.0,
+          "status": "done",
+          "attempts": 1,
+          "plan_version": 1,
+          "started_at": "2027-01-11T11:00:00+05:30",
+          "finished_at": "2027-01-11T23:00:00+05:30",
+          "output_ref": "takeoff",
+          "note": null
+        },
+        {
+          "id": "T2-rfq",
+          "title": "Send RFQs to 3 vendors and collect quotes (retry ≤3)",
+          "specialist": "quotes",
+          "depends_on": [
+            "T1-takeoff"
+          ],
+          "deadline": "2027-01-21",
+          "budget_inr": 18000.0,
+          "status": "done",
+          "attempts": 1,
+          "plan_version": 1,
+          "started_at": "2027-01-11T23:00:00+05:30",
+          "finished_at": "2027-01-17T23:00:00+05:30",
+          "output_ref": "rfq",
+          "note": null
+        },
+        {
+          "id": "T3-levelling",
+          "title": "Bid levelling: refresh and confirm every quote",
+          "specialist": "quotes",
+          "depends_on": [
+            "T2-rfq"
+          ],
+          "deadline": "2027-01-25",
+          "budget_inr": 20000.0,
+          "status": "done",
+          "attempts": 1,
+          "plan_version": 1,
+          "started_at": "2027-01-17T23:00:00+05:30",
+          "finished_at": "2027-01-20T23:00:00+05:30",
+          "output_ref": "levelling",
+          "note": null
+        },
+        {
+          "id": "T4-schedule-V1",
+          "title": "CPM schedule check for V1",
+          "specialist": "schedule",
+          "depends_on": [
+            "T3-levelling"
+          ],
+          "deadline": "2027-02-26",
+          "budget_inr": 6000.0,
+          "status": "done",
+          "attempts": 1,
+          "plan_version": 1,
+          "started_at": "2027-01-20T23:00:00+05:30",
+          "finished_at": "2027-01-21T05:00:00+05:30",
+          "output_ref": "schedule:V1",
+          "note": null
+        },
+        {
+          "id": "T5-schedule-V2",
+          "title": "CPM schedule check for V2",
+          "specialist": "schedule",
+          "depends_on": [
+            "T3-levelling"
+          ],
+          "deadline": "2027-02-26",
+          "budget_inr": 6000.0,
+          "status": "done",
+          "attempts": 1,
+          "plan_version": 1,
+          "started_at": "2027-01-21T05:00:00+05:30",
+          "finished_at": "2027-01-21T11:00:00+05:30",
+          "output_ref": "schedule:V2",
+          "note": null
+        },
+        {
+          "id": "T6-schedule-V3",
+          "title": "CPM schedule check for V3",
+          "specialist": "schedule",
+          "depends_on": [
+            "T3-levelling"
+          ],
+          "deadline": "2027-02-26",
+          "budget_inr": 6000.0,
+          "status": "done",
+          "attempts": 1,
+          "plan_version": 1,
+          "started_at": "2027-01-21T11:00:00+05:30",
+          "finished_at": "2027-01-21T17:00:00+05:30",
+          "output_ref": "schedule:V3",
+          "note": null
+        },
+        {
+          "id": "T7-budget-V1",
+          "title": "Budget check for V1",
+          "specialist": "budget",
+          "depends_on": [
+            "T3-levelling"
+          ],
+          "deadline": "2027-02-26",
+          "budget_inr": 4000.0,
+          "status": "done",
+          "attempts": 1,
+          "plan_version": 1,
+          "started_at": "2027-01-21T17:00:00+05:30",
+          "finished_at": "2027-01-21T23:00:00+05:30",
+          "output_ref": "budget:V1",
+          "note": null
+        },
+        {
+          "id": "T8-budget-V2",
+          "title": "Budget check for V2",
+          "specialist": "budget",
+          "depends_on": [
+            "T3-levelling"
+          ],
+          "deadline": "2027-02-26",
+          "budget_inr": 4000.0,
+          "status": "done",
+          "attempts": 1,
+          "plan_version": 1,
+          "started_at": "2027-01-21T23:00:00+05:30",
+          "finished_at": "2027-01-22T05:00:00+05:30",
+          "output_ref": "budget:V2",
+          "note": null
+        },
+        {
+          "id": "T9-budget-V3",
+          "title": "Budget check for V3",
+          "specialist": "budget",
+          "depends_on": [
+            "T3-levelling"
+          ],
+          "deadline": "2027-02-26",
+          "budget_inr": 4000.0,
+          "status": "done",
+          "attempts": 1,
+          "plan_version": 1,
+          "started_at": "2027-01-22T05:00:00+05:30",
+          "finished_at": "2027-01-22T11:00:00+05:30",
+          "output_ref": "budget:V3",
+          "note": null
+        },
+        {
+          "id": "T10-rank",
+          "title": "Rank vendor options and write the decision memo",
+          "specialist": "approvals",
+          "depends_on": [
+            "T4-schedule-V1",
+            "T5-schedule-V2",
+            "T6-schedule-V3",
+            "T7-budget-V1",
+            "T8-budget-V2",
+            "T9-budget-V3"
+          ],
+          "deadline": "2027-03-03",
+          "budget_inr": 10000.0,
+          "status": "pending",
+          "attempts": 0,
+          "plan_version": 1,
+          "started_at": null,
+          "finished_at": null,
+          "output_ref": "rank",
+          "note": null
+        },
+        {
+          "id": "T11-approve-vendor",
+          "title": "Human approval: vendor selection",
+          "specialist": "approvals",
+          "depends_on": [
+            "T10-rank"
+          ],
+          "deadline": "2027-03-08",
+          "budget_inr": 0.0,
+          "status": "pending",
+          "attempts": 0,
+          "plan_version": 1,
+          "started_at": null,
+          "finished_at": null,
+          "output_ref": "approve-vendor",
+          "note": null
+        },
+        {
+          "id": "T12-draft-po",
+          "title": "Draft the purchase order for the selected vendor",
+          "specialist": "po",
+          "depends_on": [
+            "T11-approve-vendor"
+          ],
+          "deadline": "2027-03-10",
+          "budget_inr": 15000.0,
+          "status": "pending",
+          "attempts": 0,
+          "plan_version": 1,
+          "started_at": null,
+          "finished_at": null,
+          "output_ref": "draft-po",
+          "note": null
+        },
+        {
+          "id": "T13-approve-po",
+          "title": "Human approval: PO release",
+          "specialist": "approvals",
+          "depends_on": [
+            "T12-draft-po"
+          ],
+          "deadline": "2027-03-13",
+          "budget_inr": 0.0,
+          "status": "pending",
+          "attempts": 0,
+          "plan_version": 1,
+          "started_at": null,
+          "finished_at": null,
+          "output_ref": "approve-po",
+          "note": null
+        },
+        {
+          "id": "T14-send-po",
+          "title": "Transmit the PO to the vendor (idempotent)",
+          "specialist": "po",
+          "depends_on": [
+            "T13-approve-po"
+          ],
+          "deadline": "2027-03-15",
+          "budget_inr": 2000.0,
+          "status": "pending",
+          "attempts": 0,
+          "plan_version": 1,
+          "started_at": null,
+          "finished_at": null,
+          "output_ref": "send-po",
+          "note": null
+        }
+      ],
+      "risks": [
+        {
+          "id": "R1-lead-time",
+          "title": "Switchgear manufacturing lead time (16-24 weeks) vs on-site date 2027-07-30",
+          "likelihood": "high",
+          "impact": "high",
+          "mitigation": "Compute CPM float per vendor; prefer on-time options and price expedite offers before deciding."
+        },
+        {
+          "id": "R2-price-volatility",
+          "title": "Copper-linked price volatility and short quote validity",
+          "likelihood": "medium",
+          "impact": "high",
+          "mitigation": "Refresh every quote before evaluation and re-check budget on any revision."
+        },
+        {
+          "id": "R3-vendor-non-response",
+          "title": "Vendor non-response to RFQ",
+          "likelihood": "medium",
+          "impact": "medium",
+          "mitigation": "Retry RFQs up to 3 times with escalating follow-up; never block on one vendor."
+        },
+        {
+          "id": "R4-spec-ambiguity",
+          "title": "Drawing vs equipment-schedule discrepancies in the spec",
+          "likelihood": "low",
+          "impact": "medium",
+          "mitigation": "Schedule governs; surface takeoff warnings as RFIs with the source page."
+        },
+        {
+          "id": "R5-approval-latency",
+          "title": "Human approvals close to the order-by date",
+          "likelihood": "medium",
+          "impact": "medium",
+          "mitigation": "Request vendor selection approval by 2027-03-08 with a ranked decision memo."
+        }
+      ],
+      "rationale": "Work backwards from the order-by date 2027-03-15: quantities first, then competitive quotes from 3 vendors, each checked against the on-site date with CPM and against the ₹4.60 Cr budget. A ranked decision memo goes to the project manager before any PO is released.",
+      "created_at": "2027-01-11T09:00:00+05:30"
+    },
+    {
+      "version": 2,
+      "tasks": [
+        {
+          "id": "T1-takeoff",
+          "title": "Take off 480 V switchgear quantities from the spec PDF",
+          "specialist": "takeoff",
+          "depends_on": [],
+          "deadline": "2027-01-12",
+          "budget_inr": 25000.0,
+          "status": "done",
+          "attempts": 1,
+          "plan_version": 1,
+          "started_at": "2027-01-11T11:00:00+05:30",
+          "finished_at": "2027-01-11T23:00:00+05:30",
+          "output_ref": "takeoff",
+          "note": null
+        },
+        {
+          "id": "T2-rfq",
+          "title": "Send RFQs to 3 vendors and collect quotes (retry ≤3)",
+          "specialist": "quotes",
+          "depends_on": [
+            "T1-takeoff"
+          ],
+          "deadline": "2027-01-21",
+          "budget_inr": 18000.0,
+          "status": "done",
+          "attempts": 1,
+          "plan_version": 1,
+          "started_at": "2027-01-11T23:00:00+05:30",
+          "finished_at": "2027-01-17T23:00:00+05:30",
+          "output_ref": "rfq",
+          "note": null
+        },
+        {
+          "id": "T3-levelling",
+          "title": "Bid levelling: refresh and confirm every quote",
+          "specialist": "quotes",
+          "depends_on": [
+            "T2-rfq"
+          ],
+          "deadline": "2027-01-25",
+          "budget_inr": 20000.0,
+          "status": "done",
+          "attempts": 1,
+          "plan_version": 1,
+          "started_at": "2027-01-17T23:00:00+05:30",
+          "finished_at": "2027-01-20T23:00:00+05:30",
+          "output_ref": "levelling",
+          "note": null
+        },
+        {
+          "id": "T4-schedule-V1",
+          "title": "CPM schedule check for V1",
+          "specialist": "schedule",
+          "depends_on": [
+            "T3-levelling"
+          ],
+          "deadline": "2027-02-26",
+          "budget_inr": 6000.0,
+          "status": "done",
+          "attempts": 1,
+          "plan_version": 1,
+          "started_at": "2027-01-20T23:00:00+05:30",
+          "finished_at": "2027-01-21T05:00:00+05:30",
+          "output_ref": "schedule:V1",
+          "note": null
+        },
+        {
+          "id": "T5-schedule-V2",
+          "title": "CPM schedule check for V2",
+          "specialist": "schedule",
+          "depends_on": [
+            "T3-levelling"
+          ],
+          "deadline": "2027-02-26",
+          "budget_inr": 6000.0,
+          "status": "done",
+          "attempts": 1,
+          "plan_version": 1,
+          "started_at": "2027-01-21T05:00:00+05:30",
+          "finished_at": "2027-01-21T11:00:00+05:30",
+          "output_ref": "schedule:V2",
+          "note": null
+        },
+        {
+          "id": "T6-schedule-V3",
+          "title": "CPM schedule check for V3",
+          "specialist": "schedule",
+          "depends_on": [
+            "T3-levelling"
+          ],
+          "deadline": "2027-02-26",
+          "budget_inr": 6000.0,
+          "status": "done",
+          "attempts": 1,
+          "plan_version": 1,
+          "started_at": "2027-01-21T11:00:00+05:30",
+          "finished_at": "2027-01-21T17:00:00+05:30",
+          "output_ref": "schedule:V3",
+          "note": null
+        },
+        {
+          "id": "T7-budget-V1",
+          "title": "Budget check for V1",
+          "specialist": "budget",
+          "depends_on": [
+            "T3-levelling"
+          ],
+          "deadline": "2027-02-26",
+          "budget_inr": 4000.0,
+          "status": "done",
+          "attempts": 1,
+          "plan_version": 1,
+          "started_at": "2027-01-21T17:00:00+05:30",
+          "finished_at": "2027-01-21T23:00:00+05:30",
+          "output_ref": "budget:V1",
+          "note": null
+        },
+        {
+          "id": "T8-budget-V2",
+          "title": "Budget check for V2",
+          "specialist": "budget",
+          "depends_on": [
+            "T3-levelling"
+          ],
+          "deadline": "2027-02-26",
+          "budget_inr": 4000.0,
+          "status": "done",
+          "attempts": 1,
+          "plan_version": 1,
+          "started_at": "2027-01-21T23:00:00+05:30",
+          "finished_at": "2027-01-22T05:00:00+05:30",
+          "output_ref": "budget:V2",
+          "note": null
+        },
+        {
+          "id": "T9-budget-V3",
+          "title": "Budget check for V3",
+          "specialist": "budget",
+          "depends_on": [
+            "T3-levelling"
+          ],
+          "deadline": "2027-02-26",
+          "budget_inr": 4000.0,
+          "status": "done",
+          "attempts": 1,
+          "plan_version": 1,
+          "started_at": "2027-01-22T05:00:00+05:30",
+          "finished_at": "2027-01-22T11:00:00+05:30",
+          "output_ref": "budget:V3",
+          "note": null
+        },
+        {
+          "id": "T10-rank",
+          "title": "Rank vendor options and write the decision memo",
+          "specialist": "approvals",
+          "depends_on": [
+            "T4-schedule-V1",
+            "T5-schedule-V2",
+            "T6-schedule-V3",
+            "T7-budget-V1",
+            "T8-budget-V2",
+            "T9-budget-V3"
+          ],
+          "deadline": "2027-03-03",
+          "budget_inr": 10000.0,
+          "status": "skipped",
+          "attempts": 0,
+          "plan_version": 1,
+          "started_at": null,
+          "finished_at": null,
+          "output_ref": "rank",
+          "note": "superseded by plan v2: options changed (deadline_break:V3, budget_breach:V2)"
+        },
+        {
+          "id": "T11-approve-vendor",
+          "title": "Human approval: vendor selection",
+          "specialist": "approvals",
+          "depends_on": [
+            "T18-escalate"
+          ],
+          "deadline": "2027-03-08",
+          "budget_inr": 0.0,
+          "status": "done",
+          "attempts": 1,
+          "plan_version": 1,
+          "started_at": "2027-01-30T02:00:00+05:30",
+          "finished_at": "2027-02-04T02:00:00+05:30",
+          "output_ref": "approve-vendor",
+          "note": null
+        },
+        {
+          "id": "T12-draft-po",
+          "title": "Draft the purchase order for the selected vendor",
+          "specialist": "po",
+          "depends_on": [
+            "T11-approve-vendor"
+          ],
+          "deadline": "2027-03-10",
+          "budget_inr": 15000.0,
+          "status": "done",
+          "attempts": 1,
+          "plan_version": 1,
+          "started_at": "2027-02-04T02:00:00+05:30",
+          "finished_at": "2027-02-07T02:00:00+05:30",
+          "output_ref": "draft-po",
+          "note": null
+        },
+        {
+          "id": "T13-approve-po",
+          "title": "Human approval: PO release",
+          "specialist": "approvals",
+          "depends_on": [
+            "T12-draft-po"
+          ],
+          "deadline": "2027-03-13",
+          "budget_inr": 0.0,
+          "status": "done",
+          "attempts": 1,
+          "plan_version": 1,
+          "started_at": "2027-02-07T02:00:00+05:30",
+          "finished_at": "2027-02-10T02:00:00+05:30",
+          "output_ref": "approve-po",
+          "note": null
+        },
+        {
+          "id": "T14-send-po",
+          "title": "Transmit the PO to the vendor (idempotent)",
+          "specialist": "po",
+          "depends_on": [
+            "T13-approve-po"
+          ],
+          "deadline": "2027-03-15",
+          "budget_inr": 2000.0,
+          "status": "done",
+          "attempts": 1,
+          "plan_version": 1,
+          "started_at": "2027-02-10T02:00:00+05:30",
+          "finished_at": "2027-02-10T14:00:00+05:30",
+          "output_ref": "send-po",
+          "note": null
+        },
+        {
+          "id": "T15-negotiate-V2",
+          "title": "Re-quote / negotiate V2's revised price back inside budget",
+          "specialist": "quotes",
+          "depends_on": [
+            "T3-levelling"
+          ],
+          "deadline": "2027-02-28",
+          "budget_inr": 15000.0,
+          "status": "done",
+          "attempts": 1,
+          "plan_version": 2,
+          "started_at": "2027-01-22T14:00:00+05:30",
+          "finished_at": "2027-01-26T14:00:00+05:30",
+          "output_ref": "negotiate:V2",
+          "note": "trigger budget_breach:V2"
+        },
+        {
+          "id": "T16-expedite-V3",
+          "title": "Evaluate V3 expedite offer (−42 d for ₹26.0 L)",
+          "specialist": "schedule",
+          "depends_on": [
+            "T3-levelling"
+          ],
+          "deadline": "2027-02-28",
+          "budget_inr": 2600000.0,
+          "status": "done",
+          "attempts": 1,
+          "plan_version": 2,
+          "started_at": "2027-01-26T14:00:00+05:30",
+          "finished_at": "2027-01-28T14:00:00+05:30",
+          "output_ref": "expedite:V3",
+          "note": "trigger deadline_break:V3"
+        },
+        {
+          "id": "T17-rank",
+          "title": "Re-rank options with negotiated / expedited figures; rewrite decision memo",
+          "specialist": "approvals",
+          "depends_on": [
+            "T15-negotiate-V2",
+            "T16-expedite-V3"
+          ],
+          "deadline": "2027-03-03",
+          "budget_inr": 10000.0,
+          "status": "done",
+          "attempts": 1,
+          "plan_version": 2,
+          "started_at": "2027-01-28T14:00:00+05:30",
+          "finished_at": "2027-01-29T14:00:00+05:30",
+          "output_ref": "rank",
+          "note": null
+        },
+        {
+          "id": "T18-escalate",
+          "title": "Escalate budget / deadline trade-off to the project manager",
+          "specialist": "approvals",
+          "depends_on": [
+            "T17-rank"
+          ],
+          "deadline": "2027-03-05",
+          "budget_inr": 2000.0,
+          "status": "done",
+          "attempts": 1,
+          "plan_version": 2,
+          "started_at": "2027-01-29T14:00:00+05:30",
+          "finished_at": "2027-01-30T02:00:00+05:30",
+          "output_ref": "escalate",
+          "note": null
+        }
+      ],
+      "risks": [
+        {
+          "id": "R1-lead-time",
+          "title": "Switchgear manufacturing lead time (16-24 weeks) vs on-site date 2027-07-30",
+          "likelihood": "high",
+          "impact": "high",
+          "mitigation": "Compute CPM float per vendor; prefer on-time options and price expedite offers before deciding."
+        },
+        {
+          "id": "R2-price-volatility",
+          "title": "Copper-linked price volatility and short quote validity",
+          "likelihood": "medium",
+          "impact": "high",
+          "mitigation": "Refresh every quote before evaluation and re-check budget on any revision."
+        },
+        {
+          "id": "R3-vendor-non-response",
+          "title": "Vendor non-response to RFQ",
+          "likelihood": "medium",
+          "impact": "medium",
+          "mitigation": "Retry RFQs up to 3 times with escalating follow-up; never block on one vendor."
+        },
+        {
+          "id": "R4-spec-ambiguity",
+          "title": "Drawing vs equipment-schedule discrepancies in the spec",
+          "likelihood": "low",
+          "impact": "medium",
+          "mitigation": "Schedule governs; surface takeoff warnings as RFIs with the source page."
+        },
+        {
+          "id": "R5-approval-latency",
+          "title": "Human approvals close to the order-by date",
+          "likelihood": "medium",
+          "impact": "medium",
+          "mitigation": "Request vendor selection approval by 2027-03-08 with a ranked decision memo."
+        },
+        {
+          "id": "R6-budget-breach",
+          "title": "Revised quote pushes committed cost over the budget ceiling",
+          "likelihood": "high",
+          "impact": "high",
+          "mitigation": "Negotiate the surcharge, compare against alternates, and escalate a budget exception only with a ranked memo."
+        },
+        {
+          "id": "R7-expedite",
+          "title": "Expedited manufacturing slot may slip",
+          "likelihood": "medium",
+          "impact": "high",
+          "mitigation": "Tie the expedite fee to a liquidated-damages clause and weekly works-progress reports."
+        }
+      ],
+      "rationale": "Plan v2 reacts to budget_breach:V2, deadline_break:V3: add T15-negotiate-V2; add T16-expedite-V3; skip T10-rank; rewire T11-approve-vendor -> T18-escalate; add T17-rank; add T18-escalate. Completed work is kept; only the affected decision path is redone.",
+      "created_at": "2027-01-22T11:00:00+05:30"
+    }
+  ],
+  "takeoff": {
+    "document": "project_alpha_480V_switchgear_spec.pdf",
+    "lines": [
+      {
+        "item_code": "SWGR-MAIN-4000A",
+        "description": "Main LV switchgear lineup, draw-out ACB incomer",
+        "qty": 4,
+        "unit": "ea",
+        "rating": "4000 A, 65 kA",
+        "source": "project_alpha_480V_switchgear_spec.pdf p4 table 1 row 1"
+      },
+      {
+        "item_code": "BKR-TIE-4000A",
+        "description": "Bus-tie air circuit breaker, draw-out",
+        "qty": 2,
+        "unit": "ea",
+        "rating": "4000 A, 65 kA",
+        "source": "project_alpha_480V_switchgear_spec.pdf p4 table 1 row 2"
+      },
+      {
+        "item_code": "BKR-FDR-1600A",
+        "description": "Feeder ACB, electronic trip LSIG",
+        "qty": 8,
+        "unit": "ea",
+        "rating": "1600 A, 65 kA",
+        "source": "project_alpha_480V_switchgear_spec.pdf p4 table 1 row 3"
+      },
+      {
+        "item_code": "BKR-FDR-800A",
+        "description": "Feeder MCCB, electronic trip LSI",
+        "qty": 16,
+        "unit": "ea",
+        "rating": "800 A, 65 kA",
+        "source": "project_alpha_480V_switchgear_spec.pdf p4 table 1 row 4"
+      },
+      {
+        "item_code": "ATS-1200A-4P",
+        "description": "Automatic transfer switch, 4-pole, open transition",
+        "qty": 4,
+        "unit": "ea",
+        "rating": "1200 A",
+        "source": "project_alpha_480V_switchgear_spec.pdf p4 table 1 row 5"
+      },
+      {
+        "item_code": "MTR-PQ-02S",
+        "description": "Power quality meter, Modbus TCP",
+        "qty": 10,
+        "unit": "ea",
+        "rating": "Class 0.2S",
+        "source": "project_alpha_480V_switchgear_spec.pdf p4 table 1 row 6"
+      },
+      {
+        "item_code": "SPD-T1-200KA",
+        "description": "Surge protective device Type 1+2",
+        "qty": 4,
+        "unit": "ea",
+        "rating": "200 kA",
+        "source": "project_alpha_480V_switchgear_spec.pdf p4 table 1 row 7"
+      },
+      {
+        "item_code": "BUSWAY-4000A-CU",
+        "description": "Sandwich busway, copper, IP54",
+        "qty": 120,
+        "unit": "m",
+        "rating": "4000 A",
+        "source": "project_alpha_480V_switchgear_spec.pdf p4 table 1 row 8"
+      }
+    ],
+    "confidence": 0.92,
+    "warnings": [
+      "SPD-T1-200KA: drawing p3 shows 3 ea (SPD-xx tags) but the equipment schedule lists 4 ea; schedule quantity used - raise an RFI to confirm."
+    ]
+  },
+  "quotes": [
+    {
+      "vendor_id": "V1",
+      "vendor_name": "Voltaris Switchgear Pvt Ltd",
+      "quote_id": "Q-V1-20270115-R1",
+      "revision": 1,
+      "lines": [
+        {
+          "item_code": "SWGR-MAIN-4000A",
+          "qty": 4,
+          "unit_price_inr": 4628000.0,
+          "total_inr": 18512000.0
+        },
+        {
+          "item_code": "BKR-TIE-4000A",
+          "qty": 2,
+          "unit_price_inr": 1319500.0,
+          "total_inr": 2639000.0
+        },
+        {
+          "item_code": "BKR-FDR-1600A",
+          "qty": 8,
+          "unit_price_inr": 558000.0,
+          "total_inr": 4464000.0
+        },
+        {
+          "item_code": "BKR-FDR-800A",
+          "qty": 16,
+          "unit_price_inr": 170200.0,
+          "total_inr": 2723200.0
+        },
+        {
+          "item_code": "ATS-1200A-4P",
+          "qty": 4,
+          "unit_price_inr": 862400.0,
+          "total_inr": 3449600.0
+        },
+        {
+          "item_code": "MTR-PQ-02S",
+          "qty": 10,
+          "unit_price_inr": 64600.0,
+          "total_inr": 646000.0
+        },
+        {
+          "item_code": "SPD-T1-200KA",
+          "qty": 4,
+          "unit_price_inr": 88400.0,
+          "total_inr": 353600.0
+        },
+        {
+          "item_code": "BUSWAY-4000A-CU",
+          "qty": 120,
+          "unit_price_inr": 19400.0,
+          "total_inr": 2328000.0
+        }
+      ],
+      "freight_inr": 360000.0,
+      "total_inr": 35475400.0,
+      "lead_time_days": 140,
+      "valid_until": "2027-02-14",
+      "reliability": 0.82,
+      "status": "received",
+      "received_at": "2027-01-15T23:00:00+05:30",
+      "notes": "Lowest price; type-tested IEC 61439-2 panels but two late deliveries on the last five orders (on-time 82%)."
+    },
+    {
+      "vendor_id": "V2",
+      "vendor_name": "Kestrel Power Systems",
+      "quote_id": "Q-V2-20270118-R2",
+      "revision": 2,
+      "lines": [
+        {
+          "item_code": "SWGR-MAIN-4000A",
+          "qty": 4,
+          "unit_price_inr": 5829700.0,
+          "total_inr": 23318800.0
+        },
+        {
+          "item_code": "BKR-TIE-4000A",
+          "qty": 2,
+          "unit_price_inr": 1609500.0,
+          "total_inr": 3219000.0
+        },
+        {
+          "item_code": "BKR-FDR-1600A",
+          "qty": 8,
+          "unit_price_inr": 688200.0,
+          "total_inr": 5505600.0
+        },
+        {
+          "item_code": "BKR-FDR-800A",
+          "qty": 16,
+          "unit_price_inr": 205400.0,
+          "total_inr": 3286400.0
+        },
+        {
+          "item_code": "ATS-1200A-4P",
+          "qty": 4,
+          "unit_price_inr": 1066000.0,
+          "total_inr": 4264000.0
+        },
+        {
+          "item_code": "MTR-PQ-02S",
+          "qty": 10,
+          "unit_price_inr": 75500.0,
+          "total_inr": 755000.0
+        },
+        {
+          "item_code": "SPD-T1-200KA",
+          "qty": 4,
+          "unit_price_inr": 105500.0,
+          "total_inr": 422000.0
+        },
+        {
+          "item_code": "BUSWAY-4000A-CU",
+          "qty": 120,
+          "unit_price_inr": 24300.0,
+          "total_inr": 2916000.0
+        }
+      ],
+      "freight_inr": 480000.0,
+      "total_inr": 44166800.0,
+      "lead_time_days": 112,
+      "valid_until": "2027-02-01",
+      "reliability": 0.93,
+      "status": "revised",
+      "received_at": "2027-01-18T23:00:00+05:30",
+      "notes": "Revision 2 of Q-V2-20270111-R1: Raw copper surcharge +11% (LME Cu up since RFQ); 3% early-order discount withdrawn because the 14-day offer validity lapsed"
+    },
+    {
+      "vendor_id": "V3",
+      "vendor_name": "Anvil Electric India",
+      "quote_id": "Q-V3-20270111-R1",
+      "revision": 1,
+      "lines": [
+        {
+          "item_code": "SWGR-MAIN-4000A",
+          "qty": 4,
+          "unit_price_inr": 4836000.0,
+          "total_inr": 19344000.0
+        },
+        {
+          "item_code": "BKR-TIE-4000A",
+          "qty": 2,
+          "unit_price_inr": 1363000.0,
+          "total_inr": 2726000.0
+        },
+        {
+          "item_code": "BKR-FDR-1600A",
+          "qty": 8,
+          "unit_price_inr": 570400.0,
+          "total_inr": 4563200.0
+        },
+        {
+          "item_code": "BKR-FDR-800A",
+          "qty": 16,
+          "unit_price_inr": 175800.0,
+          "total_inr": 2812800.0
+        },
+        {
+          "item_code": "ATS-1200A-4P",
+          "qty": 4,
+          "unit_price_inr": 901600.0,
+          "total_inr": 3606400.0
+        },
+        {
+          "item_code": "MTR-PQ-02S",
+          "qty": 10,
+          "unit_price_inr": 66000.0,
+          "total_inr": 660000.0
+        },
+        {
+          "item_code": "SPD-T1-200KA",
+          "qty": 4,
+          "unit_price_inr": 85500.0,
+          "total_inr": 342000.0
+        },
+        {
+          "item_code": "BUSWAY-4000A-CU",
+          "qty": 120,
+          "unit_price_inr": 20200.0,
+          "total_inr": 2424000.0
+        }
+      ],
+      "freight_inr": 780000.0,
+      "total_inr": 37258400.0,
+      "lead_time_days": 168,
+      "valid_until": "2027-02-25",
+      "reliability": 0.9,
+      "status": "received",
+      "received_at": "2027-01-11T23:00:00+05:30",
+      "notes": "Mid-priced, 90% on-time; standard lead time is long because Line 1 is booked through Q2 2027; expedite slot available for a fee. Expedite available: -42 days for INR 2,600,000."
+    }
+  ],
+  "vendor_attempts": [
+    {
+      "vendor_id": "V1",
+      "attempt": 1,
+      "outcome": "timeout",
+      "at": "2027-01-11T23:00:00+05:30",
+      "detail": "no response within 24 h; retrying (attempt 2/3)"
+    },
+    {
+      "vendor_id": "V1",
+      "attempt": 2,
+      "outcome": "timeout",
+      "at": "2027-01-13T23:00:00+05:30",
+      "detail": "no response within 24 h; retrying (attempt 3/3)"
+    },
+    {
+      "vendor_id": "V1",
+      "attempt": 3,
+      "outcome": "ok",
+      "at": "2027-01-15T23:00:00+05:30",
+      "detail": "Q-V1-20270115-R1: INR 35,475,400 ex-GST, lead 140 d"
+    },
+    {
+      "vendor_id": "V2",
+      "attempt": 1,
+      "outcome": "ok",
+      "at": "2027-01-11T23:00:00+05:30",
+      "detail": "Q-V2-20270111-R1: INR 38,651,400 ex-GST, lead 112 d"
+    },
+    {
+      "vendor_id": "V3",
+      "attempt": 1,
+      "outcome": "ok",
+      "at": "2027-01-11T23:00:00+05:30",
+      "detail": "Q-V3-20270111-R1: INR 37,258,400 ex-GST, lead 168 d"
+    },
+    {
+      "vendor_id": "V1",
+      "attempt": 1,
+      "outcome": "ok",
+      "at": "2027-01-18T23:00:00+05:30",
+      "detail": "Q-V1-20270115-R1 re-confirmed unchanged"
+    },
+    {
+      "vendor_id": "V2",
+      "attempt": 2,
+      "outcome": "revised",
+      "at": "2027-01-18T23:00:00+05:30",
+      "detail": "Q-V2-20270118-R2: INR 38,651,400 -> 44,166,800 (+14.3%). Revision 2 of Q-V2-20270111-R1: Raw copper surcharge +11% (LME Cu up since RFQ); 3% early-order discount withdrawn because the 14-day offer validity lapsed"
+    },
+    {
+      "vendor_id": "V3",
+      "attempt": 1,
+      "outcome": "ok",
+      "at": "2027-01-18T23:00:00+05:30",
+      "detail": "Q-V3-20270111-R1 re-confirmed unchanged"
+    }
+  ],
+  "options": [
+    {
+      "option_id": "O-V3X",
+      "vendor_id": "V3",
+      "vendor_name": "Anvil Electric India",
+      "total_inr": 39858400.0,
+      "lead_time_days": 126,
+      "delivery_date": "2027-07-24",
+      "float_days": 6,
+      "reliability": 0.9,
+      "expedite_fee_inr": 2600000.0,
+      "budget_verdict": "warn",
+      "meets_deadline": true,
+      "score": 0.385,
+      "recommended": true,
+      "rationale": "Anvil Electric India expedited (-42 d): committed INR 417.2 L (90.7% of budget, warn); delivers 2027-07-24 (+6 d float); on-time record 90%."
+    },
+    {
+      "option_id": "O-V2",
+      "vendor_id": "V2",
+      "vendor_name": "Kestrel Power Systems",
+      "total_inr": 44166800.0,
+      "lead_time_days": 112,
+      "delivery_date": "2027-07-10",
+      "float_days": 20,
+      "reliability": 0.93,
+      "expedite_fee_inr": 0.0,
+      "budget_verdict": "breach",
+      "meets_deadline": true,
+      "score": 0.425,
+      "recommended": false,
+      "rationale": "Kestrel Power Systems rev 2: committed INR 463.8 L (100.8% of budget, breach); delivers 2027-07-10 (+20 d float); on-time record 93%; INFEASIBLE: over budget."
+    },
+    {
+      "option_id": "O-V3",
+      "vendor_id": "V3",
+      "vendor_name": "Anvil Electric India",
+      "total_inr": 37258400.0,
+      "lead_time_days": 168,
+      "delivery_date": "2027-09-04",
+      "float_days": -36,
+      "reliability": 0.9,
+      "expedite_fee_inr": 0.0,
+      "budget_verdict": "ok",
+      "meets_deadline": false,
+      "score": 0.406,
+      "recommended": false,
+      "rationale": "Anvil Electric India: committed INR 391.2 L (85.0% of budget, ok); delivers 2027-09-04 (-36 d float); on-time record 90%; INFEASIBLE: misses required-on-site by 36 d."
+    },
+    {
+      "option_id": "O-V1",
+      "vendor_id": "V1",
+      "vendor_name": "Voltaris Switchgear Pvt Ltd",
+      "total_inr": 35475400.0,
+      "lead_time_days": 140,
+      "delivery_date": "2027-08-07",
+      "float_days": -8,
+      "reliability": 0.82,
+      "expedite_fee_inr": 0.0,
+      "budget_verdict": "ok",
+      "meets_deadline": false,
+      "score": 0.404,
+      "recommended": false,
+      "rationale": "Voltaris Switchgear Pvt Ltd: committed INR 372.5 L (81.0% of budget, ok); delivers 2027-08-07 (-8 d float); on-time record 82%; INFEASIBLE: misses required-on-site by 8 d."
+    }
+  ],
+  "schedule": {
+    "vendor_id": "V3",
+    "activities": [
+      {
+        "id": "PO",
+        "name": "PO issued",
+        "duration_days": 0,
+        "depends_on": [],
+        "early_start": 0,
+        "early_finish": 0,
+        "late_start": 0,
+        "late_finish": 0,
+        "slack_days": 0,
+        "critical": true
+      },
+      {
+        "id": "SUB",
+        "name": "Submittals / shop drawings",
+        "duration_days": 14,
+        "depends_on": [
+          "PO"
+        ],
+        "early_start": 0,
+        "early_finish": 14,
+        "late_start": 0,
+        "late_finish": 14,
+        "slack_days": 0,
+        "critical": true
+      },
+      {
+        "id": "APR",
+        "name": "Engineer approval",
+        "duration_days": 10,
+        "depends_on": [
+          "SUB"
+        ],
+        "early_start": 14,
+        "early_finish": 24,
+        "late_start": 14,
+        "late_finish": 24,
+        "slack_days": 0,
+        "critical": true
+      },
+      {
+        "id": "MFG",
+        "name": "Manufacture (vendor lead time)",
+        "duration_days": 126,
+        "depends_on": [
+          "APR"
+        ],
+        "early_start": 24,
+        "early_finish": 150,
+        "late_start": 24,
+        "late_finish": 150,
+        "slack_days": 0,
+        "critical": true
+      },
+      {
+        "id": "ITP",
+        "name": "FAT procedure & ITP approval",
+        "duration_days": 21,
+        "depends_on": [
+          "APR"
+        ],
+        "early_start": 24,
+        "early_finish": 45,
+        "late_start": 129,
+        "late_finish": 150,
+        "slack_days": 105,
+        "critical": false
+      },
+      {
+        "id": "FAT",
+        "name": "Factory acceptance test (witnessed)",
+        "duration_days": 5,
+        "depends_on": [
+          "MFG",
+          "ITP"
+        ],
+        "early_start": 150,
+        "early_finish": 155,
+        "late_start": 150,
+        "late_finish": 155,
+        "slack_days": 0,
+        "critical": true
+      },
+      {
+        "id": "SHP",
+        "name": "Shipping to site (domestic)",
+        "duration_days": 7,
+        "depends_on": [
+          "FAT"
+        ],
+        "early_start": 155,
+        "early_finish": 162,
+        "late_start": 155,
+        "late_finish": 162,
+        "slack_days": 0,
+        "critical": true
+      },
+      {
+        "id": "DEL",
+        "name": "Delivered to site",
+        "duration_days": 0,
+        "depends_on": [
+          "SHP"
+        ],
+        "early_start": 162,
+        "early_finish": 162,
+        "late_start": 162,
+        "late_finish": 162,
+        "slack_days": 0,
+        "critical": true
+      }
+    ],
+    "critical_path": [
+      "PO",
+      "SUB",
+      "APR",
+      "MFG",
+      "FAT",
+      "SHP",
+      "DEL"
+    ],
+    "po_issue_date": "2027-02-10",
+    "delivery_date": "2027-07-22",
+    "required_on_site": "2027-07-30",
+    "float_days": 8,
+    "meets_deadline": true
+  },
+  "budget": {
+    "budget_inr": 46000000.0,
+    "committed_inr": 39858400.0,
+    "forecast_inr": 41721320.0,
+    "spent_process_inr": 131500.0,
+    "points": [
+      {
+        "sim_time": "2027-01-11T09:00:00+05:30",
+        "committed_inr": 0.0,
+        "forecast_inr": 0.0,
+        "budget_inr": 46000000.0,
+        "process_inr": 0.0,
+        "label": "plan v1"
+      },
+      {
+        "sim_time": "2027-01-21T23:00:00+05:30",
+        "committed_inr": 0.0,
+        "forecast_inr": 37249170.0,
+        "budget_inr": 46000000.0,
+        "process_inr": 80500.0,
+        "label": "budget V1"
+      },
+      {
+        "sim_time": "2027-01-22T05:00:00+05:30",
+        "committed_inr": 0.0,
+        "forecast_inr": 37249170.0,
+        "budget_inr": 46000000.0,
+        "process_inr": 83500.0,
+        "label": "budget V2"
+      },
+      {
+        "sim_time": "2027-01-22T11:00:00+05:30",
+        "committed_inr": 0.0,
+        "forecast_inr": 37249170.0,
+        "budget_inr": 46000000.0,
+        "process_inr": 86500.0,
+        "label": "budget V3"
+      },
+      {
+        "sim_time": "2027-01-26T14:00:00+05:30",
+        "committed_inr": 0.0,
+        "forecast_inr": 37249170.0,
+        "budget_inr": 46000000.0,
+        "process_inr": 89500.0,
+        "label": "negotiation"
+      },
+      {
+        "sim_time": "2027-01-29T14:00:00+05:30",
+        "committed_inr": 0.0,
+        "forecast_inr": 41721320.0,
+        "budget_inr": 46000000.0,
+        "process_inr": 108000.0,
+        "label": "decision memo"
+      },
+      {
+        "sim_time": "2027-02-10T02:00:00+05:30",
+        "committed_inr": 39858400.0,
+        "forecast_inr": 41721320.0,
+        "budget_inr": 46000000.0,
+        "process_inr": 130000.0,
+        "label": "PO PO-ALPHA-20270207-V3-01 sent"
+      }
+    ]
+  },
+  "approvals": [
+    {
+      "id": "run-20261112-234535-dd21:T11-approve-vendor",
+      "run_id": "run-20261112-234535-dd21",
+      "kind": "vendor_selection",
+      "title": "Select vendor for 480 V switchgear",
+      "summary": "Recommend O-V3X Anvil Electric India: ₹3.99 Cr ex-GST, delivery 2027-07-24 (+6 d float), budget warn.",
+      "memo": {
+        "memo_id": "MEMO-04AA7D9F",
+        "title": "Project Alpha - 480 V switchgear: vendor selection",
+        "situation": "Order-by 2027-03-15, required on site 2027-07-30, budget ₹4.60 Cr. Projected PO issue 2027-02-12. 3 priced quotes; events: budget_breach:V2, deadline_break:V3.",
+        "options": [
+          {
+            "option_id": "O-V3X",
+            "vendor_id": "V3",
+            "vendor_name": "Anvil Electric India",
+            "total_inr": 39858400.0,
+            "lead_time_days": 126,
+            "delivery_date": "2027-07-24",
+            "float_days": 6,
+            "reliability": 0.9,
+            "expedite_fee_inr": 2600000.0,
+            "budget_verdict": "warn",
+            "meets_deadline": true,
+            "score": 0.385,
+            "recommended": true,
+            "rationale": "Anvil Electric India expedited (-42 d): committed INR 417.2 L (90.7% of budget, warn); delivers 2027-07-24 (+6 d float); on-time record 90%."
+          },
+          {
+            "option_id": "O-V2",
+            "vendor_id": "V2",
+            "vendor_name": "Kestrel Power Systems",
+            "total_inr": 44166800.0,
+            "lead_time_days": 112,
+            "delivery_date": "2027-07-10",
+            "float_days": 20,
+            "reliability": 0.93,
+            "expedite_fee_inr": 0.0,
+            "budget_verdict": "breach",
+            "meets_deadline": true,
+            "score": 0.425,
+            "recommended": false,
+            "rationale": "Kestrel Power Systems rev 2: committed INR 463.8 L (100.8% of budget, breach); delivers 2027-07-10 (+20 d float); on-time record 93%; INFEASIBLE: over budget."
+          },
+          {
+            "option_id": "O-V3",
+            "vendor_id": "V3",
+            "vendor_name": "Anvil Electric India",
+            "total_inr": 37258400.0,
+            "lead_time_days": 168,
+            "delivery_date": "2027-09-04",
+            "float_days": -36,
+            "reliability": 0.9,
+            "expedite_fee_inr": 0.0,
+            "budget_verdict": "ok",
+            "meets_deadline": false,
+            "score": 0.406,
+            "recommended": false,
+            "rationale": "Anvil Electric India: committed INR 391.2 L (85.0% of budget, ok); delivers 2027-09-04 (-36 d float); on-time record 90%; INFEASIBLE: misses required-on-site by 36 d."
+          },
+          {
+            "option_id": "O-V1",
+            "vendor_id": "V1",
+            "vendor_name": "Voltaris Switchgear Pvt Ltd",
+            "total_inr": 35475400.0,
+            "lead_time_days": 140,
+            "delivery_date": "2027-08-07",
+            "float_days": -8,
+            "reliability": 0.82,
+            "expedite_fee_inr": 0.0,
+            "budget_verdict": "ok",
+            "meets_deadline": false,
+            "score": 0.404,
+            "recommended": false,
+            "rationale": "Voltaris Switchgear Pvt Ltd: committed INR 372.5 L (81.0% of budget, ok); delivers 2027-08-07 (-8 d float); on-time record 82%; INFEASIBLE: misses required-on-site by 8 d."
+          }
+        ],
+        "recommendation": "O-V3X",
+        "reasoning": "Recommend O-V3X - Anvil Electric India with expedite (INR 26.0 L): total INR 398.6 L ex-GST, delivery 2027-07-24 (+6 d float), on-time record 90%, score 0.39. Rejected O-V2: Kestrel Power Systems rev 2: committed INR 463.8 L (100.8% of budget, breach); delivers 2027-07-10 (+20 d float); on-time record 93%; INFEASIBLE: over budget. Rejected O-V3: Anvil Electric India: committed INR 391.2 L (85.0% of budget, ok); delivers 2027-09-04 (-36 d float); on-time record 90%; INFEASIBLE: misses required-on-site by 36 d. Rejected O-V1: Voltaris Switchgear Pvt Ltd: committed INR 372.5 L (81.0% of budget, ok); delivers 2027-08-07 (-8 d float); on-time record 82%; INFEASIBLE: misses required-on-site by 8 d.",
+        "risks": [
+          "O-V3X: only 6 d float against the energisation window; any slip in approvals or FAT eats it.",
+          "O-V3X: above the 90% budget warning line - little headroom for variations or copper price movement.",
+          "O-V3X: expedite fee INR 26.0 L must be tied to a contractual delivery date with LDs, payable only on milestone."
+        ],
+        "asks": "Approve vendor selection for Project Alpha 480 V switchgear: confirm O-V3X or pick one of O-V3X. Approval authorises a PO to be drafted for release by 2027-03-15."
+      },
+      "po": null,
+      "options": [
+        "O-V3X",
+        "O-V2",
+        "O-V3",
+        "O-V1"
+      ],
+      "status": "approved",
+      "decided_option": "O-V3X",
+      "decided_by": "cli.auto",
+      "comment": null,
+      "requested_at": "2027-01-30T02:00:00+05:30",
+      "decided_at": "2027-02-04T02:00:00+05:30"
+    },
+    {
+      "id": "run-20261112-234535-dd21:T13-approve-po",
+      "run_id": "run-20261112-234535-dd21",
+      "kind": "po_release",
+      "title": "Release PO PO-ALPHA-20270207-V3-01",
+      "summary": "Anvil Electric India: ₹4.70 Cr incl. GST (₹3.65 Cr ex-GST + freight/fees), delivery 2027-07-24, Nil advance, 90% within 30 days of delivery, 10% retention released after SAT.",
+      "memo": null,
+      "po": {
+        "po_number": "PO-ALPHA-20270207-V3-01",
+        "vendor_id": "V3",
+        "vendor_name": "Anvil Electric India",
+        "project": "Project Alpha",
+        "lines": [
+          {
+            "line_no": 1,
+            "item_code": "SWGR-MAIN-4000A",
+            "description": "Main LV switchgear lineup, draw-out ACB incomer (4000 A, 65 kA)",
+            "qty": 4,
+            "unit_price_inr": 4836000.0,
+            "total_inr": 19344000.0
+          },
+          {
+            "line_no": 2,
+            "item_code": "BKR-TIE-4000A",
+            "description": "Bus-tie air circuit breaker, draw-out (4000 A, 65 kA)",
+            "qty": 2,
+            "unit_price_inr": 1363000.0,
+            "total_inr": 2726000.0
+          },
+          {
+            "line_no": 3,
+            "item_code": "BKR-FDR-1600A",
+            "description": "Feeder ACB, electronic trip LSIG (1600 A, 65 kA)",
+            "qty": 8,
+            "unit_price_inr": 570400.0,
+            "total_inr": 4563200.0
+          },
+          {
+            "line_no": 4,
+            "item_code": "BKR-FDR-800A",
+            "description": "Feeder MCCB, electronic trip LSI (800 A, 65 kA)",
+            "qty": 16,
+            "unit_price_inr": 175800.0,
+            "total_inr": 2812800.0
+          },
+          {
+            "line_no": 5,
+            "item_code": "ATS-1200A-4P",
+            "description": "Automatic transfer switch, 4-pole, open transition (1200 A)",
+            "qty": 4,
+            "unit_price_inr": 901600.0,
+            "total_inr": 3606400.0
+          },
+          {
+            "line_no": 6,
+            "item_code": "MTR-PQ-02S",
+            "description": "Power quality meter, Modbus TCP (Class 0.2S)",
+            "qty": 10,
+            "unit_price_inr": 66000.0,
+            "total_inr": 660000.0
+          },
+          {
+            "line_no": 7,
+            "item_code": "SPD-T1-200KA",
+            "description": "Surge protective device Type 1+2 (200 kA)",
+            "qty": 4,
+            "unit_price_inr": 85500.0,
+            "total_inr": 342000.0
+          },
+          {
+            "line_no": 8,
+            "item_code": "BUSWAY-4000A-CU",
+            "description": "Sandwich busway, copper, IP54 (4000 A)",
+            "qty": 120,
+            "unit_price_inr": 20200.0,
+            "total_inr": 2424000.0
+          }
+        ],
+        "subtotal_inr": 36478400.0,
+        "freight_inr": 780000.0,
+        "expedite_fee_inr": 2600000.0,
+        "gst_inr": 7174512.0,
+        "total_inr": 47032912.0,
+        "delivery_date": "2027-07-24",
+        "payment_terms": "Nil advance, 90% within 30 days of delivery, 10% retention released after SAT",
+        "incoterms": "DAP Project Alpha site, Chakan MIDC (Incoterms 2020)",
+        "terms": [
+          "Contractual delivery: on or before 2027-07-24 (required on site 2027-07-30).",
+          "Liquidated damages: 0.5% of order value per week (or part) of delay beyond the contractual delivery date, capped at 10% of order value.",
+          "Warranty: 24 months from energisation or 30 months from delivery, whichever is earlier; defects rectified at site within 72 h of notice.",
+          "Factory acceptance test: witnessed by Owner and Engineer (5 days) with 14 days' notice; despatch only after signed FAT report and release note.",
+          "Submittals: GA, SLD, wiring diagrams and protection coordination study within 14 days of PO; Engineer review 10 days; manufacture only on approved drawings.",
+          "Compliance: IEC 61439-1/-2 type-tested assemblies, 65 kA 1 s, arc-fault containment per IEC TR 61641; type-test certificates with the first submittal.",
+          "Bank guarantees: advance against ABG of equal value; 10% performance bank guarantee valid for the warranty period plus 3 months.",
+          "Price basis: firm, ex-GST; GST 18% charged on invoice per prevailing law.",
+          "Expedite fee INR 2,600,000.00 is payable only on delivery by the contractual date; forfeited in full if delivery is late (in addition to LDs).",
+          "Reference: vendor quote Q-V3-20270111-R1 rev 1; takeoff from project_alpha_480V_switchgear_spec.pdf."
+        ],
+        "status": "draft",
+        "issued_at": "2027-02-07T10:00:00",
+        "markdown": "# Purchase Order PO-ALPHA-20270207-V3-01\n\n**Project:** Project Alpha - 480 V switchgear  \n**Status:** DRAFT  \n**PO date:** 2027-02-07  \n**Contractual delivery:** 2027-07-24  \n**Vendor quote:** Q-V3-20270111-R1 (rev 1)\n\n## Parties\n\n| | |\n|---|---|\n| **Vendor** | Anvil Electric India (V3), Chennai, Tamil Nadu - GSTIN 33AAACA0000C1Z3 - tenders@anvilelectric.example |\n| **Bill to** | Alpha Data Centres Pvt Ltd (synthetic), GSTIN 27AAACA0000Z1Z9, Pune, Maharashtra |\n| **Ship to** | Project Alpha site - 24 MW Tier-III Data Centre, Plot A-7, Chakan MIDC Phase II, Chakan, Pune 410501, Maharashtra, India |\n| **Incoterms** | DAP Project Alpha site, Chakan MIDC (Incoterms 2020) |\n| **Payment terms** | Nil advance, 90% within 30 days of delivery, 10% retention released after SAT |\n\n## Lines\n\n| # | Item code | Description | Qty | Unit price (INR) | Amount (INR) |\n|---:|---|---|---:|---:|---:|\n| 1 | `SWGR-MAIN-4000A` | Main LV switchgear lineup, draw-out ACB incomer (4000 A, 65 kA) | 4 | 4,836,000.00 | 19,344,000.00 |\n| 2 | `BKR-TIE-4000A` | Bus-tie air circuit breaker, draw-out (4000 A, 65 kA) | 2 | 1,363,000.00 | 2,726,000.00 |\n| 3 | `BKR-FDR-1600A` | Feeder ACB, electronic trip LSIG (1600 A, 65 kA) | 8 | 570,400.00 | 4,563,200.00 |\n| 4 | `BKR-FDR-800A` | Feeder MCCB, electronic trip LSI (800 A, 65 kA) | 16 | 175,800.00 | 2,812,800.00 |\n| 5 | `ATS-1200A-4P` | Automatic transfer switch, 4-pole, open transition (1200 A) | 4 | 901,600.00 | 3,606,400.00 |\n| 6 | `MTR-PQ-02S` | Power quality meter, Modbus TCP (Class 0.2S) | 10 | 66,000.00 | 660,000.00 |\n| 7 | `SPD-T1-200KA` | Surge protective device Type 1+2 (200 kA) | 4 | 85,500.00 | 342,000.00 |\n| 8 | `BUSWAY-4000A-CU` | Sandwich busway, copper, IP54 (4000 A) | 120 | 20,200.00 | 2,424,000.00 |\n\n## Totals\n\n| | INR |\n|---|---:|\n| Subtotal (equipment) | 36,478,400.00 |\n| Freight to site | 780,000.00 |\n| Expedite fee | 2,600,000.00 |\n| Taxable value | 39,858,400.00 |\n| GST @ 18% | 7,174,512.00 |\n| **Total payable** | **47,032,912.00** |\n\n## Terms & conditions\n\n1. Contractual delivery: on or before 2027-07-24 (required on site 2027-07-30).\n2. Liquidated damages: 0.5% of order value per week (or part) of delay beyond the contractual delivery date, capped at 10% of order value.\n3. Warranty: 24 months from energisation or 30 months from delivery, whichever is earlier; defects rectified at site within 72 h of notice.\n4. Factory acceptance test: witnessed by Owner and Engineer (5 days) with 14 days' notice; despatch only after signed FAT report and release note.\n5. Submittals: GA, SLD, wiring diagrams and protection coordination study within 14 days of PO; Engineer review 10 days; manufacture only on approved drawings.\n6. Compliance: IEC 61439-1/-2 type-tested assemblies, 65 kA 1 s, arc-fault containment per IEC TR 61641; type-test certificates with the first submittal.\n7. Bank guarantees: advance against ABG of equal value; 10% performance bank guarantee valid for the warranty period plus 3 months.\n8. Price basis: firm, ex-GST; GST 18% charged on invoice per prevailing law.\n9. Expedite fee INR 2,600,000.00 is payable only on delivery by the contractual date; forfeited in full if delivery is late (in addition to LDs).\n10. Reference: vendor quote Q-V3-20270111-R1 rev 1; takeoff from project_alpha_480V_switchgear_spec.pdf.\n\n## Approvals\n\n| Role | Name | Signature | Date |\n|---|---|---|---|\n| Prepared by | SiteMind procurement agent | (system) | 2027-02-07 |\n| Vendor selection approved | Project Manager, Project Alpha | | |\n| PO release approved | Project Director / Commercial Head | | |\n| Accepted by vendor | Anvil Electric India | | |\n\n_Budget ceiling for this package: INR 46,000,000 ex-GST. Generated deterministically by SiteMind; synthetic demo data._\n"
+      },
+      "options": [],
+      "status": "approved",
+      "decided_option": null,
+      "decided_by": "cli.auto",
+      "comment": null,
+      "requested_at": "2027-02-07T02:00:00+05:30",
+      "decided_at": "2027-02-10T02:00:00+05:30"
+    }
+  ],
+  "po": {
+    "po_number": "PO-ALPHA-20270207-V3-01",
+    "vendor_id": "V3",
+    "vendor_name": "Anvil Electric India",
+    "project": "Project Alpha",
+    "lines": [
+      {
+        "line_no": 1,
+        "item_code": "SWGR-MAIN-4000A",
+        "description": "Main LV switchgear lineup, draw-out ACB incomer (4000 A, 65 kA)",
+        "qty": 4,
+        "unit_price_inr": 4836000.0,
+        "total_inr": 19344000.0
+      },
+      {
+        "line_no": 2,
+        "item_code": "BKR-TIE-4000A",
+        "description": "Bus-tie air circuit breaker, draw-out (4000 A, 65 kA)",
+        "qty": 2,
+        "unit_price_inr": 1363000.0,
+        "total_inr": 2726000.0
+      },
+      {
+        "line_no": 3,
+        "item_code": "BKR-FDR-1600A",
+        "description": "Feeder ACB, electronic trip LSIG (1600 A, 65 kA)",
+        "qty": 8,
+        "unit_price_inr": 570400.0,
+        "total_inr": 4563200.0
+      },
+      {
+        "line_no": 4,
+        "item_code": "BKR-FDR-800A",
+        "description": "Feeder MCCB, electronic trip LSI (800 A, 65 kA)",
+        "qty": 16,
+        "unit_price_inr": 175800.0,
+        "total_inr": 2812800.0
+      },
+      {
+        "line_no": 5,
+        "item_code": "ATS-1200A-4P",
+        "description": "Automatic transfer switch, 4-pole, open transition (1200 A)",
+        "qty": 4,
+        "unit_price_inr": 901600.0,
+        "total_inr": 3606400.0
+      },
+      {
+        "line_no": 6,
+        "item_code": "MTR-PQ-02S",
+        "description": "Power quality meter, Modbus TCP (Class 0.2S)",
+        "qty": 10,
+        "unit_price_inr": 66000.0,
+        "total_inr": 660000.0
+      },
+      {
+        "line_no": 7,
+        "item_code": "SPD-T1-200KA",
+        "description": "Surge protective device Type 1+2 (200 kA)",
+        "qty": 4,
+        "unit_price_inr": 85500.0,
+        "total_inr": 342000.0
+      },
+      {
+        "line_no": 8,
+        "item_code": "BUSWAY-4000A-CU",
+        "description": "Sandwich busway, copper, IP54 (4000 A)",
+        "qty": 120,
+        "unit_price_inr": 20200.0,
+        "total_inr": 2424000.0
+      }
+    ],
+    "subtotal_inr": 36478400.0,
+    "freight_inr": 780000.0,
+    "expedite_fee_inr": 2600000.0,
+    "gst_inr": 7174512.0,
+    "total_inr": 47032912.0,
+    "delivery_date": "2027-07-24",
+    "payment_terms": "Nil advance, 90% within 30 days of delivery, 10% retention released after SAT",
+    "incoterms": "DAP Project Alpha site, Chakan MIDC (Incoterms 2020)",
+    "terms": [
+      "Contractual delivery: on or before 2027-07-24 (required on site 2027-07-30).",
+      "Liquidated damages: 0.5% of order value per week (or part) of delay beyond the contractual delivery date, capped at 10% of order value.",
+      "Warranty: 24 months from energisation or 30 months from delivery, whichever is earlier; defects rectified at site within 72 h of notice.",
+      "Factory acceptance test: witnessed by Owner and Engineer (5 days) with 14 days' notice; despatch only after signed FAT report and release note.",
+      "Submittals: GA, SLD, wiring diagrams and protection coordination study within 14 days of PO; Engineer review 10 days; manufacture only on approved drawings.",
+      "Compliance: IEC 61439-1/-2 type-tested assemblies, 65 kA 1 s, arc-fault containment per IEC TR 61641; type-test certificates with the first submittal.",
+      "Bank guarantees: advance against ABG of equal value; 10% performance bank guarantee valid for the warranty period plus 3 months.",
+      "Price basis: firm, ex-GST; GST 18% charged on invoice per prevailing law.",
+      "Expedite fee INR 2,600,000.00 is payable only on delivery by the contractual date; forfeited in full if delivery is late (in addition to LDs).",
+      "Reference: vendor quote Q-V3-20270111-R1 rev 1; takeoff from project_alpha_480V_switchgear_spec.pdf."
+    ],
+    "status": "sent",
+    "issued_at": "2027-02-10T02:00:00+05:30",
+    "markdown": "# Purchase Order PO-ALPHA-20270207-V3-01\n\n**Project:** Project Alpha - 480 V switchgear  \n**Status:** SENT  \n**PO date:** 2027-02-10  \n**Contractual delivery:** 2027-07-24  \n**Vendor quote:** Q-V3-20270111-R1 (rev 1)\n\n## Parties\n\n| | |\n|---|---|\n| **Vendor** | Anvil Electric India (V3), Chennai, Tamil Nadu - GSTIN 33AAACA0000C1Z3 - tenders@anvilelectric.example |\n| **Bill to** | Alpha Data Centres Pvt Ltd (synthetic), GSTIN 27AAACA0000Z1Z9, Pune, Maharashtra |\n| **Ship to** | Project Alpha site - 24 MW Tier-III Data Centre, Plot A-7, Chakan MIDC Phase II, Chakan, Pune 410501, Maharashtra, India |\n| **Incoterms** | DAP Project Alpha site, Chakan MIDC (Incoterms 2020) |\n| **Payment terms** | Nil advance, 90% within 30 days of delivery, 10% retention released after SAT |\n\n## Lines\n\n| # | Item code | Description | Qty | Unit price (INR) | Amount (INR) |\n|---:|---|---|---:|---:|---:|\n| 1 | `SWGR-MAIN-4000A` | Main LV switchgear lineup, draw-out ACB incomer (4000 A, 65 kA) | 4 | 4,836,000.00 | 19,344,000.00 |\n| 2 | `BKR-TIE-4000A` | Bus-tie air circuit breaker, draw-out (4000 A, 65 kA) | 2 | 1,363,000.00 | 2,726,000.00 |\n| 3 | `BKR-FDR-1600A` | Feeder ACB, electronic trip LSIG (1600 A, 65 kA) | 8 | 570,400.00 | 4,563,200.00 |\n| 4 | `BKR-FDR-800A` | Feeder MCCB, electronic trip LSI (800 A, 65 kA) | 16 | 175,800.00 | 2,812,800.00 |\n| 5 | `ATS-1200A-4P` | Automatic transfer switch, 4-pole, open transition (1200 A) | 4 | 901,600.00 | 3,606,400.00 |\n| 6 | `MTR-PQ-02S` | Power quality meter, Modbus TCP (Class 0.2S) | 10 | 66,000.00 | 660,000.00 |\n| 7 | `SPD-T1-200KA` | Surge protective device Type 1+2 (200 kA) | 4 | 85,500.00 | 342,000.00 |\n| 8 | `BUSWAY-4000A-CU` | Sandwich busway, copper, IP54 (4000 A) | 120 | 20,200.00 | 2,424,000.00 |\n\n## Totals\n\n| | INR |\n|---|---:|\n| Subtotal (equipment) | 36,478,400.00 |\n| Freight to site | 780,000.00 |\n| Expedite fee | 2,600,000.00 |\n| Taxable value | 39,858,400.00 |\n| GST @ 18% | 7,174,512.00 |\n| **Total payable** | **47,032,912.00** |\n\n## Terms & conditions\n\n1. Contractual delivery: on or before 2027-07-24 (required on site 2027-07-30).\n2. Liquidated damages: 0.5% of order value per week (or part) of delay beyond the contractual delivery date, capped at 10% of order value.\n3. Warranty: 24 months from energisation or 30 months from delivery, whichever is earlier; defects rectified at site within 72 h of notice.\n4. Factory acceptance test: witnessed by Owner and Engineer (5 days) with 14 days' notice; despatch only after signed FAT report and release note.\n5. Submittals: GA, SLD, wiring diagrams and protection coordination study within 14 days of PO; Engineer review 10 days; manufacture only on approved drawings.\n6. Compliance: IEC 61439-1/-2 type-tested assemblies, 65 kA 1 s, arc-fault containment per IEC TR 61641; type-test certificates with the first submittal.\n7. Bank guarantees: advance against ABG of equal value; 10% performance bank guarantee valid for the warranty period plus 3 months.\n8. Price basis: firm, ex-GST; GST 18% charged on invoice per prevailing law.\n9. Expedite fee INR 2,600,000.00 is payable only on delivery by the contractual date; forfeited in full if delivery is late (in addition to LDs).\n10. Reference: vendor quote Q-V3-20270111-R1 rev 1; takeoff from project_alpha_480V_switchgear_spec.pdf.\n\n## Approvals\n\n| Role | Name | Signature | Date |\n|---|---|---|---|\n| Prepared by | SiteMind procurement agent | (system) | 2027-02-10 |\n| Vendor selection approved | Project Manager, Project Alpha | | |\n| PO release approved | Project Director / Commercial Head | | |\n| Accepted by vendor | Anvil Electric India | | |\n\n_Budget ceiling for this package: INR 46,000,000 ex-GST. Generated deterministically by SiteMind; synthetic demo data._\n"
+  },
+  "audit": [
+    {
+      "seq": 1,
+      "run_id": "run-20261112-234535-dd21",
+      "sim_time": "2027-01-11T09:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:36.440840Z",
+      "actor": "planner",
+      "action": "plan.created",
+      "summary": "Work backwards from the order-by date 2027-03-15: quantities first, then competitive quotes from 3 vendors, each checked against the on-site date with CPM and against the ₹4.60 Cr budget. A ranked decision memo goes to the project manager before any PO is released.",
+      "inputs": {
+        "goal": {
+          "text": "Get the 480 V switchgear package for Project Alpha ordered by 2027-03-15 within budget ₹4.6 Cr",
+          "project": "Project Alpha",
+          "package": "480 V switchgear",
+          "need_by": "2027-03-15",
+          "required_on_site": "2027-07-30",
+          "budget_inr": 46000000.0,
+          "currency": "INR"
+        }
+      },
+      "outputs": {
+        "tasks": [
+          "T1-takeoff (due 2027-01-12)",
+          "T2-rfq (due 2027-01-21)",
+          "T3-levelling (due 2027-01-25)",
+          "T4-schedule-V1 (due 2027-02-26)",
+          "T5-schedule-V2 (due 2027-02-26)",
+          "T6-schedule-V3 (due 2027-02-26)",
+          "T7-budget-V1 (due 2027-02-26)",
+          "T8-budget-V2 (due 2027-02-26)",
+          "T9-budget-V3 (due 2027-02-26)",
+          "T10-rank (due 2027-03-03)",
+          "T11-approve-vendor (due 2027-03-08)",
+          "T12-draft-po (due 2027-03-10)",
+          "T13-approve-po (due 2027-03-13)",
+          "T14-send-po (due 2027-03-15)"
+        ],
+        "risks": [
+          "Switchgear manufacturing lead time (16-24 weeks) vs on-site date 2027-07-30",
+          "Copper-linked price volatility and short quote validity",
+          "Vendor non-response to RFQ",
+          "Drawing vs equipment-schedule discrepancies in the spec",
+          "Human approvals close to the order-by date"
+        ],
+        "llm": {
+          "provider": "off",
+          "model": "template",
+          "tokens": 0,
+          "latency_ms": 0
+        }
+      },
+      "cost_inr": 0.0,
+      "llm_tokens": 0,
+      "confidence": 0.85,
+      "task_id": null,
+      "plan_version": 1
+    },
+    {
+      "seq": 2,
+      "run_id": "run-20261112-234535-dd21",
+      "sim_time": "2027-01-11T11:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:36.789690Z",
+      "actor": "takeoff",
+      "action": "takeoff.warning",
+      "summary": "SPD-T1-200KA: drawing p3 shows 3 ea (SPD-xx tags) but the equipment schedule lists 4 ea; schedule quantity used - raise an RFI to confirm.",
+      "inputs": {},
+      "outputs": {},
+      "cost_inr": 0.0,
+      "llm_tokens": 0,
+      "confidence": 0.92,
+      "task_id": "T1-takeoff",
+      "plan_version": 1
+    },
+    {
+      "seq": 3,
+      "run_id": "run-20261112-234535-dd21",
+      "sim_time": "2027-01-11T23:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:37.180495Z",
+      "actor": "takeoff",
+      "action": "task.done",
+      "summary": "Extracted 8 line items from project_alpha_480V_switchgear_spec.pdf with 1 warning(s); schedule quantities govern.",
+      "inputs": {
+        "task": "T1-takeoff",
+        "title": "Take off 480 V switchgear quantities from the spec PDF"
+      },
+      "outputs": {
+        "lines": [
+          "4 ea SWGR-MAIN-4000A",
+          "2 ea BKR-TIE-4000A",
+          "8 ea BKR-FDR-1600A",
+          "16 ea BKR-FDR-800A",
+          "4 ea ATS-1200A-4P",
+          "10 ea MTR-PQ-02S",
+          "4 ea SPD-T1-200KA",
+          "120 m BUSWAY-4000A-CU"
+        ],
+        "warnings": [
+          "SPD-T1-200KA: drawing p3 shows 3 ea (SPD-xx tags) but the equipment schedule lists 4 ea; schedule quantity used - raise an RFI to confirm."
+        ]
+      },
+      "cost_inr": 21000.0,
+      "llm_tokens": 0,
+      "confidence": 0.92,
+      "task_id": "T1-takeoff",
+      "plan_version": 1
+    },
+    {
+      "seq": 4,
+      "run_id": "run-20261112-234535-dd21",
+      "sim_time": "2027-01-13T23:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:37.668149Z",
+      "actor": "quotes",
+      "action": "rfq.timeout",
+      "summary": "V1 did not answer RFQ attempt 1: no response within 24 h; retrying (attempt 2/3).",
+      "inputs": {},
+      "outputs": {
+        "vendor_id": "V1",
+        "attempt": 1,
+        "outcome": "timeout",
+        "at": "2027-01-11T23:00:00+05:30",
+        "detail": "no response within 24 h; retrying (attempt 2/3)"
+      },
+      "cost_inr": 0.0,
+      "llm_tokens": 0,
+      "confidence": null,
+      "task_id": "T2-rfq",
+      "plan_version": 1
+    },
+    {
+      "seq": 5,
+      "run_id": "run-20261112-234535-dd21",
+      "sim_time": "2027-01-15T23:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:37.748311Z",
+      "actor": "quotes",
+      "action": "rfq.timeout",
+      "summary": "V1 did not answer RFQ attempt 2: no response within 24 h; retrying (attempt 3/3).",
+      "inputs": {},
+      "outputs": {
+        "vendor_id": "V1",
+        "attempt": 2,
+        "outcome": "timeout",
+        "at": "2027-01-13T23:00:00+05:30",
+        "detail": "no response within 24 h; retrying (attempt 3/3)"
+      },
+      "cost_inr": 0.0,
+      "llm_tokens": 0,
+      "confidence": null,
+      "task_id": "T2-rfq",
+      "plan_version": 1
+    },
+    {
+      "seq": 6,
+      "run_id": "run-20261112-234535-dd21",
+      "sim_time": "2027-01-17T05:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:37.844368Z",
+      "actor": "quotes",
+      "action": "quote.received",
+      "summary": "Voltaris Switchgear Pvt Ltd quoted ₹3.55 Cr ex-GST, lead 140 d, valid to 2027-02-14 (attempt 3).",
+      "inputs": {},
+      "outputs": {
+        "quote_id": "Q-V1-20270115-R1",
+        "total_inr": 35475400.0
+      },
+      "cost_inr": 0.0,
+      "llm_tokens": 0,
+      "confidence": null,
+      "task_id": "T2-rfq",
+      "plan_version": 1
+    },
+    {
+      "seq": 7,
+      "run_id": "run-20261112-234535-dd21",
+      "sim_time": "2027-01-12T19:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:37.884247Z",
+      "actor": "quotes",
+      "action": "quote.received",
+      "summary": "Kestrel Power Systems quoted ₹3.87 Cr ex-GST, lead 112 d, valid to 2027-01-25 (attempt 1).",
+      "inputs": {},
+      "outputs": {
+        "quote_id": "Q-V2-20270111-R1",
+        "total_inr": 38651400.0
+      },
+      "cost_inr": 0.0,
+      "llm_tokens": 0,
+      "confidence": null,
+      "task_id": "T2-rfq",
+      "plan_version": 1
+    },
+    {
+      "seq": 8,
+      "run_id": "run-20261112-234535-dd21",
+      "sim_time": "2027-01-13T19:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:37.924222Z",
+      "actor": "quotes",
+      "action": "quote.received",
+      "summary": "Anvil Electric India quoted ₹3.73 Cr ex-GST, lead 168 d, valid to 2027-02-25 (attempt 1).",
+      "inputs": {},
+      "outputs": {
+        "quote_id": "Q-V3-20270111-R1",
+        "total_inr": 37258400.0
+      },
+      "cost_inr": 0.0,
+      "llm_tokens": 0,
+      "confidence": null,
+      "task_id": "T2-rfq",
+      "plan_version": 1
+    },
+    {
+      "seq": 9,
+      "run_id": "run-20261112-234535-dd21",
+      "sim_time": "2027-01-17T23:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:38.276328Z",
+      "actor": "quotes",
+      "action": "task.done",
+      "summary": "Sent 5 RFQ messages to 3 vendors; 3 quotes received, 2 timeout(s) retried.",
+      "inputs": {
+        "task": "T2-rfq",
+        "title": "Send RFQs to 3 vendors and collect quotes (retry ≤3)"
+      },
+      "outputs": {
+        "attempts": 5,
+        "quotes": 3
+      },
+      "cost_inr": 30000.0,
+      "llm_tokens": 0,
+      "confidence": null,
+      "task_id": "T2-rfq",
+      "plan_version": 1
+    },
+    {
+      "seq": 10,
+      "run_id": "run-20261112-234535-dd21",
+      "sim_time": "2027-01-18T23:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:38.640352Z",
+      "actor": "quotes",
+      "action": "quote.revised",
+      "summary": "Kestrel Power Systems revised Q-V2-20270111-R1 → Q-V2-20270118-R2: ₹3.87 Cr → ₹4.42 Cr (+14.3 %). Revision 2 of Q-V2-20270111-R1: Raw copper surcharge +11% (LME Cu up since RFQ); 3% early-order discount withdrawn because the 14-day offer validity lapsed",
+      "inputs": {
+        "old_total_inr": 38651400.0
+      },
+      "outputs": {
+        "new_total_inr": 44166800.0,
+        "revision": 2
+      },
+      "cost_inr": 0.0,
+      "llm_tokens": 0,
+      "confidence": null,
+      "task_id": "T3-levelling",
+      "plan_version": 1
+    },
+    {
+      "seq": 11,
+      "run_id": "run-20261112-234535-dd21",
+      "sim_time": "2027-01-17T23:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:38.784080Z",
+      "actor": "system",
+      "action": "worker.killed",
+      "summary": "Worker pid 5292 received SIGKILL while at execute:T3-levelling:pacing.",
+      "inputs": {},
+      "outputs": {
+        "pid": 5292
+      },
+      "cost_inr": 0.0,
+      "llm_tokens": 0,
+      "confidence": null,
+      "task_id": null,
+      "plan_version": null
+    },
+    {
+      "seq": 12,
+      "run_id": "run-20261112-234535-dd21",
+      "sim_time": "2027-01-17T23:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:40.324998Z",
+      "actor": "system",
+      "action": "worker.resumed",
+      "summary": "Worker restarted (restart #1) and resumed from the latest LangGraph checkpoint (7 persisted).",
+      "inputs": {},
+      "outputs": {
+        "pid": 5297,
+        "checkpoints": 7
+      },
+      "cost_inr": 0.0,
+      "llm_tokens": 0,
+      "confidence": null,
+      "task_id": null,
+      "plan_version": null
+    },
+    {
+      "seq": 14,
+      "run_id": "run-20261112-234535-dd21",
+      "sim_time": "2027-01-20T23:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:40.840671Z",
+      "actor": "quotes",
+      "action": "task.done",
+      "summary": "Refreshed 3 quotes before evaluation; revisions from V2.",
+      "inputs": {
+        "task": "T3-levelling",
+        "title": "Bid levelling: refresh and confirm every quote"
+      },
+      "outputs": {
+        "revised": [
+          "V2"
+        ]
+      },
+      "cost_inr": 16000.0,
+      "llm_tokens": 0,
+      "confidence": null,
+      "task_id": "T3-levelling",
+      "plan_version": 1
+    },
+    {
+      "seq": 15,
+      "run_id": "run-20261112-234535-dd21",
+      "sim_time": "2027-01-21T05:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:41.334462Z",
+      "actor": "schedule",
+      "action": "task.done",
+      "summary": "CPM for Voltaris Switchgear Pvt Ltd: PO 2027-02-06 → delivery 2027-08-01 vs required 2027-07-30 (-2 d float); critical path PO → SUB → APR → MFG → FAT → SHP → DEL.",
+      "inputs": {
+        "task": "T4-schedule-V1",
+        "title": "CPM schedule check for V1"
+      },
+      "outputs": {
+        "float_days": -2,
+        "meets_deadline": false
+      },
+      "cost_inr": 4500.0,
+      "llm_tokens": 0,
+      "confidence": 0.9,
+      "task_id": "T4-schedule-V1",
+      "plan_version": 1
+    },
+    {
+      "seq": 16,
+      "run_id": "run-20261112-234535-dd21",
+      "sim_time": "2027-01-21T11:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:41.840452Z",
+      "actor": "schedule",
+      "action": "task.done",
+      "summary": "CPM for Kestrel Power Systems: PO 2027-02-06 → delivery 2027-07-04 vs required 2027-07-30 (+26 d float); critical path PO → SUB → APR → MFG → FAT → SHP → DEL.",
+      "inputs": {
+        "task": "T5-schedule-V2",
+        "title": "CPM schedule check for V2"
+      },
+      "outputs": {
+        "float_days": 26,
+        "meets_deadline": true
+      },
+      "cost_inr": 4500.0,
+      "llm_tokens": 0,
+      "confidence": 0.9,
+      "task_id": "T5-schedule-V2",
+      "plan_version": 1
+    },
+    {
+      "seq": 17,
+      "run_id": "run-20261112-234535-dd21",
+      "sim_time": "2027-01-21T17:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:42.304581Z",
+      "actor": "schedule",
+      "action": "task.done",
+      "summary": "CPM for Anvil Electric India: PO 2027-02-06 → delivery 2027-08-29 vs required 2027-07-30 (-30 d float); critical path PO → SUB → APR → MFG → FAT → SHP → DEL.",
+      "inputs": {
+        "task": "T6-schedule-V3",
+        "title": "CPM schedule check for V3"
+      },
+      "outputs": {
+        "float_days": -30,
+        "meets_deadline": false
+      },
+      "cost_inr": 4500.0,
+      "llm_tokens": 0,
+      "confidence": 0.9,
+      "task_id": "T6-schedule-V3",
+      "plan_version": 1
+    },
+    {
+      "seq": 18,
+      "run_id": "run-20261112-234535-dd21",
+      "sim_time": "2027-01-21T23:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:42.809568Z",
+      "actor": "budget",
+      "action": "task.done",
+      "summary": "Quote Q-V1-20270115-R1 INR 35,475,400 + 5% contingency INR 1,773,770 = INR 37,249,170 committed vs budget INR 46,000,000 (81.0% utilised). Healthy headroom of INR 8,750,830.",
+      "inputs": {
+        "task": "T7-budget-V1",
+        "title": "Budget check for V1"
+      },
+      "outputs": {
+        "verdict": "ok",
+        "utilisation": 0.8098
+      },
+      "cost_inr": 3000.0,
+      "llm_tokens": 0,
+      "confidence": null,
+      "task_id": "T7-budget-V1",
+      "plan_version": 1
+    },
+    {
+      "seq": 19,
+      "run_id": "run-20261112-234535-dd21",
+      "sim_time": "2027-01-22T05:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:43.275074Z",
+      "actor": "budget",
+      "action": "task.done",
+      "summary": "Quote Q-V2-20270118-R2 INR 44,166,800 + 5% contingency INR 2,208,340 = INR 46,375,140 committed vs budget INR 46,000,000 (100.8% utilised). Over budget by INR 375,140; needs re-negotiation, an alternative vendor or a budget exception. Quote is revision 2: Revision 2 of Q-V2-20270111-R1: Raw copper surcharge +11% (LME Cu up since RFQ); 3% early-order discount withdrawn because the 14-day offer validity lapsed",
+      "inputs": {
+        "task": "T8-budget-V2",
+        "title": "Budget check for V2"
+      },
+      "outputs": {
+        "verdict": "breach",
+        "utilisation": 1.0082
+      },
+      "cost_inr": 3000.0,
+      "llm_tokens": 0,
+      "confidence": null,
+      "task_id": "T8-budget-V2",
+      "plan_version": 1
+    },
+    {
+      "seq": 20,
+      "run_id": "run-20261112-234535-dd21",
+      "sim_time": "2027-01-22T11:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:43.804432Z",
+      "actor": "budget",
+      "action": "task.done",
+      "summary": "Quote Q-V3-20270111-R1 INR 37,258,400 + 5% contingency INR 1,862,920 = INR 39,121,320 committed vs budget INR 46,000,000 (85.0% utilised). Healthy headroom of INR 6,878,680.",
+      "inputs": {
+        "task": "T9-budget-V3",
+        "title": "Budget check for V3"
+      },
+      "outputs": {
+        "verdict": "ok",
+        "utilisation": 0.8505
+      },
+      "cost_inr": 3000.0,
+      "llm_tokens": 0,
+      "confidence": null,
+      "task_id": "T9-budget-V3",
+      "plan_version": 1
+    },
+    {
+      "seq": 21,
+      "run_id": "run-20261112-234535-dd21",
+      "sim_time": "2027-01-22T11:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:43.873987Z",
+      "actor": "monitor",
+      "action": "trigger.detected",
+      "summary": "budget_breach:V2: V2 revision 2 lifts committed cost to ₹4.64 Cr (101% of budget) — breach",
+      "inputs": {},
+      "outputs": {
+        "trigger": "budget_breach:V2"
+      },
+      "cost_inr": 0.0,
+      "llm_tokens": 0,
+      "confidence": null,
+      "task_id": null,
+      "plan_version": 1
+    },
+    {
+      "seq": 22,
+      "run_id": "run-20261112-234535-dd21",
+      "sim_time": "2027-01-22T11:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:43.908158Z",
+      "actor": "monitor",
+      "action": "trigger.detected",
+      "summary": "deadline_break:V3: V3 delivers 2027-08-29 (-30 d vs required on site) and no option has ≥14 d float; expedite offer −42 d available",
+      "inputs": {},
+      "outputs": {
+        "trigger": "deadline_break:V3"
+      },
+      "cost_inr": 0.0,
+      "llm_tokens": 0,
+      "confidence": null,
+      "task_id": null,
+      "plan_version": 1
+    },
+    {
+      "seq": 23,
+      "run_id": "run-20261112-234535-dd21",
+      "sim_time": "2027-01-22T11:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:44.012958Z",
+      "actor": "planner",
+      "action": "replan",
+      "summary": "Plan v2 reacts to budget_breach:V2, deadline_break:V3: add T15-negotiate-V2; add T16-expedite-V3; skip T10-rank; rewire T11-approve-vendor -> T18-escalate; add T17-rank; add T18-escalate. Completed work is kept; only the affected decision path is redone.",
+      "inputs": {
+        "triggers": [
+          "budget_breach:V2",
+          "deadline_break:V3"
+        ],
+        "from_version": 1
+      },
+      "outputs": {
+        "version": 2,
+        "added": [
+          "T15-negotiate-V2",
+          "T16-expedite-V3",
+          "T17-rank",
+          "T18-escalate"
+        ],
+        "skipped": [
+          "T10-rank"
+        ],
+        "llm": {
+          "provider": "off",
+          "model": "template",
+          "tokens": 0,
+          "latency_ms": 0
+        }
+      },
+      "cost_inr": 0.0,
+      "llm_tokens": 0,
+      "confidence": 0.75,
+      "task_id": null,
+      "plan_version": 2
+    },
+    {
+      "seq": 24,
+      "run_id": "run-20261112-234535-dd21",
+      "sim_time": "2027-01-26T14:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:44.596408Z",
+      "actor": "quotes",
+      "action": "task.done",
+      "summary": "Kestrel Power Systems holds Q-V2-20270118-R2 at ₹4.42 Cr (copper surcharge is LME pass-through); still breach at 101% of budget.",
+      "inputs": {
+        "task": "T15-negotiate-V2",
+        "title": "Re-quote / negotiate V2's revised price back inside budget"
+      },
+      "outputs": {
+        "verdict": "breach",
+        "held": true
+      },
+      "cost_inr": 12000.0,
+      "llm_tokens": 0,
+      "confidence": null,
+      "task_id": "T15-negotiate-V2",
+      "plan_version": 2
+    },
+    {
+      "seq": 25,
+      "run_id": "run-20261112-234535-dd21",
+      "sim_time": "2027-01-28T14:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:45.088528Z",
+      "actor": "schedule",
+      "action": "task.done",
+      "summary": "Anvil Electric India expedite: lead 168 → 126 d for ₹26.0 L; delivery 2027-07-23 (+7 d float), committed ₹4.17 Cr (warn).",
+      "inputs": {
+        "task": "T16-expedite-V3",
+        "title": "Evaluate V3 expedite offer (−42 d for ₹26.0 L)"
+      },
+      "outputs": {
+        "feasible": true,
+        "float_days": 7,
+        "verdict": "warn"
+      },
+      "cost_inr": 6500.0,
+      "llm_tokens": 0,
+      "confidence": 0.8,
+      "task_id": "T16-expedite-V3",
+      "plan_version": 2
+    },
+    {
+      "seq": 26,
+      "run_id": "run-20261112-234535-dd21",
+      "sim_time": "2027-01-29T14:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:45.628468Z",
+      "actor": "approvals",
+      "action": "task.done",
+      "summary": "Ranked 4 options; recommend O-V3X. Recommend O-V3X - Anvil Electric India with expedite (INR 26.0 L): total INR 398.6 L ex-GST, delivery 2027-07-24 (+6 d float), on-time record 90%, score 0.39. Rejected O-V2: Kestrel Power Systems rev 2: committed INR 463.8 L (100.8% of budget, breach); delivers 2027-07-10 (+20 d float); on-time record 93%; INFEASIBLE: over budget. Rejected O-V3: Anvil Electric India: committed INR 391.2 L (85.0% o",
+      "inputs": {
+        "task": "T17-rank",
+        "title": "Re-rank options with negotiated / expedited figures; rewrite decision memo"
+      },
+      "outputs": {
+        "recommendation": "O-V3X",
+        "options": [
+          "O-V3X:0.385",
+          "O-V2:0.425",
+          "O-V3:0.406",
+          "O-V1:0.404"
+        ],
+        "llm": {
+          "provider": "off",
+          "model": "template",
+          "tokens": 0,
+          "latency_ms": 0,
+          "cached": false,
+          "key": "run-20261112-234535-dd21:T17-rank:llm:memo"
+        }
+      },
+      "cost_inr": 8000.0,
+      "llm_tokens": 0,
+      "confidence": 0.385,
+      "task_id": "T17-rank",
+      "plan_version": 2
+    },
+    {
+      "seq": 27,
+      "run_id": "run-20261112-234535-dd21",
+      "sim_time": "2027-01-29T14:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:45.824164Z",
+      "actor": "planner",
+      "action": "escalation",
+      "summary": "Escalated to project manager: expedite fee ₹26.0 L needs sign-off; budget warn; O-V2 over budget after price revision. Recommendation O-V3X (Anvil Electric India) with memo MEMO-04AA7D9F.",
+      "inputs": {},
+      "outputs": {
+        "memo_id": "MEMO-04AA7D9F",
+        "recommendation": "O-V3X"
+      },
+      "cost_inr": 0.0,
+      "llm_tokens": 0,
+      "confidence": null,
+      "task_id": "T18-escalate",
+      "plan_version": 2
+    },
+    {
+      "seq": 28,
+      "run_id": "run-20261112-234535-dd21",
+      "sim_time": "2027-01-30T02:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:46.177053Z",
+      "actor": "approvals",
+      "action": "task.done",
+      "summary": "Escalation sent (expedite fee ₹26.0 L needs sign-off; budget warn; O-V2 over budget after price revision).",
+      "inputs": {
+        "task": "T18-escalate",
+        "title": "Escalate budget / deadline trade-off to the project manager"
+      },
+      "outputs": {},
+      "cost_inr": 1500.0,
+      "llm_tokens": 0,
+      "confidence": null,
+      "task_id": "T18-escalate",
+      "plan_version": 2
+    },
+    {
+      "seq": 29,
+      "run_id": "run-20261112-234535-dd21",
+      "sim_time": "2027-01-30T02:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:46.320318Z",
+      "actor": "approvals",
+      "action": "approval.requested",
+      "summary": "Human approval requested (vendor_selection): Recommend O-V3X Anvil Electric India: ₹3.99 Cr ex-GST, delivery 2027-07-24 (+6 d float), budget warn.",
+      "inputs": {},
+      "outputs": {
+        "approval_id": "run-20261112-234535-dd21:T11-approve-vendor",
+        "options": [
+          "O-V3X",
+          "O-V2",
+          "O-V3",
+          "O-V1"
+        ]
+      },
+      "cost_inr": 0.0,
+      "llm_tokens": 0,
+      "confidence": null,
+      "task_id": "T11-approve-vendor",
+      "plan_version": 2
+    },
+    {
+      "seq": 31,
+      "run_id": "run-20261112-234535-dd21",
+      "sim_time": "2027-02-04T02:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:47.424136Z",
+      "actor": "human",
+      "action": "approval.approved",
+      "summary": "cli.auto approved O-V3X (Anvil Electric India, ₹3.99 Cr).",
+      "inputs": {
+        "decision": "approve",
+        "option_id": "O-V3X",
+        "comment": null,
+        "decided_by": "cli.auto"
+      },
+      "outputs": {},
+      "cost_inr": 0.0,
+      "llm_tokens": 0,
+      "confidence": null,
+      "task_id": "T11-approve-vendor",
+      "plan_version": 2
+    },
+    {
+      "seq": 32,
+      "run_id": "run-20261112-234535-dd21",
+      "sim_time": "2027-02-04T02:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:47.464225Z",
+      "actor": "approvals",
+      "action": "task.done",
+      "summary": "Vendor selection approved: O-V3X.",
+      "inputs": {
+        "task": "T11-approve-vendor",
+        "title": "Human approval: vendor selection"
+      },
+      "outputs": {
+        "option": "O-V3X"
+      },
+      "cost_inr": 0.0,
+      "llm_tokens": 0,
+      "confidence": null,
+      "task_id": "T11-approve-vendor",
+      "plan_version": 2
+    },
+    {
+      "seq": 33,
+      "run_id": "run-20261112-234535-dd21",
+      "sim_time": "2027-02-07T02:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:47.968774Z",
+      "actor": "po",
+      "action": "task.done",
+      "summary": "Drafted PO-ALPHA-20270207-V3-01 for Anvil Electric India: subtotal ₹3.65 Cr, freight ₹7.8 L, expedite ₹26.0 L, GST ₹71.7 L, total ₹4.70 Cr.",
+      "inputs": {
+        "task": "T12-draft-po",
+        "title": "Draft the purchase order for the selected vendor"
+      },
+      "outputs": {
+        "po_number": "PO-ALPHA-20270207-V3-01",
+        "total_inr": 47032912.0
+      },
+      "cost_inr": 12500.0,
+      "llm_tokens": 0,
+      "confidence": null,
+      "task_id": "T12-draft-po",
+      "plan_version": 2
+    },
+    {
+      "seq": 34,
+      "run_id": "run-20261112-234535-dd21",
+      "sim_time": "2027-02-07T02:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:48.132163Z",
+      "actor": "approvals",
+      "action": "approval.requested",
+      "summary": "Human approval requested (po_release): Anvil Electric India: ₹4.70 Cr incl. GST (₹3.65 Cr ex-GST + freight/fees), delivery 2027-07-24, Nil advance, 90% within 30 days of delivery, 10% retention released after SAT.",
+      "inputs": {},
+      "outputs": {
+        "approval_id": "run-20261112-234535-dd21:T13-approve-po",
+        "options": []
+      },
+      "cost_inr": 0.0,
+      "llm_tokens": 0,
+      "confidence": null,
+      "task_id": "T13-approve-po",
+      "plan_version": 2
+    },
+    {
+      "seq": 36,
+      "run_id": "run-20261112-234535-dd21",
+      "sim_time": "2027-02-10T02:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:49.172483Z",
+      "actor": "human",
+      "action": "approval.approved",
+      "summary": "cli.auto approved release of PO-ALPHA-20270207-V3-01 (₹4.70 Cr).",
+      "inputs": {
+        "decision": "approve",
+        "option_id": null,
+        "comment": null,
+        "decided_by": "cli.auto"
+      },
+      "outputs": {},
+      "cost_inr": 0.0,
+      "llm_tokens": 0,
+      "confidence": null,
+      "task_id": "T13-approve-po",
+      "plan_version": 2
+    },
+    {
+      "seq": 37,
+      "run_id": "run-20261112-234535-dd21",
+      "sim_time": "2027-02-10T02:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:49.212220Z",
+      "actor": "approvals",
+      "action": "task.done",
+      "summary": "PO PO-ALPHA-20270207-V3-01 release approved.",
+      "inputs": {
+        "task": "T13-approve-po",
+        "title": "Human approval: PO release"
+      },
+      "outputs": {},
+      "cost_inr": 0.0,
+      "llm_tokens": 0,
+      "confidence": null,
+      "task_id": "T13-approve-po",
+      "plan_version": 2
+    },
+    {
+      "seq": 38,
+      "run_id": "run-20261112-234535-dd21",
+      "sim_time": "2027-02-10T14:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:49.788327Z",
+      "actor": "po",
+      "action": "task.done",
+      "summary": "Transmitted PO-ALPHA-20270207-V3-01 to Anvil Electric India (message 12); committed ₹3.99 Cr ex-GST; delivery 2027-07-22 with +8 d float.",
+      "inputs": {
+        "task": "T14-send-po",
+        "title": "Transmit the PO to the vendor (idempotent)"
+      },
+      "outputs": {
+        "po_number": "PO-ALPHA-20270207-V3-01",
+        "message_id": 12
+      },
+      "cost_inr": 1500.0,
+      "llm_tokens": 0,
+      "confidence": null,
+      "task_id": "T14-send-po",
+      "plan_version": 2
+    },
+    {
+      "seq": 39,
+      "run_id": "run-20261112-234535-dd21",
+      "sim_time": "2027-02-10T14:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:49.873481Z",
+      "actor": "system",
+      "action": "run.completed",
+      "summary": "Goal met: PO PO-ALPHA-20270207-V3-01 sent to Anvil Electric India on 2027-02-10 (order-by 2027-03-15); 30 sim days, plan v2.",
+      "inputs": {},
+      "outputs": {
+        "po": "PO-ALPHA-20270207-V3-01"
+      },
+      "cost_inr": 0.0,
+      "llm_tokens": 0,
+      "confidence": null,
+      "task_id": null,
+      "plan_version": 2
+    }
+  ],
+  "ledger": [
+    {
+      "idempotency_key": "run-20261112-234535-dd21:plan-v1:llm:rationale",
+      "run_id": "run-20261112-234535-dd21",
+      "kind": "llm.call",
+      "status": "done",
+      "payload": {
+        "prompt": "Goal: Get the 480 V switchgear package for Project Alpha ordered by 2027-03-15 within budget ₹4.6 Cr. Plan: takeoff, RFQ to 3 vendors, schedule and budget check per vendor, decision memo, human approval, PO. Risks: 1) Switchgear manufacturing lead time (16-24 weeks) vs on-site date 2027-07-30; 2) Copper-linked price volatility and short quote validity; 3) Vendor non-response to RFQ; 4) Drawing vs equipment-schedule discrepancies in the spec; 5) Human approvals close to the order-by date. Return ",
+        "schema": "PlanNarrative",
+        "provider": "off",
+        "model": "template"
+      },
+      "result": {
+        "value": {
+          "rationale": "Work backwards from the order-by date 2027-03-15: quantities first, then competitive quotes from 3 vendors, each checked against the on-site date with CPM and against the ₹4.60 Cr budget. A ranked decision memo goes to the project manager before any PO is released.",
+          "mitigations": [
+            "Compute CPM float per vendor; prefer on-time options and price expedite offers before deciding.",
+            "Refresh every quote before evaluation and re-check budget on any revision.",
+            "Retry RFQs up to 3 times with escalating follow-up; never block on one vendor.",
+            "Schedule governs; surface takeoff warnings as RFIs with the source page.",
+            "Request vendor selection approval by 2027-03-08 with a ranked decision memo."
+          ]
+        },
+        "provider": "off",
+        "model": "template",
+        "tokens": 0,
+        "latency_ms": 0,
+        "error": null
+      },
+      "sim_time": "2027-01-11T09:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:36.420231Z",
+      "executions": 1
+    },
+    {
+      "idempotency_key": "run-20261112-234535-dd21:T2-rfq:rfq:V1:a1",
+      "run_id": "run-20261112-234535-dd21",
+      "kind": "rfq.sent",
+      "status": "done",
+      "payload": {
+        "vendor_id": "V1",
+        "attempt": 1,
+        "ref": "RFQ-5-dd21-V1-A1"
+      },
+      "result": {
+        "ref": "RFQ-5-dd21-V1-A1",
+        "timeout": true,
+        "hours": 24
+      },
+      "sim_time": "2027-01-11T23:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:37.384167Z",
+      "executions": 1
+    },
+    {
+      "idempotency_key": "run-20261112-234535-dd21:T2-rfq:rfq:V1:a2",
+      "run_id": "run-20261112-234535-dd21",
+      "kind": "rfq.sent",
+      "status": "done",
+      "payload": {
+        "vendor_id": "V1",
+        "attempt": 2,
+        "ref": "RFQ-5-dd21-V1-A2"
+      },
+      "result": {
+        "ref": "RFQ-5-dd21-V1-A2",
+        "timeout": true,
+        "hours": 24
+      },
+      "sim_time": "2027-01-13T23:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:37.452302Z",
+      "executions": 1
+    },
+    {
+      "idempotency_key": "run-20261112-234535-dd21:T2-rfq:rfq:V1:a3",
+      "run_id": "run-20261112-234535-dd21",
+      "kind": "rfq.sent",
+      "status": "done",
+      "payload": {
+        "vendor_id": "V1",
+        "attempt": 3,
+        "ref": "RFQ-5-dd21-V1-A3"
+      },
+      "result": {
+        "ref": "RFQ-5-dd21-V1-A3",
+        "quote": {
+          "vendor_id": "V1",
+          "vendor_name": "Voltaris Switchgear Pvt Ltd",
+          "quote_id": "Q-V1-20270115-R1",
+          "revision": 1,
+          "lines": [
+            {
+              "item_code": "SWGR-MAIN-4000A",
+              "qty": 4,
+              "unit_price_inr": 4628000.0,
+              "total_inr": 18512000.0
+            },
+            {
+              "item_code": "BKR-TIE-4000A",
+              "qty": 2,
+              "unit_price_inr": 1319500.0,
+              "total_inr": 2639000.0
+            },
+            {
+              "item_code": "BKR-FDR-1600A",
+              "qty": 8,
+              "unit_price_inr": 558000.0,
+              "total_inr": 4464000.0
+            },
+            {
+              "item_code": "BKR-FDR-800A",
+              "qty": 16,
+              "unit_price_inr": 170200.0,
+              "total_inr": 2723200.0
+            },
+            {
+              "item_code": "ATS-1200A-4P",
+              "qty": 4,
+              "unit_price_inr": 862400.0,
+              "total_inr": 3449600.0
+            },
+            {
+              "item_code": "MTR-PQ-02S",
+              "qty": 10,
+              "unit_price_inr": 64600.0,
+              "total_inr": 646000.0
+            },
+            {
+              "item_code": "SPD-T1-200KA",
+              "qty": 4,
+              "unit_price_inr": 88400.0,
+              "total_inr": 353600.0
+            },
+            {
+              "item_code": "BUSWAY-4000A-CU",
+              "qty": 120,
+              "unit_price_inr": 19400.0,
+              "total_inr": 2328000.0
+            }
+          ],
+          "freight_inr": 360000.0,
+          "total_inr": 35475400.0,
+          "lead_time_days": 140,
+          "valid_until": "2027-02-14",
+          "reliability": 0.82,
+          "status": "received",
+          "received_at": "2027-01-15T23:00:00+05:30",
+          "notes": "Lowest price; type-tested IEC 61439-2 panels but two late deliveries on the last five orders (on-time 82%)."
+        }
+      },
+      "sim_time": "2027-01-15T23:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:37.506894Z",
+      "executions": 1
+    },
+    {
+      "idempotency_key": "run-20261112-234535-dd21:T2-rfq:rfq:V2:a1",
+      "run_id": "run-20261112-234535-dd21",
+      "kind": "rfq.sent",
+      "status": "done",
+      "payload": {
+        "vendor_id": "V2",
+        "attempt": 1,
+        "ref": "RFQ-5-dd21-V2-A1"
+      },
+      "result": {
+        "ref": "RFQ-5-dd21-V2-A1",
+        "quote": {
+          "vendor_id": "V2",
+          "vendor_name": "Kestrel Power Systems",
+          "quote_id": "Q-V2-20270111-R1",
+          "revision": 1,
+          "lines": [
+            {
+              "item_code": "SWGR-MAIN-4000A",
+              "qty": 4,
+              "unit_price_inr": 5094400.0,
+              "total_inr": 20377600.0
+            },
+            {
+              "item_code": "BKR-TIE-4000A",
+              "qty": 2,
+              "unit_price_inr": 1406500.0,
+              "total_inr": 2813000.0
+            },
+            {
+              "item_code": "BKR-FDR-1600A",
+              "qty": 8,
+              "unit_price_inr": 601400.0,
+              "total_inr": 4811200.0
+            },
+            {
+              "item_code": "BKR-FDR-800A",
+              "qty": 16,
+              "unit_price_inr": 179400.0,
+              "total_inr": 2870400.0
+            },
+            {
+              "item_code": "ATS-1200A-4P",
+              "qty": 4,
+              "unit_price_inr": 931600.0,
+              "total_inr": 3726400.0
+            },
+            {
+              "item_code": "MTR-PQ-02S",
+              "qty": 10,
+              "unit_price_inr": 66000.0,
+              "total_inr": 660000.0
+            },
+            {
+              "item_code": "SPD-T1-200KA",
+              "qty": 4,
+              "unit_price_inr": 92200.0,
+              "total_inr": 368800.0
+            },
+            {
+              "item_code": "BUSWAY-4000A-CU",
+              "qty": 120,
+              "unit_price_inr": 21200.0,
+              "total_inr": 2544000.0
+            }
+          ],
+          "freight_inr": 480000.0,
+          "total_inr": 38651400.0,
+          "lead_time_days": 112,
+          "valid_until": "2027-01-25",
+          "reliability": 0.93,
+          "status": "received",
+          "received_at": "2027-01-11T23:00:00+05:30",
+          "notes": "Best on-time record (93%) and shortest lead time; prices are list less a 3% early-order discount valid 14 days; copper-indexed price variation clause. Includes 3% early-order discount, valid 14 days."
+        }
+      },
+      "sim_time": "2027-01-11T23:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:37.568333Z",
+      "executions": 1
+    },
+    {
+      "idempotency_key": "run-20261112-234535-dd21:T2-rfq:rfq:V3:a1",
+      "run_id": "run-20261112-234535-dd21",
+      "kind": "rfq.sent",
+      "status": "done",
+      "payload": {
+        "vendor_id": "V3",
+        "attempt": 1,
+        "ref": "RFQ-5-dd21-V3-A1"
+      },
+      "result": {
+        "ref": "RFQ-5-dd21-V3-A1",
+        "quote": {
+          "vendor_id": "V3",
+          "vendor_name": "Anvil Electric India",
+          "quote_id": "Q-V3-20270111-R1",
+          "revision": 1,
+          "lines": [
+            {
+              "item_code": "SWGR-MAIN-4000A",
+              "qty": 4,
+              "unit_price_inr": 4836000.0,
+              "total_inr": 19344000.0
+            },
+            {
+              "item_code": "BKR-TIE-4000A",
+              "qty": 2,
+              "unit_price_inr": 1363000.0,
+              "total_inr": 2726000.0
+            },
+            {
+              "item_code": "BKR-FDR-1600A",
+              "qty": 8,
+              "unit_price_inr": 570400.0,
+              "total_inr": 4563200.0
+            },
+            {
+              "item_code": "BKR-FDR-800A",
+              "qty": 16,
+              "unit_price_inr": 175800.0,
+              "total_inr": 2812800.0
+            },
+            {
+              "item_code": "ATS-1200A-4P",
+              "qty": 4,
+              "unit_price_inr": 901600.0,
+              "total_inr": 3606400.0
+            },
+            {
+              "item_code": "MTR-PQ-02S",
+              "qty": 10,
+              "unit_price_inr": 66000.0,
+              "total_inr": 660000.0
+            },
+            {
+              "item_code": "SPD-T1-200KA",
+              "qty": 4,
+              "unit_price_inr": 85500.0,
+              "total_inr": 342000.0
+            },
+            {
+              "item_code": "BUSWAY-4000A-CU",
+              "qty": 120,
+              "unit_price_inr": 20200.0,
+              "total_inr": 2424000.0
+            }
+          ],
+          "freight_inr": 780000.0,
+          "total_inr": 37258400.0,
+          "lead_time_days": 168,
+          "valid_until": "2027-02-25",
+          "reliability": 0.9,
+          "status": "received",
+          "received_at": "2027-01-11T23:00:00+05:30",
+          "notes": "Mid-priced, 90% on-time; standard lead time is long because Line 1 is booked through Q2 2027; expedite slot available for a fee. Expedite available: -42 days for INR 2,600,000."
+        }
+      },
+      "sim_time": "2027-01-11T23:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:37.628560Z",
+      "executions": 1
+    },
+    {
+      "idempotency_key": "run-20261112-234535-dd21:T3-levelling:refresh:V1:r1",
+      "run_id": "run-20261112-234535-dd21",
+      "kind": "quote.refresh",
+      "status": "done",
+      "payload": {
+        "vendor_id": "V1",
+        "quote_id": "Q-V1-20270115-R1"
+      },
+      "result": {
+        "ref": "REFRESH-Q-V1-20270115-R1",
+        "quote": {
+          "vendor_id": "V1",
+          "vendor_name": "Voltaris Switchgear Pvt Ltd",
+          "quote_id": "Q-V1-20270115-R1",
+          "revision": 1,
+          "lines": [
+            {
+              "item_code": "SWGR-MAIN-4000A",
+              "qty": 4,
+              "unit_price_inr": 4628000.0,
+              "total_inr": 18512000.0
+            },
+            {
+              "item_code": "BKR-TIE-4000A",
+              "qty": 2,
+              "unit_price_inr": 1319500.0,
+              "total_inr": 2639000.0
+            },
+            {
+              "item_code": "BKR-FDR-1600A",
+              "qty": 8,
+              "unit_price_inr": 558000.0,
+              "total_inr": 4464000.0
+            },
+            {
+              "item_code": "BKR-FDR-800A",
+              "qty": 16,
+              "unit_price_inr": 170200.0,
+              "total_inr": 2723200.0
+            },
+            {
+              "item_code": "ATS-1200A-4P",
+              "qty": 4,
+              "unit_price_inr": 862400.0,
+              "total_inr": 3449600.0
+            },
+            {
+              "item_code": "MTR-PQ-02S",
+              "qty": 10,
+              "unit_price_inr": 64600.0,
+              "total_inr": 646000.0
+            },
+            {
+              "item_code": "SPD-T1-200KA",
+              "qty": 4,
+              "unit_price_inr": 88400.0,
+              "total_inr": 353600.0
+            },
+            {
+              "item_code": "BUSWAY-4000A-CU",
+              "qty": 120,
+              "unit_price_inr": 19400.0,
+              "total_inr": 2328000.0
+            }
+          ],
+          "freight_inr": 360000.0,
+          "total_inr": 35475400.0,
+          "lead_time_days": 140,
+          "valid_until": "2027-02-14",
+          "reliability": 0.82,
+          "status": "received",
+          "received_at": "2027-01-15T23:00:00+05:30",
+          "notes": "Lowest price; type-tested IEC 61439-2 panels but two late deliveries on the last five orders (on-time 82%)."
+        }
+      },
+      "sim_time": "2027-01-18T23:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:38.492464Z",
+      "executions": 2
+    },
+    {
+      "idempotency_key": "run-20261112-234535-dd21:T3-levelling:refresh:V2:r1",
+      "run_id": "run-20261112-234535-dd21",
+      "kind": "quote.refresh",
+      "status": "done",
+      "payload": {
+        "vendor_id": "V2",
+        "quote_id": "Q-V2-20270111-R1"
+      },
+      "result": {
+        "ref": "REFRESH-Q-V2-20270111-R1",
+        "quote": {
+          "vendor_id": "V2",
+          "vendor_name": "Kestrel Power Systems",
+          "quote_id": "Q-V2-20270118-R2",
+          "revision": 2,
+          "lines": [
+            {
+              "item_code": "SWGR-MAIN-4000A",
+              "qty": 4,
+              "unit_price_inr": 5829700.0,
+              "total_inr": 23318800.0
+            },
+            {
+              "item_code": "BKR-TIE-4000A",
+              "qty": 2,
+              "unit_price_inr": 1609500.0,
+              "total_inr": 3219000.0
+            },
+            {
+              "item_code": "BKR-FDR-1600A",
+              "qty": 8,
+              "unit_price_inr": 688200.0,
+              "total_inr": 5505600.0
+            },
+            {
+              "item_code": "BKR-FDR-800A",
+              "qty": 16,
+              "unit_price_inr": 205400.0,
+              "total_inr": 3286400.0
+            },
+            {
+              "item_code": "ATS-1200A-4P",
+              "qty": 4,
+              "unit_price_inr": 1066000.0,
+              "total_inr": 4264000.0
+            },
+            {
+              "item_code": "MTR-PQ-02S",
+              "qty": 10,
+              "unit_price_inr": 75500.0,
+              "total_inr": 755000.0
+            },
+            {
+              "item_code": "SPD-T1-200KA",
+              "qty": 4,
+              "unit_price_inr": 105500.0,
+              "total_inr": 422000.0
+            },
+            {
+              "item_code": "BUSWAY-4000A-CU",
+              "qty": 120,
+              "unit_price_inr": 24300.0,
+              "total_inr": 2916000.0
+            }
+          ],
+          "freight_inr": 480000.0,
+          "total_inr": 44166800.0,
+          "lead_time_days": 112,
+          "valid_until": "2027-02-01",
+          "reliability": 0.93,
+          "status": "revised",
+          "received_at": "2027-01-18T23:00:00+05:30",
+          "notes": "Revision 2 of Q-V2-20270111-R1: Raw copper surcharge +11% (LME Cu up since RFQ); 3% early-order discount withdrawn because the 14-day offer validity lapsed"
+        }
+      },
+      "sim_time": "2027-01-18T23:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:38.560585Z",
+      "executions": 2
+    },
+    {
+      "idempotency_key": "run-20261112-234535-dd21:T3-levelling:refresh:V3:r1",
+      "run_id": "run-20261112-234535-dd21",
+      "kind": "quote.refresh",
+      "status": "done",
+      "payload": {
+        "vendor_id": "V3",
+        "quote_id": "Q-V3-20270111-R1"
+      },
+      "result": {
+        "ref": "REFRESH-Q-V3-20270111-R1",
+        "quote": {
+          "vendor_id": "V3",
+          "vendor_name": "Anvil Electric India",
+          "quote_id": "Q-V3-20270111-R1",
+          "revision": 1,
+          "lines": [
+            {
+              "item_code": "SWGR-MAIN-4000A",
+              "qty": 4,
+              "unit_price_inr": 4836000.0,
+              "total_inr": 19344000.0
+            },
+            {
+              "item_code": "BKR-TIE-4000A",
+              "qty": 2,
+              "unit_price_inr": 1363000.0,
+              "total_inr": 2726000.0
+            },
+            {
+              "item_code": "BKR-FDR-1600A",
+              "qty": 8,
+              "unit_price_inr": 570400.0,
+              "total_inr": 4563200.0
+            },
+            {
+              "item_code": "BKR-FDR-800A",
+              "qty": 16,
+              "unit_price_inr": 175800.0,
+              "total_inr": 2812800.0
+            },
+            {
+              "item_code": "ATS-1200A-4P",
+              "qty": 4,
+              "unit_price_inr": 901600.0,
+              "total_inr": 3606400.0
+            },
+            {
+              "item_code": "MTR-PQ-02S",
+              "qty": 10,
+              "unit_price_inr": 66000.0,
+              "total_inr": 660000.0
+            },
+            {
+              "item_code": "SPD-T1-200KA",
+              "qty": 4,
+              "unit_price_inr": 85500.0,
+              "total_inr": 342000.0
+            },
+            {
+              "item_code": "BUSWAY-4000A-CU",
+              "qty": 120,
+              "unit_price_inr": 20200.0,
+              "total_inr": 2424000.0
+            }
+          ],
+          "freight_inr": 780000.0,
+          "total_inr": 37258400.0,
+          "lead_time_days": 168,
+          "valid_until": "2027-02-25",
+          "reliability": 0.9,
+          "status": "received",
+          "received_at": "2027-01-11T23:00:00+05:30",
+          "notes": "Mid-priced, 90% on-time; standard lead time is long because Line 1 is booked through Q2 2027; expedite slot available for a fee. Expedite available: -42 days for INR 2,600,000."
+        }
+      },
+      "sim_time": "2027-01-18T23:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:38.620347Z",
+      "executions": 2
+    },
+    {
+      "idempotency_key": "run-20261112-234535-dd21:plan-v2:llm:replan",
+      "run_id": "run-20261112-234535-dd21",
+      "kind": "llm.call",
+      "status": "done",
+      "payload": {
+        "prompt": "Procurement re-plan. Triggers: budget_breach:V2, deadline_break:V3. Facts: budget_breach:V2=V2 revision 2 lifts committed cost to ₹4.64 Cr (101% of budget) — breach; deadline_break:V3=V3 delivers 2027-08-29 (-30 d vs required on site) and no option has ≥14 d float; expedite offer −42 d available. Changes: add T15-negotiate-V2; add T16-expedite-V3; skip T10-rank; rewire T11-approve-vendor -> T18-escalate; add T17-rank; add T18-escalate. In 2 sentences, explain why the plan changed and what happen",
+        "provider": "off",
+        "model": "template"
+      },
+      "result": {
+        "value": "Plan v2 reacts to budget_breach:V2, deadline_break:V3: add T15-negotiate-V2; add T16-expedite-V3; skip T10-rank; rewire T11-approve-vendor -> T18-escalate; add T17-rank; add T18-escalate. Completed work is kept; only the affected decision path is redone.",
+        "provider": "off",
+        "model": "template",
+        "tokens": 0,
+        "latency_ms": 0,
+        "error": null
+      },
+      "sim_time": "2027-01-22T11:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:43.992232Z",
+      "executions": 1
+    },
+    {
+      "idempotency_key": "run-20261112-234535-dd21:T15-negotiate-V2:negotiate:V2:r2",
+      "run_id": "run-20261112-234535-dd21",
+      "kind": "quote.negotiate",
+      "status": "done",
+      "payload": {
+        "vendor_id": "V2",
+        "quote_id": "Q-V2-20270118-R2"
+      },
+      "result": {
+        "ref": "NEGOTIATE-Q-V2-20270118-R2",
+        "quote": {
+          "vendor_id": "V2",
+          "vendor_name": "Kestrel Power Systems",
+          "quote_id": "Q-V2-20270118-R2",
+          "revision": 2,
+          "lines": [
+            {
+              "item_code": "SWGR-MAIN-4000A",
+              "qty": 4,
+              "unit_price_inr": 5829700.0,
+              "total_inr": 23318800.0
+            },
+            {
+              "item_code": "BKR-TIE-4000A",
+              "qty": 2,
+              "unit_price_inr": 1609500.0,
+              "total_inr": 3219000.0
+            },
+            {
+              "item_code": "BKR-FDR-1600A",
+              "qty": 8,
+              "unit_price_inr": 688200.0,
+              "total_inr": 5505600.0
+            },
+            {
+              "item_code": "BKR-FDR-800A",
+              "qty": 16,
+              "unit_price_inr": 205400.0,
+              "total_inr": 3286400.0
+            },
+            {
+              "item_code": "ATS-1200A-4P",
+              "qty": 4,
+              "unit_price_inr": 1066000.0,
+              "total_inr": 4264000.0
+            },
+            {
+              "item_code": "MTR-PQ-02S",
+              "qty": 10,
+              "unit_price_inr": 75500.0,
+              "total_inr": 755000.0
+            },
+            {
+              "item_code": "SPD-T1-200KA",
+              "qty": 4,
+              "unit_price_inr": 105500.0,
+              "total_inr": 422000.0
+            },
+            {
+              "item_code": "BUSWAY-4000A-CU",
+              "qty": 120,
+              "unit_price_inr": 24300.0,
+              "total_inr": 2916000.0
+            }
+          ],
+          "freight_inr": 480000.0,
+          "total_inr": 44166800.0,
+          "lead_time_days": 112,
+          "valid_until": "2027-02-01",
+          "reliability": 0.93,
+          "status": "revised",
+          "received_at": "2027-01-18T23:00:00+05:30",
+          "notes": "Revision 2 of Q-V2-20270111-R1: Raw copper surcharge +11% (LME Cu up since RFQ); 3% early-order discount withdrawn because the 14-day offer validity lapsed"
+        }
+      },
+      "sim_time": "2027-01-24T14:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:44.236311Z",
+      "executions": 1
+    },
+    {
+      "idempotency_key": "run-20261112-234535-dd21:T16-expedite-V3:expedite:V3",
+      "run_id": "run-20261112-234535-dd21",
+      "kind": "expedite.confirm",
+      "status": "done",
+      "payload": {
+        "vendor_id": "V3"
+      },
+      "result": {
+        "confirmed": true,
+        "days_saved": 42,
+        "fee_inr": 2600000.0
+      },
+      "sim_time": "2027-01-26T14:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:44.748378Z",
+      "executions": 1
+    },
+    {
+      "idempotency_key": "run-20261112-234535-dd21:T17-rank:llm:memo",
+      "run_id": "run-20261112-234535-dd21",
+      "kind": "llm.call",
+      "status": "done",
+      "payload": {
+        "prompt": "Options: O-V3X Anvil Electric India ₹3.99 Cr float +6d warn REC; O-V2 Kestrel Power Systems ₹4.42 Cr float +20d breach; O-V3 Anvil Electric India ₹3.73 Cr float -36d ok; O-V1 Voltaris Switchgear Pvt Ltd ₹3.55 Cr float -8d ok. Recommended: O-V3X. Write 2 sentences for the project manager explaining the recommendation. Use only the numbers given.",
+        "provider": "off",
+        "model": "template"
+      },
+      "result": {
+        "value": "",
+        "provider": "off",
+        "model": "template",
+        "tokens": 0,
+        "latency_ms": 0,
+        "error": null
+      },
+      "sim_time": "2027-01-28T14:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:45.276617Z",
+      "executions": 1
+    },
+    {
+      "idempotency_key": "run-20261112-234535-dd21:T18-escalate:notify:pm",
+      "run_id": "run-20261112-234535-dd21",
+      "kind": "notify.pm",
+      "status": "done",
+      "payload": {
+        "memo": "MEMO-04AA7D9F"
+      },
+      "result": {
+        "message_id": 11
+      },
+      "sim_time": "2027-01-29T14:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:45.804117Z",
+      "executions": 1
+    },
+    {
+      "idempotency_key": "run-20261112-234535-dd21:T11-approve-vendor:approval:requested",
+      "run_id": "run-20261112-234535-dd21",
+      "kind": "approval.requested",
+      "status": "done",
+      "payload": {
+        "kind": "vendor_selection"
+      },
+      "result": {
+        "approval_id": "run-20261112-234535-dd21:T11-approve-vendor"
+      },
+      "sim_time": "2027-01-30T02:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:46.285312Z",
+      "executions": 2
+    },
+    {
+      "idempotency_key": "run-20261112-234535-dd21:T13-approve-po:approval:requested",
+      "run_id": "run-20261112-234535-dd21",
+      "kind": "approval.requested",
+      "status": "done",
+      "payload": {
+        "kind": "po_release"
+      },
+      "result": {
+        "approval_id": "run-20261112-234535-dd21:T13-approve-po"
+      },
+      "sim_time": "2027-02-07T02:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:48.112163Z",
+      "executions": 2
+    },
+    {
+      "idempotency_key": "run-20261112-234535-dd21:T14-send-po:po:PO-ALPHA-20270207-V3-01",
+      "run_id": "run-20261112-234535-dd21",
+      "kind": "po.sent",
+      "status": "done",
+      "payload": {
+        "po_number": "PO-ALPHA-20270207-V3-01"
+      },
+      "result": {
+        "message_id": 12,
+        "po_number": "PO-ALPHA-20270207-V3-01",
+        "sent_at": "2027-02-10T02:00:00+05:30"
+      },
+      "sim_time": "2027-02-10T02:00:00+05:30",
+      "wall_time": "2026-11-12T18:15:49.408128Z",
+      "executions": 1
+    }
+  ],
+  "timeline": [
+    {
+      "sim_time": "2027-01-11T09:00:00+05:30",
+      "lane": "system",
+      "label": "Run created",
+      "kind": "info"
+    },
+    {
+      "sim_time": "2027-01-11T09:00:00+05:30",
+      "lane": "planner",
+      "label": "Goal received: Get the 480 V switchgear package for Project Alpha ordered by 2027-03-15 within budget ₹4.6 Cr",
+      "kind": "info"
+    },
+    {
+      "sim_time": "2027-01-11T09:00:00+05:30",
+      "lane": "planner",
+      "label": "Plan v1: 14 tasks, 5 risks, PO by 2027-03-15",
+      "kind": "success"
+    },
+    {
+      "sim_time": "2027-01-11T15:00:00+05:30",
+      "lane": "takeoff",
+      "label": "RFI raised: SPD-T1-200KA: drawing p3 shows 3 ea (SPD-xx tags) but the equipment schedule lists 4 ea",
+      "kind": "warning"
+    },
+    {
+      "sim_time": "2027-01-11T17:00:00+05:30",
+      "lane": "takeoff",
+      "label": "Takeoff: 8 line items from spec (confidence 92%)",
+      "kind": "success"
+    },
+    {
+      "sim_time": "2027-01-11T23:00:00+05:30",
+      "lane": "quotes",
+      "label": "RFQ → V1 Voltaris Switchgear Pvt Ltd (attempt 1)",
+      "kind": "info"
+    },
+    {
+      "sim_time": "2027-01-11T23:00:00+05:30",
+      "lane": "quotes",
+      "label": "RFQ → V2 Kestrel Power Systems (attempt 1)",
+      "kind": "info"
+    },
+    {
+      "sim_time": "2027-01-11T23:00:00+05:30",
+      "lane": "quotes",
+      "label": "RFQ → V3 Anvil Electric India (attempt 1)",
+      "kind": "info"
+    },
+    {
+      "sim_time": "2027-01-12T19:00:00+05:30",
+      "lane": "quotes",
+      "label": "V2 quoted ₹3.87 Cr, 112 d lead",
+      "kind": "success"
+    },
+    {
+      "sim_time": "2027-01-13T19:00:00+05:30",
+      "lane": "quotes",
+      "label": "V3 quoted ₹3.73 Cr, 168 d lead",
+      "kind": "success"
+    },
+    {
+      "sim_time": "2027-01-13T23:00:00+05:30",
+      "lane": "quotes",
+      "label": "V1 silent after 2 d (attempt 1/3) — retrying",
+      "kind": "warning"
+    },
+    {
+      "sim_time": "2027-01-13T23:00:00+05:30",
+      "lane": "quotes",
+      "label": "RFQ → V1 Voltaris Switchgear Pvt Ltd (attempt 2)",
+      "kind": "info"
+    },
+    {
+      "sim_time": "2027-01-15T23:00:00+05:30",
+      "lane": "quotes",
+      "label": "V1 silent after 2 d (attempt 2/3) — retrying",
+      "kind": "warning"
+    },
+    {
+      "sim_time": "2027-01-15T23:00:00+05:30",
+      "lane": "quotes",
+      "label": "RFQ → V1 Voltaris Switchgear Pvt Ltd (attempt 3)",
+      "kind": "info"
+    },
+    {
+      "sim_time": "2027-01-17T05:00:00+05:30",
+      "lane": "quotes",
+      "label": "V1 quoted ₹3.55 Cr, 140 d lead",
+      "kind": "success"
+    },
+    {
+      "sim_time": "2027-01-17T23:00:00+05:30",
+      "lane": "system",
+      "label": "Worker pid 5292 killed (SIGKILL) at execute:T3-levelling:pacing",
+      "kind": "kill"
+    },
+    {
+      "sim_time": "2027-01-17T23:00:00+05:30",
+      "lane": "system",
+      "label": "Worker pid 5297 resumed from checkpoint #7",
+      "kind": "success"
+    },
+    {
+      "sim_time": "2027-01-18T23:00:00+05:30",
+      "lane": "quotes",
+      "label": "V2 revised price +14.3 % → ₹4.42 Cr (copper surcharge)",
+      "kind": "warning"
+    },
+    {
+      "sim_time": "2027-01-20T23:00:00+05:30",
+      "lane": "quotes",
+      "label": "Bid levelling done: 3 quotes confirmed, 1 revised",
+      "kind": "info"
+    },
+    {
+      "sim_time": "2027-01-21T05:00:00+05:30",
+      "lane": "schedule",
+      "label": "V1: delivery 01 Aug (-2 d float) — LATE",
+      "kind": "warning"
+    },
+    {
+      "sim_time": "2027-01-21T11:00:00+05:30",
+      "lane": "schedule",
+      "label": "V2: delivery 04 Jul (+26 d float)",
+      "kind": "success"
+    },
+    {
+      "sim_time": "2027-01-21T17:00:00+05:30",
+      "lane": "schedule",
+      "label": "V3: delivery 29 Aug (-30 d float) — LATE",
+      "kind": "warning"
+    },
+    {
+      "sim_time": "2027-01-21T23:00:00+05:30",
+      "lane": "budget",
+      "label": "V1: ₹3.72 Cr committed = 81% of budget (ok)",
+      "kind": "success"
+    },
+    {
+      "sim_time": "2027-01-22T05:00:00+05:30",
+      "lane": "budget",
+      "label": "V2: ₹4.64 Cr committed = 101% of budget (breach)",
+      "kind": "error"
+    },
+    {
+      "sim_time": "2027-01-22T11:00:00+05:30",
+      "lane": "budget",
+      "label": "V3: ₹3.91 Cr committed = 85% of budget (ok)",
+      "kind": "success"
+    },
+    {
+      "sim_time": "2027-01-22T11:00:00+05:30",
+      "lane": "planner",
+      "label": "Monitor: V2 revision 2 lifts committed cost to ₹4.64 Cr (101% of budget) — breach",
+      "kind": "warning"
+    },
+    {
+      "sim_time": "2027-01-22T11:00:00+05:30",
+      "lane": "planner",
+      "label": "Monitor: V3 delivers 2027-08-29 (-30 d vs required on site) and no option has ≥14 d float; expedite offer −42 d available",
+      "kind": "warning"
+    },
+    {
+      "sim_time": "2027-01-22T11:00:00+05:30",
+      "lane": "planner",
+      "label": "Re-plan v2: +4 tasks (negotiate-V2, expedite-V3, rank, escalate), 1 superseded",
+      "kind": "warning"
+    },
+    {
+      "sim_time": "2027-01-22T14:00:00+05:30",
+      "lane": "quotes",
+      "label": "Negotiation call with V2: ask to absorb surcharge",
+      "kind": "info"
+    },
+    {
+      "sim_time": "2027-01-26T14:00:00+05:30",
+      "lane": "quotes",
+      "label": "V2 negotiation: price held (breach)",
+      "kind": "warning"
+    },
+    {
+      "sim_time": "2027-01-28T14:00:00+05:30",
+      "lane": "schedule",
+      "label": "V3 expedited (−42 d, ₹26.0 L): delivery 23 Jul (+7 d), 91% of budget",
+      "kind": "success"
+    },
+    {
+      "sim_time": "2027-01-29T14:00:00+05:30",
+      "lane": "approvals",
+      "label": "Decision memo: recommend O-V3X (Anvil Electric India, expedited), 1/4 options feasible",
+      "kind": "success"
+    },
+    {
+      "sim_time": "2027-01-29T14:00:00+05:30",
+      "lane": "human",
+      "label": "Escalated to PM: expedite fee ₹26.0 L needs sign-off; budget warn; O-V2 over budget after price revision",
+      "kind": "human"
+    },
+    {
+      "sim_time": "2027-01-30T02:00:00+05:30",
+      "lane": "human",
+      "label": "Awaiting human: Select vendor for 480 V switchgear",
+      "kind": "human"
+    },
+    {
+      "sim_time": "2027-02-04T02:00:00+05:30",
+      "lane": "human",
+      "label": "Approved O-V3X Anvil Electric India",
+      "kind": "human"
+    },
+    {
+      "sim_time": "2027-02-07T02:00:00+05:30",
+      "lane": "po",
+      "label": "PO PO-ALPHA-20270207-V3-01 drafted: Anvil Electric India, ₹4.70 Cr incl. GST",
+      "kind": "info"
+    },
+    {
+      "sim_time": "2027-02-07T02:00:00+05:30",
+      "lane": "human",
+      "label": "Awaiting human: Release PO PO-ALPHA-20270207-V3-01",
+      "kind": "human"
+    },
+    {
+      "sim_time": "2027-02-10T02:00:00+05:30",
+      "lane": "human",
+      "label": "PO PO-ALPHA-20270207-V3-01 release approved",
+      "kind": "human"
+    },
+    {
+      "sim_time": "2027-02-10T02:00:00+05:30",
+      "lane": "po",
+      "label": "PO PO-ALPHA-20270207-V3-01 sent to Anvil Electric India (₹3.99 Cr ex-GST)",
+      "kind": "success"
+    },
+    {
+      "sim_time": "2027-02-10T10:00:00+05:30",
+      "lane": "po",
+      "label": "V3 acknowledged PO; delivery 22 Jul (+8 d float)",
+      "kind": "success"
+    },
+    {
+      "sim_time": "2027-02-10T14:00:00+05:30",
+      "lane": "system",
+      "label": "Goal met — PO sent 10 Feb, 30 sim days",
+      "kind": "success"
+    }
+  ],
+  "worker": {
+    "pid": 5315,
+    "alive": true,
+    "started_at": "2026-11-12T18:15:49.002573Z",
+    "restarts": 1
+  },
+  "checkpoints": 38,
+  "current_node": "finish",
+  "llm": {
+    "provider": "off",
+    "model": "template",
+    "calls": 3,
+    "fallbacks": 0,
+    "tokens": 0,
+    "latency_ms": 0,
+    "replayed": 0
+  },
+  "error": null
+}

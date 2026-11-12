@@ -12,6 +12,7 @@
 
 from __future__ import annotations
 
+import contextlib
 import sqlite3
 import time
 from collections.abc import Callable
@@ -1037,6 +1038,19 @@ def rt_goal(ctx: Ctx) -> Goal:
     return ctx.rt.goal
 
 
+def _rerender_po(ctx: Ctx, po: PurchaseOrder) -> PurchaseOrder:
+    """Refresh the rendered PO package after a status change (draft -> approved -> sent)."""
+    from .specialists._data import vendor_profile
+    from .specialists.po import render_po_markdown
+
+    q = _quotes(ctx.facts).get(po.vendor_id)
+    if q is not None:
+        # rendering is cosmetic; never fail the task on it
+        with contextlib.suppress(Exception):
+            po.markdown = render_po_markdown(po, ctx.rt.goal, q, vendor_profile(po.vendor_id))
+    return po
+
+
 def h_approve_po(ctx: Ctx, plan: Plan, task: PlanTask, vendor: str | None) -> Outcome:
     req, decision = _approval(ctx, plan, task, "po_release")
     wait = DURATION_DAYS["approve-po"]
@@ -1058,7 +1072,7 @@ def h_approve_po(ctx: Ctx, plan: Plan, task: PlanTask, vendor: str | None) -> Ou
             wait, "PO release rejected.", status=TaskStatus.failed, note="rejected by human"
         )
     po.status = "approved"
-    ctx.facts["po"] = po.model_dump(mode="json")
+    ctx.facts["po"] = _rerender_po(ctx, po).model_dump(mode="json")
     ctx.audit(
         "human",
         "approval.approved",
@@ -1089,7 +1103,7 @@ def h_send_po(ctx: Ctx, plan: Plan, task: PlanTask, vendor: str | None) -> Outco
     res = ctx.once("po", po.po_number, "po.sent", {"po_number": po.po_number}, send)
     po.status = "sent"
     po.issued_at = datetime.fromisoformat(res["sent_at"])
-    ctx.facts["po"] = po.model_dump(mode="json")
+    ctx.facts["po"] = _rerender_po(ctx, po).model_dump(mode="json")
     memo = DecisionMemo.model_validate(ctx.facts["memo"])
     opt = next(o for o in memo.options if o.option_id == ctx.facts["selected_option"])
     s = schedule_for_lead_time(
