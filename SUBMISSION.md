@@ -21,15 +21,15 @@ A procurement agent for construction that plans a multi-week job, survives kill 
 | Challenge | 1.3 "Work that takes days, not minutes" |
 | Also demonstrates | 1.2 "The conductor: orchestrating specialist agents" (the demo goal is that challenge's example input) |
 | Division | Students |
-| Team | <!-- TODO verify: names and college of each team member (2 to 4 members, all students) --> |
+| Team | _to be filled in on Devpost (2–4 student members)_ |
 
 ## Links
 
 | Item | URL |
 |---|---|
 | Repository | `https://github.com/<your-username>/sitemind` |
-| Demo video (2:51) | `<video URL>` <!-- TODO verify: upload submission/sitemind_demo.mp4 and paste the link --> |
-| Pitch deck (8 to 10 slides) | `<deck URL>` <!-- TODO verify: the deck is a separate required deliverable --> |
+| Demo video | `<YouTube URL>` (file: `submission/sitemind_demo.mp4`) |
+| Pitch deck (10 slides) | `submission/SiteMind_pitch.pdf` (upload to Devpost) |
 
 ---
 
@@ -145,7 +145,7 @@ confidence. Every specialist is also exposed as an MCP tool, so another agent ca
   and an expedite fee that should be paid only against a delivery milestone.
 - The whole thing runs offline on a laptop CPU, and with the model switched off every number
   is unchanged.
-- A deterministic test suite that needs no model, including kill-and-resume durability tests. <!-- TODO verify: add the final test count from `make test` (60 passed at the time of writing) -->
+- A deterministic test suite that needs no model, including kill-and-resume durability tests. 60 deterministic tests, a real-model run and a Playwright e2e all pass.
 
 ### What we learned
 
@@ -185,7 +185,7 @@ confidence. Every specialist is also exposed as an MCP tool, so another agent ca
 | Model | Qwen2.5-3B-Instruct (`qwen2.5:3b`) on Ollama, local CPU |
 | Calls per run | 3 |
 | Cost per run | ₹0 in API fees |
-| Response time | Full run 5.4 s with the model off. With the model on: <!-- TODO verify: measured seconds per call and per run with Ollama --> |
+| Response time | Full run 5.4 s with the model off. With `qwen2.5:3b` on a 4-core CPU: ~25 s per call, 75.6 s per full run, 0 fallbacks. |
 
 ## Testing instructions for judges
 

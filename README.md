@@ -314,7 +314,13 @@ network, CPM schedule, budget, ranking and memo, PO), the planner and re-plan ru
 store and `perform_once`, the graph, kill-and-resume durability, the API and the MCP server.
 Tests marked `llm` call a real local model and are skipped when Ollama is unreachable.
 
-<!-- TODO verify: state the final test count (60 passed, 1 deselected at the time of writing; tests were still being added) and add the Playwright e2e command once e2e/ has a spec file -->
+Current results (full logs in [`docs/QA.md`](docs/QA.md)): **60 passed** (deterministic suite, ~21 s),
+**1 passed** real-model run (`python3 -m pytest -m llm tests/test_llm_real.py`), dashboard e2e
+**1/1** against the real backend and **13/13** in mock mode.
+
+```bash
+cd e2e && npm ci && npx playwright test --trace off sitemind.spec.ts   # real backend e2e
+```
 
 ## Demo numbers
 
@@ -394,7 +400,7 @@ delivery milestone with LDs.
 | Not used for | quantities, prices, dates, scores, verdicts (all deterministic code) |
 | Cost per run | ₹0 in API fees; runs on a laptop CPU |
 | Calls per run | 3 (plan rationale, re-plan explanation, memo prose) |
-| Response time | 5.4 s wall for the full run with `SITEMIND_LLM_PROVIDER=off`. With `qwen2.5:3b` on CPU: <!-- TODO verify: measure seconds per LLM call and total wall time per run with Ollama --> |
+| Response time | 5.4 s wall for the full run with `SITEMIND_LLM_PROVIDER=off`. With `qwen2.5:3b` on a 4-core CPU (no GPU): 3 calls, 0 fallbacks, ~25 s per call, 75.6 s wall for the full run (measured, see docs/QA.md) |
 | If the model is unreachable | deterministic template; the audit entry records `provider: "fallback"` |
 
 Each model call is cached in the ledger, so a resumed run does not call the model again.

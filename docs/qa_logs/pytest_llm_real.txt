@@ -1,0 +1,10 @@
+[worker 1266] run run-20261113-005021-8166 start (dict)
+[worker 1266] run run-20261113-005021-8166 -> waiting_human
+[worker 1266] run run-20261113-005021-8166 start (Command)
+[worker 1266] run run-20261113-005021-8166 -> waiting_human
+[worker 1266] run run-20261113-005021-8166 start (Command)
+[worker 1266] run run-20261113-005021-8166 -> completed
+
+real-LLM run: wall 75.6s, llm={'calls': 3, 'fallbacks': 0, 'tokens': 865, 'latency_ms': 74490, 'replayed': 0}
+.
+1 passed in 143.39s (0:02:23)
