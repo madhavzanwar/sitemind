@@ -1,0 +1,28 @@
+{
+  "name": "demo",
+  "description": "Deterministic chaos for the Project Alpha demo: V1 times out twice, V2 revises its price on refresh (copper surcharge, discount withdrawn), V3's standard lead time misses the energisation window unless expedited.",
+  "required_on_site": "2027-07-30",
+  "need_by": "2027-03-15",
+  "sim_start": "2027-01-11T09:00:00+05:30",
+  "vendors": {
+    "V1": {
+      "timeout_on_attempts": [1, 2],
+      "timeout_hours": 24,
+      "revision_on_refresh": null
+    },
+    "V2": {
+      "timeout_on_attempts": [],
+      "revision_on_refresh": {
+        "price_uplift_pct": 11.0,
+        "withdraw_discount": true,
+        "lead_time_delta_days": 0,
+        "reason": "Raw copper surcharge +11% (LME Cu up since RFQ); 3% early-order discount withdrawn because the 14-day offer validity lapsed"
+      }
+    },
+    "V3": {
+      "timeout_on_attempts": [],
+      "revision_on_refresh": null,
+      "offer_expedite": true
+    }
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "currency": "INR",
+  "price_basis": "Unit prices ex-works, ex-GST (18% IGST/CGST+SGST charged on invoice, input tax credit recoverable). Freight quoted separately to Project Alpha site, Chakan MIDC Phase II, Pune 410501.",
+  "list_prices_inr": {
+    "SWGR-MAIN-4000A": 5200000,
+    "BKR-TIE-4000A": 1450000,
+    "BKR-FDR-1600A": 620000,
+    "BKR-FDR-800A": 185000,
+    "ATS-1200A-4P": 980000,
+    "MTR-PQ-02S": 68000,
+    "SPD-T1-200KA": 95000,
+    "BUSWAY-4000A-CU": 21500
+  },
+  "vendors": {
+    "V1": {
+      "vendor_id": "V1",
+      "name": "Voltaris Switchgear Pvt Ltd",
+      "city": "Nashik, Maharashtra",
+      "gstin": "27AAACV0000A1Z1",
+      "contact": "rfq@voltaris.example",
+      "reliability": 0.82,
+      "lead_time_days": 140,
+      "quote_validity_days": 30,
+      "response_hours": 30,
+      "freight_inr": 360000,
+      "early_order_discount_pct": 0.0,
+      "payment_terms": "10% advance against advance bank guarantee, 80% against delivery & inspection, 10% after SAT / energisation",
+      "incoterms": "DAP Project Alpha site, Chakan MIDC (Incoterms 2020)",
+      "unit_prices_inr": {
+        "SWGR-MAIN-4000A": 4628000,
+        "BKR-TIE-4000A": 1319500,
+        "BKR-FDR-1600A": 558000,
+        "BKR-FDR-800A": 170200,
+        "ATS-1200A-4P": 862400,
+        "MTR-PQ-02S": 64600,
+        "SPD-T1-200KA": 88400,
+        "BUSWAY-4000A-CU": 19400
+      },
+      "expedite": null,
+      "notes": "Lowest price; type-tested IEC 61439-2 panels but two late deliveries on the last five orders (on-time 82%)."
+    },
+    "V2": {
+      "vendor_id": "V2",
+      "name": "Kestrel Power Systems",
+      "city": "Vadodara, Gujarat",
+      "gstin": "24AAACK0000B1Z2",
+      "contact": "projects@kestrelpower.example",
+      "reliability": 0.93,
+      "lead_time_days": 112,
+      "quote_validity_days": 14,
+      "response_hours": 20,
+      "freight_inr": 480000,
+      "early_order_discount_pct": 3.0,
+      "payment_terms": "20% advance against ABG, 70% pro-rata against despatch, 10% against performance bank guarantee",
+      "incoterms": "CPT Project Alpha site, Chakan MIDC (Incoterms 2020)",
+      "unit_prices_inr": {
+        "SWGR-MAIN-4000A": 5252000,
+        "BKR-TIE-4000A": 1450000,
+        "BKR-FDR-1600A": 620000,
+        "BKR-FDR-800A": 185000,
+        "ATS-1200A-4P": 960400,
+        "MTR-PQ-02S": 68000,
+        "SPD-T1-200KA": 95000,
+        "BUSWAY-4000A-CU": 21900
+      },
+      "expedite": null,
+      "notes": "Best on-time record (93%) and shortest lead time; prices are list less a 3% early-order discount valid 14 days; copper-indexed price variation clause."
+    },
+    "V3": {
+      "vendor_id": "V3",
+      "name": "Anvil Electric India",
+      "city": "Chennai, Tamil Nadu",
+      "gstin": "33AAACA0000C1Z3",
+      "contact": "tenders@anvilelectric.example",
+      "reliability": 0.90,
+      "lead_time_days": 168,
+      "quote_validity_days": 45,
+      "response_hours": 44,
+      "freight_inr": 780000,
+      "early_order_discount_pct": 0.0,
+      "payment_terms": "Nil advance, 90% within 30 days of delivery, 10% retention released after SAT",
+      "incoterms": "DAP Project Alpha site, Chakan MIDC (Incoterms 2020)",
+      "unit_prices_inr": {
+        "SWGR-MAIN-4000A": 4836000,
+        "BKR-TIE-4000A": 1363000,
+        "BKR-FDR-1600A": 570400,
+        "BKR-FDR-800A": 175800,
+        "ATS-1200A-4P": 901600,
+        "MTR-PQ-02S": 66000,
+        "SPD-T1-200KA": 85500,
+        "BUSWAY-4000A-CU": 20200
+      },
+      "expedite": {
+        "days_saved": 42,
+        "fee_inr": 2600000,
+        "description": "Priority slot on Line 2 + double-shift assembly + air-freighted ACB modules (−42 days)"
+      },
+      "notes": "Mid-priced, 90% on-time; standard lead time is long because Line 1 is booked through Q2 2027; expedite slot available for a fee."
+    }
+  }
+}

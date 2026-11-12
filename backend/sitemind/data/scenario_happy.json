@@ -1,0 +1,12 @@
+{
+  "name": "happy",
+  "description": "No injected failures: every vendor answers on the first attempt, refreshes return the same price, expedite still on offer from V3.",
+  "required_on_site": "2027-07-30",
+  "need_by": "2027-03-15",
+  "sim_start": "2027-01-11T09:00:00+05:30",
+  "vendors": {
+    "V1": {"timeout_on_attempts": [], "revision_on_refresh": null},
+    "V2": {"timeout_on_attempts": [], "revision_on_refresh": null},
+    "V3": {"timeout_on_attempts": [], "revision_on_refresh": null, "offer_expedite": true}
+  }
+}
