@@ -102,7 +102,7 @@ scenes:
     actions:
       # kill inside a side-effect task's pacing window (after its side effect, before its checkpoint)
       # so the resumed worker re-requests that action and the ledger shows "x2 requested, executed once"
-      - { do: kill_when, until: "s.status === 'running' && /(negotiate|expedite|escalate).*:pacing$/.test(s.current_node || '')", timeout: 90 }
+      - { do: kill_when, until: "s.status === 'running' && /(negotiate|expedite|escalate).*:pacing$/.test(s.current_node || '')", timeout: 300 }
       - { do: wait_run, until: "s.status === 'killed' || (s.worker && !s.worker.alive)", timeout: 30 }
       - { do: highlight, testid: worker-status, hold: 2.0 }
 
@@ -119,7 +119,7 @@ scenes:
       - { do: wait_run, until: "(s.worker && s.worker.restarts >= 1) || s.status !== 'killed'", timeout: 30, optional: true }
       - { do: click, testid: tab-audit }
       - { do: click, testid: audit-view-ledger }
-      - { do: wait_run, until: "(s.ledger||[]).some(l => l.executions >= 2)", timeout: 20, optional: true }
+      - { do: wait_run, until: "(s.ledger||[]).some(l => l.executions >= 2)", timeout: 90 }
       - { do: pause, s: 1.0 }
       - { do: highlight, testid: ledger-dedup, hold: 3.0, optional: true }
       - { do: highlight, testid: ledger-table, hold: 2.0, optional: true }
