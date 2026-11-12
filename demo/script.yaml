@@ -18,7 +18,7 @@ meta:
   scene_lead_s: 0.35         # silence before narration starts in each scene
   scene_tail_s: 0.6          # hold after narration ends
   max_total_s: 178           # hard cap (Devpost allows 5 min; we aim for <= 3:00)
-  max_speedup: 6.0           # long agent waits are time-lapsed (labelled on screen) up to this factor
+  max_speedup: 10.0           # long agent waits are time-lapsed (labelled on screen) up to this factor
   base_url: http://localhost:8000
 
 scenes:
@@ -32,6 +32,8 @@ scenes:
         say: "On a twenty four megawatt data centre job, long-lead, four-eighty volt switchgear is the number one schedule risk."
       - text: "Today, coordinators juggle quotes, lead times and budgets in email and Excel, for weeks."
         say: "Today, procurement coordinators juggle quotes, lead times and budgets in email and Excel, for weeks."
+      - text: "Project Alpha is a Tier-III build at Chakan, Pune, and one missed date slips energisation."
+        say: "Project Alpha is a tier three build at Chakan, Pune, and one missed date slips energisation."
 
   - id: 2
     title: "A goal in plain English"
@@ -51,6 +53,7 @@ scenes:
     title: "It plans the job"
     narration:
       - text: "A local model on this laptop drafts the plan: a task graph with deadlines, budget and risks."
+      - text: "Fourteen tasks, five risks."
       - text: "Each step is assigned to a specialist agent, and the simulated clock starts on day one."
     actions:
       - { do: click, testid: tab-overview, optional: true }
@@ -62,7 +65,10 @@ scenes:
     title: "Specialists at work"
     narration:
       - text: "The takeoff specialist reads the switchgear spec PDF and extracts every line item, with its source."
+      - text: "It finds eight items, and flags one mismatch against the drawing for an RFI."
+        say: "It finds eight items, and flags one mismatch against the drawing for an R F I."
       - text: "Then requests for quotation go out to three mock vendors, each sent exactly once."
+      - text: "The vendors and prices are synthetic."
     actions:
       - { do: wait_run, until: "!!s.takeoff", timeout: 120 }
       - { do: highlight, testid: timeline, hold: 2.0 }
@@ -73,7 +79,7 @@ scenes:
     title: "Things go wrong. It re-plans."
     narration:
       - text: "Real vendors are messy. Voltaris times out twice; the agent backs off and retries."
-      - text: "Kestrel then revises its price by eleven percent, which breaks the budget."
+      - text: "Kestrel then revises its price up fourteen percent, a copper surcharge plus a lost discount, which breaks the budget."
       - text: "SiteMind notices, and re-plans to version two instead of blindly continuing."
     actions:
       - { do: wait_run, until: "(s.vendor_attempts||[]).some(a => a.outcome === 'timeout')", timeout: 150 }
@@ -104,7 +110,7 @@ scenes:
     title: "Resume from checkpoint"
     narration:
       - text: "A fresh worker resumes from the last LangGraph checkpoint, saved after every task."
-      - text: "The action ledger shows it: the interrupted step was requested twice, but executed only once."
+      - text: "The action ledger shows it: every action appears once, and anything requested twice was still executed only once."
       - text: "No duplicate emails. No duplicate orders."
     actions:
       - { do: highlight, testid: resume-button, hold: 1.0 }
@@ -113,17 +119,22 @@ scenes:
       - { do: wait_run, until: "(s.worker && s.worker.restarts >= 1) || s.status !== 'killed'", timeout: 30, optional: true }
       - { do: click, testid: tab-audit }
       - { do: click, testid: audit-view-ledger }
-      - { do: wait_run, until: "(s.ledger||[]).some(l => l.executions >= 2)", timeout: 90, optional: true }
-      - { do: pause, s: 1.2 }
-      - { do: highlight, testid: ledger-dedup, hold: 3.0 }
+      - { do: wait_run, until: "(s.ledger||[]).some(l => l.executions >= 2)", timeout: 20, optional: true }
+      - { do: pause, s: 1.0 }
+      - { do: highlight, testid: ledger-dedup, hold: 3.0, optional: true }
+      - { do: highlight, testid: ledger-table, hold: 2.0, optional: true }
 
   - id: 8
     title: "A human signs off"
     narration:
       - text: "Before anything that can't be undone, SiteMind stops and asks a person."
-      - text: "The decision memo ranks every option on cost, delivery float and reliability, and recommends one."
+      - text: "The decision memo ranks every option on cost, delivery float and reliability, and recommends one: Anvil's expedited slot, ₹26 lakh extra, on site before the deadline."
+        say: "The decision memo ranks every option on cost, delivery float and reliability, and recommends one: Anvil's expedited slot, twenty six lakh extra, on site before the deadline."
+      - text: "Voltaris is cheaper, but would arrive late."
       - text: "The project manager approves it."
     actions:
+      - { do: click, testid: tab-overview }
+      - { do: highlight, testid: task-graph, hold: 1.0, optional: true }
       - { do: wait_run, until: "(s.approvals||[]).some(a => a.status === 'pending')", timeout: 180 }
       - { do: click, testid: tab-approvals }
       - { do: highlight, testid: approvals-inbox, hold: 3.0 }
@@ -133,15 +144,18 @@ scenes:
   - id: 9
     title: "Purchase order sent"
     narration:
-      - text: "It drafts the purchase order, asks once more before release, then sends it exactly once."
+      - text: "It drafts the purchase order, asks once more before release, then sends it exactly once: ₹4.7 crore with GST, 33 days ahead of the order-by date."
+        say: "It drafts the purchase order, asks once more before release, then sends it exactly once: four point seven crore with G S T, thirty three days ahead of the order-by date."
       - text: "Every decision, specialist call and rupee is in the audit trail."
     actions:
       - { do: approve_all, until: "(s.po && s.po.status === 'sent') || s.status === 'completed'", timeout: 180 }
       - { do: click, testid: tab-po }
       - { do: wait_selector, testid: po-package, timeout: 20 }
       - { do: highlight, testid: po-package, hold: 2.5 }
-      - { do: scroll, testid: po-package, dy: 500, optional: true }
-      - { do: highlight, testid: run-status, hold: 1.5, optional: true }
+      - { do: scroll, testid: po-package, dy: 400, optional: true }
+      - { do: click, testid: tab-audit }
+      - { do: click, testid: audit-view-ledger, optional: true }
+      - { do: highlight, testid: ledger-dedup, hold: 2.5, optional: true }
 
   - id: 10
     title: "Impact"

@@ -28,6 +28,9 @@ def _ollama_up() -> bool:
 def test_real_llm_end_to_end(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("SITEMIND_LLM_PROVIDER", "ollama")
     monkeypatch.setenv("SITEMIND_LLM_MODEL", "qwen2.5:3b")
+    from sitemind.llm import LLM
+
+    LLM().warmup()  # model load is not part of the measured agent run
     t0 = time.monotonic()
     rid = create_run(demo_request(), spawn=False).run_id
     drive(rid)

@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+import threading
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
 from datetime import date
 from pathlib import Path
 from typing import Any
@@ -26,7 +29,15 @@ from .runner import (
 )
 from .specialists.registry import REGISTRY
 
-app = FastAPI(title="SiteMind", version=__version__)
+
+@asynccontextmanager
+async def lifespan(_: FastAPI) -> AsyncIterator[None]:
+    """Load the local model in the background so the first plan call is not a cold start."""
+    threading.Thread(target=lambda: LLM(get_settings()).warmup(), daemon=True).start()
+    yield
+
+
+app = FastAPI(title="SiteMind", version=__version__, lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],

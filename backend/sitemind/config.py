@@ -66,7 +66,7 @@ def get_settings() -> Settings:
         ollama_base_url=os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434").rstrip("/"),
         openai_base_url=os.environ.get("OPENAI_BASE_URL") or None,
         openai_api_key=os.environ.get("OPENAI_API_KEY") or None,
-        llm_timeout_s=_float("SITEMIND_LLM_TIMEOUT", 60.0),
+        llm_timeout_s=_float("SITEMIND_LLM_TIMEOUT", 90.0),
         llm_max_tokens=int(_float("SITEMIND_LLM_MAX_TOKENS", 140)),
         step_delay_s=_float("SITEMIND_STEP_DELAY", 0.0),
         scenario_dir=Path(

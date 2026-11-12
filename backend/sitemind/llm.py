@@ -77,7 +77,6 @@ class LLM:
             self.provider = "off"
         self.model = self.settings.llm_model if self.provider != "off" else "template"
         self.stats = LLMStats()
-        self._agent_model: Any = None
 
     # ---------------------------------------------------------------- info
     def describe(self) -> dict[str, Any]:
@@ -105,27 +104,48 @@ class LLM:
 
     # ---------------------------------------------------------------- pydantic-ai plumbing
     def _model(self) -> Any:
-        if self._agent_model is not None:
-            return self._agent_model
+        """Fresh pydantic-ai model per call (its async client is bound to one event loop).
+
+        ``max_retries=0`` so a slow / dead endpoint fails fast into the deterministic fallback
+        instead of silently retrying (the OpenAI SDK default is 2 retries).
+        """
+        from openai import AsyncOpenAI
+
         if self.provider == "ollama":
             from pydantic_ai.models.ollama import OllamaModel
             from pydantic_ai.providers.ollama import OllamaProvider
 
-            self._agent_model = OllamaModel(
-                self.model,
-                provider=OllamaProvider(base_url=f"{self.settings.ollama_base_url}/v1"),
+            client = AsyncOpenAI(
+                base_url=f"{self.settings.ollama_base_url}/v1",
+                api_key="ollama",
+                max_retries=0,
+                timeout=self.settings.llm_timeout_s,
             )
-        else:
-            from pydantic_ai.models.openai import OpenAIChatModel
-            from pydantic_ai.providers.openai import OpenAIProvider
+            return OllamaModel(self.model, provider=OllamaProvider(openai_client=client))
+        from pydantic_ai.models.openai import OpenAIChatModel
+        from pydantic_ai.providers.openai import OpenAIProvider
 
-            self._agent_model = OpenAIChatModel(
-                self.model,
-                provider=OpenAIProvider(
-                    base_url=self.settings.openai_base_url, api_key=self.settings.openai_api_key
-                ),
+        client = AsyncOpenAI(
+            base_url=self.settings.openai_base_url,
+            api_key=self.settings.openai_api_key,
+            max_retries=0,
+            timeout=self.settings.llm_timeout_s,
+        )
+        return OpenAIChatModel(self.model, provider=OpenAIProvider(openai_client=client))
+
+    def warmup(self, keep_alive: str = "2h") -> bool:
+        """Load the local model into memory (Ollama) so the first real call is fast."""
+        if self.provider != "ollama":
+            return False
+        try:
+            r = httpx.post(
+                f"{self.settings.ollama_base_url}/api/generate",
+                json={"model": self.model, "prompt": "", "keep_alive": keep_alive},
+                timeout=max(self.settings.llm_timeout_s, 120.0),
             )
-        return self._agent_model
+            return r.status_code == 200
+        except httpx.HTTPError:
+            return False
 
     def _settings(self, max_tokens: int | None) -> dict[str, Any]:
         return {
