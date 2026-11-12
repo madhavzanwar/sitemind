@@ -30,7 +30,7 @@ services:
     environment:
       OLLAMA_HOST: http://ollama:11434
     entrypoint: ["/bin/sh", "-c"]
-    command: ["ollama pull ${SITEMIND_LLM_MODEL:-qwen2.5:3b}"]
+    command: ["ollama show ${SITEMIND_LLM_MODEL:-qwen2.5:3b} >/dev/null 2>&1 || ollama pull ${SITEMIND_LLM_MODEL:-qwen2.5:3b}"]
     restart: "no"
 
   app:

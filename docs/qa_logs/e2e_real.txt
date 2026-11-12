@@ -1,0 +1,8 @@
+[WebServer] INFO:     Application startup complete.
+[WebServer] INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › sitemind.spec.ts:25:1 › launch, survive SIGKILL, approve twice, PO sent (41.7s)
+
+  1 passed (50.2s)

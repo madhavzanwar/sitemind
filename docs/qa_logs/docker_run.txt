@@ -1,0 +1,10 @@
+run run-20261113-013101-f9ba
+killed at execute:T2-rfq:pacing ckpt 5
+status killed
+resumed
+approved vendor_selection
+approved po_release
+final completed plan v 2 PO PO-ALPHA-20270207-V3-01 sent
+llm {'provider': 'ollama', 'model': 'qwen2.5:3b', 'calls': 3, 'fallbacks': 0, 'tokens': 865, 'latency_ms': 35386, 'replayed': 0}
+dedup [('T2-rfq:rfq:V1:a1', 2), ('T2-rfq:rfq:V1:a2', 2), ('T2-rfq:rfq:V1:a3', 2), ('T2-rfq:rfq:V2:a1', 2), ('T2-rfq:rfq:V3:a1', 2), ('T11-approve-vendor:approval:requested', 2), ('T13-approve-po:approval:requested', 2)]
+wall 58.5 s

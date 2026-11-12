@@ -1,0 +1,6 @@
+  ✓  10 [chromium] › screenshots.spec.ts:29:3 › screenshot audit (2.3s)
+  ✓  11 [chromium] › screenshots.spec.ts:29:3 › screenshot po (2.3s)
+  ✓  12 [chromium] › screenshots.spec.ts:37:1 › screenshot ledger (1.6s)
+  ✓  13 [chromium] › sitemind.spec.ts:25:1 › launch, survive SIGKILL, approve twice, PO sent (11.9s)
+
+  13 passed (41.8s)
