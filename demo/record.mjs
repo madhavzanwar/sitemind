@@ -232,6 +232,26 @@ async function doAction(page, a, warnings, ctx = {}) {
       await sleep(800);
       break;
     }
+    case 'kill_when': { // park the cursor on Kill, then click the instant `until` holds (fast poll)
+      const loc = tid(page, 'kill-button');
+      await loc.waitFor({ state: 'visible', timeout: 6000 });
+      const b = await loc.boundingBox();
+      if (b) {
+        await glide(page, b.x + b.width / 2, b.y + b.height / 2);
+        await page.evaluate((bb) => window.__smRing && window.__smRing(bb, 1500), b);
+      }
+      const end = Date.now() + (a.timeout || 90) * 1000;
+      let hit = false;
+      while (Date.now() < end) {
+        const s = await snapshot().catch(() => null);
+        if (s && evalCond(a.until, s)) { hit = true; break; }
+        await sleep(150);
+      }
+      if (hit) { await loc.click({ timeout: 3000 }).catch(() => api('POST', `/api/runs/${RUN_ID}/kill`)); }
+      else { log('  ! kill window not seen; killing now'); await loc.click({ timeout: 3000 }).catch(() => api('POST', `/api/runs/${RUN_ID}/kill`)); }
+      log(`  worker killed${hit ? ' (in pacing window)' : ''}`);
+      break;
+    }
     case 'kill':
       await clickOrApi(page, 'kill-button', () => api('POST', `/api/runs/${RUN_ID}/kill`));
       log('  worker killed');
