@@ -148,7 +148,7 @@ class LLM:
         )
         res = agent.run_sync(prompt)
         usage = res.usage
-        if callable(usage):
+        if callable(usage) and not hasattr(usage, "input_tokens"):
             usage = usage()
         tokens = int(getattr(usage, "input_tokens", 0) or 0) + int(
             getattr(usage, "output_tokens", 0) or 0
