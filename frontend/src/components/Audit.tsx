@@ -99,7 +99,9 @@ function filterAudit(rows: AuditEntry[], q: string, actor: string | null) {
 }
 function filterLedger(rows: LedgerEntry[], q: string) {
   const s = q.trim().toLowerCase()
-  return rows.filter((r) => !s || `${r.idempotency_key} ${r.kind}`.toLowerCase().includes(s)).slice().reverse()
+  const out = rows.filter((r) => !s || `${r.idempotency_key} ${r.kind}`.toLowerCase().includes(s)).slice().reverse()
+  // keys re-requested after a resume (executions > 1) go first so the dedup is obvious
+  return [...out.filter((r) => r.executions > 1), ...out.filter((r) => r.executions <= 1)]
 }
 
 function AuditTable({ rows }: { rows: AuditEntry[] }) {
@@ -205,7 +207,26 @@ function Json({ label, value }: { label: string; value: unknown }) {
 
 function LedgerTable({ rows }: { rows: LedgerEntry[] }) {
   if (!rows.length) return <Empty icon={KeyRound} title="Ledger is empty" hint="Every side effect (RFQ, approval request, LLM call, PO dispatch) is recorded here under an idempotency key." />
+  const dups = rows.filter((r) => r.executions > 1)
   return (
+    <>
+    {dups.length > 0 && (
+      <div data-testid="dedup-banner" className="m-3 flex items-start gap-3 rounded-xl border border-emerald-400/25 bg-emerald-400/[0.06] px-4 py-3">
+        <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-emerald-400" />
+        <div className="min-w-0">
+          <div className="text-[13px] font-semibold text-emerald-200">
+            Deduplicated on resume — {dups.length} side effect{dups.length > 1 ? 's' : ''} requested again after the worker restarted, executed once
+          </div>
+          <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1">
+            {dups.map((d) => (
+              <span key={d.idempotency_key} className="font-mono text-[11px] text-ink-200">
+                <span className="text-emerald-300">×{d.executions}</span> {d.kind} · {d.idempotency_key.split(':').slice(1).join(':')}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    )}
     <table className="w-full text-[12.5px]" data-testid="ledger-table">
       <thead className="sticky top-0 z-10 bg-ink-900/95 backdrop-blur">
         <tr className="border-b border-white/[0.06]">
@@ -250,5 +271,6 @@ function LedgerTable({ rows }: { rows: LedgerEntry[] }) {
         })}
       </tbody>
     </table>
+    </>
   )
 }

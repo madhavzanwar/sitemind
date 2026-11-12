@@ -154,7 +154,9 @@ export function TaskGraph({ snap, className }: { snap: RunSnapshot; className?: 
 
   const lay = useMemo(() => (plan ? layout(plan) : null), [plan])
   const [ref, size] = useSize<HTMLDivElement>()
-  const scale = lay && size.w ? Math.min(1.15, size.w / lay.width, size.h / lay.height) : 1
+  // Fit to the card, but never shrink node text below a readable size: overflow scrolls instead.
+  const MIN_SCALE = 0.82
+  const scale = lay && size.w ? Math.max(MIN_SCALE, Math.min(1.15, size.w / lay.width, size.h / lay.height)) : 1
 
   const pos = useMemo(() => new Map(lay?.placed.map((p) => [p.task.id, p]) ?? []), [lay])
 
@@ -201,11 +203,17 @@ export function TaskGraph({ snap, className }: { snap: RunSnapshot; className?: 
         </>
       }
     >
-      <div ref={ref} className={cx('grid-bg relative h-full w-full overflow-hidden', killed && 'saturate-[0.35]')}>
+      <div ref={ref} className={cx('grid-bg relative flex h-full w-full overflow-auto', killed && 'saturate-[0.35]')}>
         {lay && plan ? (
           <div
-            className="absolute left-1/2 top-1/2 origin-center"
-            style={{ width: lay.width, height: lay.height, transform: `translate(-50%, -50%) scale(${scale})` }}
+            data-testid="task-graph-canvas"
+            data-scale={scale.toFixed(2)}
+            className="relative m-auto shrink-0"
+            style={{ width: lay.width * scale, height: lay.height * scale }}
+          >
+          <div
+            className="absolute left-0 top-0 origin-top-left"
+            style={{ width: lay.width, height: lay.height, transform: `scale(${scale})` }}
           >
             <svg className="absolute inset-0 overflow-visible" width={lay.width} height={lay.height}>
               <defs>
@@ -251,6 +259,7 @@ export function TaskGraph({ snap, className }: { snap: RunSnapshot; className?: 
             {lay.placed.map(({ task, x, y, h }) => (
               <Node key={task.id} task={task} x={x} y={y} h={h} frozen={killed} />
             ))}
+          </div>
           </div>
         ) : (
           <div className="grid h-full place-items-center text-sm text-ink-400">Planner is decomposing the goal…</div>

@@ -37,6 +37,7 @@ for (const [name, url] of cases) {
 test('screenshot ledger', async ({ page }) => {
   await page.goto('/?fixture=completed&tab=audit')
   await page.getByTestId('audit-view-ledger').click()
-  await page.waitForTimeout(600)
+  await page.mouse.move(0, 1079)
+  await page.waitForTimeout(800)
   await page.screenshot({ path: join(SHOTS, 'ledger.png') })
 })

@@ -15,6 +15,8 @@ const shot = async (page: Page, name: string) => {
   if (MOCK) return
   // let transient toasts auto-dismiss so they don't cover the dashboard
   await expect(page.getByTestId('toast')).toHaveCount(0, { timeout: 8_000 })
+  await page.mouse.move(0, 1079)
+  await page.waitForTimeout(400) // let CSS transitions settle
   await page.screenshot({ path: join(SHOTS, `real-${name}.png`) })
 }
 
@@ -58,6 +60,10 @@ test('launch, survive SIGKILL, approve twice, PO sent', async ({ page }) => {
 
   // --- approval 1: vendor selection
   await expect(status(page)).toHaveAttribute('data-status', 'waiting_human', { timeout: 120_000 })
+  // before any decision: no "Selected" badge, exactly one "Recommended"
+  const vendors = page.getByTestId('vendor-table')
+  await expect(vendors.getByText('Selected', { exact: true })).toHaveCount(0)
+  await expect(vendors.getByText('Recommended', { exact: true })).toHaveCount(1)
   await shot(page, 'overview-waiting')
   await page.getByTestId('tab-approvals').click()
   await expect(page.getByTestId('approvals-inbox')).toBeVisible()
@@ -77,6 +83,7 @@ test('launch, survive SIGKILL, approve twice, PO sent', async ({ page }) => {
   // --- completed + PO SENT
   await page.getByTestId('tab-overview').click()
   await expect(status(page)).toHaveAttribute('data-status', 'completed', { timeout: 120_000 })
+  await expect(page.getByTestId('vendor-table').getByText('Selected', { exact: true })).toHaveCount(1)
   await shot(page, 'overview-completed')
   await page.getByTestId('tab-po').click()
   const po = page.getByTestId('po-package')
@@ -91,5 +98,6 @@ test('launch, survive SIGKILL, approve twice, PO sent', async ({ page }) => {
   await shot(page, 'audit')
   await page.getByTestId('audit-view-ledger').click()
   await expect(page.getByTestId('ledger-table')).toContainText('po.sent')
+  await expect(page.getByTestId('dedup-banner')).toBeVisible()
   await shot(page, 'ledger')
 })
