@@ -45,7 +45,7 @@ export function Vendors({ snap, className }: { snap: RunSnapshot; className?: st
       testId="vendor-table"
       title="Vendor comparison"
       icon={Building2}
-      subtitle={rows.length ? `${snap.quotes.length}/${rows.length} quotes in` : undefined}
+      subtitle={rows.length ? `${snap.quotes.length}/${rows.length} quotes in · synthetic vendors (demo data)` : 'synthetic vendors (demo data)'}
       className={className}
       bodyClassName="overflow-auto p-3"
     >
