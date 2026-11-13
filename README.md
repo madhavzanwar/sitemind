@@ -250,7 +250,7 @@ claude mcp add sitemind -- python -m sitemind.mcp_server
 ### Docker (3 commands)
 
 ```bash
-git clone https://github.com/<your-username>/sitemind
+git clone https://github.com/madhavzanwar/sitemind
 cd sitemind
 docker compose up --build
 ```
@@ -263,7 +263,7 @@ a Docker volume.
 Requires Python 3.11+, Node 22, and [Ollama](https://ollama.com).
 
 ```bash
-git clone https://github.com/<your-username>/sitemind
+git clone https://github.com/madhavzanwar/sitemind
 cd sitemind
 scripts/dev.sh
 ```

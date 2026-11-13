@@ -27,7 +27,7 @@ A procurement agent for construction that plans a multi-week job, survives kill 
 
 | Item | URL |
 |---|---|
-| Repository | `https://github.com/<your-username>/sitemind` |
+| Repository | `https://github.com/madhavzanwar/sitemind` |
 | Demo video | `<YouTube URL>` (file: `submission/sitemind_demo.mp4`) |
 | Pitch deck (10 slides) | `submission/SiteMind_pitch.pdf` (upload to Devpost) |
 
@@ -192,7 +192,7 @@ confidence. Every specialist is also exposed as an MCP tool, so another agent ca
 Docker (3 commands, first start downloads a 1.9 GB model):
 
 ```bash
-git clone https://github.com/<your-username>/sitemind
+git clone https://github.com/madhavzanwar/sitemind
 cd sitemind
 docker compose up --build
 ```
@@ -200,7 +200,7 @@ docker compose up --build
 Without Docker (needs Python 3.11+, Node 22, Ollama):
 
 ```bash
-git clone https://github.com/<your-username>/sitemind
+git clone https://github.com/madhavzanwar/sitemind
 cd sitemind
 scripts/dev.sh
 ```
