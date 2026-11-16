@@ -1,9 +1,10 @@
 import { useRef } from 'react'
-import { Award, Building2, Clock, RefreshCw, TimerOff, TrendingUp, Truck, ShieldCheck, Ban, CheckCircle2, Rocket } from 'lucide-react'
+import { Award, Building2, CheckCircle2, Clock, TrendingDown, TrendingUp } from 'lucide-react'
 import type { Quote, RunSnapshot, VendorAttempt, VendorOption } from '../types'
-import { cx, dayMonth, inr, pct, signed } from '../lib/format'
-import { VERDICT_TONE } from '../lib/status'
-import { Badge, Card, Empty } from './ui'
+import { committedOf } from '../lib/derive'
+import { cx, dayMonth, inr, inrFull, pct, signed } from '../lib/format'
+import { VERDICT_TONE, TONE } from '../lib/status'
+import { Card, Confidence, Empty } from './ui'
 
 interface Row {
   id: string
@@ -32,159 +33,198 @@ function vendorRows(snap: RunSnapshot, selected: string | null | undefined): Row
   })
 }
 
-export function Vendors({ snap, className }: { snap: RunSnapshot; className?: string }) {
-  const selected = snap.approvals.find((a) => a.kind === 'vendor_selection' && a.status === 'approved')?.decided_option
+function blockedDocs(snap: RunSnapshot): Record<string, string> {
+  const out: Record<string, string> = {}
+  for (const e of snap.events ?? []) if (e.status === 'applied' && e.type === 'document_missing' && e.vendor_id) out[e.vendor_id] = String(e.params.document ?? 'document')
+  return out
+}
+
+export function VendorTable({ snap, className, full }: { snap: RunSnapshot; className?: string; full?: boolean }) {
+  const selected = [...snap.approvals].reverse().find((a) => a.kind === 'vendor_selection' && a.status === 'approved')?.decided_option
   const rows = vendorRows(snap, selected)
-  // Remember the first-seen revision-1 total per vendor to show revision deltas.
   const firstTotals = useRef<Record<string, number>>({})
   snap.quotes.forEach((q) => {
     if (q.revision === 1 && firstTotals.current[q.vendor_id] == null) firstTotals.current[q.vendor_id] = q.total_inr
   })
+  const blocked = blockedDocs(snap)
+  const rec = snap.options.find((o) => o.recommended)
+  const chosen = selected ? snap.options.find((o) => o.option_id === selected) : null
+  const focus = chosen ?? rec
+  const memo = [...snap.approvals].reverse().find((a) => a.memo)?.memo
+
   return (
-    <Card
-      testId="vendor-table"
-      title="Vendor comparison"
-      icon={Building2}
-      subtitle={rows.length ? `${snap.quotes.length}/${rows.length} quotes in · synthetic vendors (demo data)` : 'synthetic vendors (demo data)'}
-      className={className}
-      bodyClassName="overflow-auto p-3"
-    >
+    <Card testId="vendor-table" title="Vendors" icon={Building2} subtitle={rows.length ? `${snap.quotes.length} of ${rows.length} quotes in · ex-GST` : undefined} className={className}>
       {rows.length === 0 ? (
-        <Empty icon={Building2} title="No RFQs yet" hint="Quotes appear once the takeoff is complete and RFQs are dispatched." />
+        <Empty icon={Building2} title="No quotes yet" hint="Quotes appear after the spec takeoff, once RFQs go out to the vendors." />
       ) : (
-        <div className="flex flex-col gap-2.5">
-          {rows.map((r) => (
-            <VendorCard key={r.id} row={r} firstTotal={firstTotals.current[r.id]} chosen={!!selected && selected === r.option?.option_id} />
-          ))}
-        </div>
+        <>
+          <div className="overflow-x-auto px-2">
+            <table className="w-full min-w-[760px] text-sm">
+              <thead>
+                <tr className="border-b border-white/[0.06]">
+                  <th className="th">Vendor</th>
+                  <th className="th text-right">Total</th>
+                  <th className="th text-right">Lead time</th>
+                  <th className="th text-right">Delivery</th>
+                  <th className="th text-right">Float</th>
+                  <th className="th text-right">On-time</th>
+                  <th className="th">Budget</th>
+                  <th className="th">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((r) => {
+                  const o = r.option
+                  const q = r.quote
+                  const isSel = !!selected && selected === o?.option_id
+                  const isRec = !selected && !!o?.recommended
+                  const revAttempt = r.attempts.find((a) => a.outcome === 'revised')
+                  const parsedOld = revAttempt?.detail.match(/INR\s*([\d,]+)\s*(?:->|→)/)?.[1]
+                  const oldTotal = firstTotals.current[r.id] ?? (parsedOld ? Number(parsedOld.replace(/,/g, '')) : undefined)
+                  const revised = (q?.revision ?? 1) > 1 && oldTotal != null && q
+                  const delta = revised ? q.total_inr / oldTotal - 1 : 0
+                  const timeouts = r.attempts.filter((a) => a.outcome === 'timeout').length
+                  const why = !o
+                    ? null
+                    : blocked[r.id]
+                      ? `Blocked: ${blocked[r.id]} missing`
+                      : o.budget_verdict === 'breach'
+                        ? 'Infeasible: over budget'
+                        : !o.meets_deadline
+                          ? `Infeasible: ${-o.float_days} d late`
+                          : null
+                  return (
+                    <tr
+                      key={r.id}
+                      data-testid={`vendor-${r.id}`}
+                      className={cx('border-b border-white/[0.04] last:border-0', (isRec || isSel) && 'bg-accent-400/[0.06]')}
+                    >
+                      <td className={cx('td relative', (isRec || isSel) && 'before:absolute before:inset-y-2 before:left-0 before:w-[3px] before:rounded-full before:bg-accent-400')}>
+                        <div className="font-medium text-ink-50">{q || o ? r.name : <span className="italic text-ink-400">Awaiting quote</span>}</div>
+                        <div className="mt-0.5 text-[13px] text-ink-400">
+                          <span className="font-mono text-[12px]">{r.id}</span>
+                          {q && <span className="font-mono text-[12px]"> · {q.quote_id}</span>}
+                          {o && o.expedite_fee_inr > 0 && <span className="text-sky-300"> · with expedite</span>}
+                        </div>
+                      </td>
+                      <td className="td text-right">
+                        <div className="num font-medium text-ink-50">{o || q ? inr(o?.total_inr ?? q?.total_inr) : '—'}</div>
+                        {revised && (
+                          <div data-testid={`revised-${r.id}`} className={cx('mt-0.5 inline-flex items-center gap-1 text-[13px]', delta > 0 ? 'text-rose-300' : 'text-emerald-300')} title={revAttempt?.detail}>
+                            {delta > 0 ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
+                            <span className="num">
+                              {delta > 0 ? '+' : ''}
+                              {(delta * 100).toFixed(1)}%
+                            </span>
+                            <span className="text-ink-500 line-through">{inr(oldTotal)}</span>
+                          </div>
+                        )}
+                      </td>
+                      <td className="td num text-right text-ink-100">{o ? `${o.lead_time_days} d` : q ? `${q.lead_time_days} d` : '—'}</td>
+                      <td className="td num text-right text-ink-100">{o ? dayMonth(o.delivery_date) : '—'}</td>
+                      <td className={cx('td num text-right', !o ? 'text-ink-500' : o.float_days < 0 ? 'text-rose-300' : o.float_days < 14 ? 'text-orange-300' : 'text-emerald-300')}>{o ? signed(o.float_days) : '—'}</td>
+                      <td className="td num text-right text-ink-100">{q || o ? pct(q?.reliability ?? o?.reliability ?? 0) : '—'}</td>
+                      <td className="td">
+                        {o ? (
+                          <span data-testid={`verdict-${r.id}`} className={cx('inline-flex items-center gap-1.5 text-[13px]', TONE[VERDICT_TONE[o.budget_verdict]].text)}>
+                            <span className={cx('h-2 w-2 rounded-full', TONE[VERDICT_TONE[o.budget_verdict]].dot)} />
+                            {o.budget_verdict === 'ok' ? 'Within' : o.budget_verdict === 'warn' ? 'Tight' : 'Over'} · {pct(committedOf(o) / snap.goal.budget_inr)}
+                          </span>
+                        ) : (
+                          <span className="text-ink-500">—</span>
+                        )}
+                      </td>
+                      <td className="td">
+                        {isSel ? (
+                          <span className="inline-flex items-center gap-1.5 font-medium text-accent-300">
+                            <CheckCircle2 className="h-4 w-4" /> Selected
+                          </span>
+                        ) : isRec ? (
+                          <span className="inline-flex items-center gap-1.5 font-medium text-accent-300">
+                            <Award className="h-4 w-4" /> Recommended
+                          </span>
+                        ) : why ? (
+                          <span className="text-[13px] text-rose-300">{why}</span>
+                        ) : !q ? (
+                          <span className="inline-flex items-center gap-1.5 text-[13px] text-orange-300">
+                            <Clock className="h-3.5 w-3.5" /> {timeouts ? `No reply ×${timeouts}, retrying` : 'Waiting for reply'}
+                          </span>
+                        ) : (
+                          <span className="text-[13px] text-ink-300">{o ? `Feasible · score ${o.score.toFixed(2)}` : 'Quoted'}</span>
+                        )}
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+          {focus && (
+            <div data-testid="why-this-vendor" className="mx-5 mb-5 mt-3 rounded-xl bg-white/[0.03] p-4">
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                <span className="text-sm font-semibold text-ink-50">Why {focus.vendor_name}?</span>
+                <span className="text-[13px] text-ink-400">
+                  score {focus.score.toFixed(2)} · cost 40 % · float 35 % · reliability 25 %
+                </span>
+                <span className="ml-auto">
+                  <Confidence value={Math.min(0.99, 0.6 + focus.score / 2)} />
+                </span>
+              </div>
+              <p className={cx('mt-2 text-sm leading-relaxed text-ink-200', !full && 'line-clamp-3')}>{memo && memo.recommendation === focus.option_id ? memo.reasoning : focus.rationale}</p>
+            </div>
+          )}
+          {full && <LineComparison snap={snap} />}
+        </>
       )}
     </Card>
   )
 }
 
-function VendorCard({ row, firstTotal, chosen }: { row: Row; firstTotal?: number; chosen: boolean }) {
-  const { quote: q, option: o } = row
-  const total = o?.total_inr ?? q?.total_inr
-  const revised = (q?.revision ?? 1) > 1
-  const revAttempt = row.attempts.find((a) => a.outcome === 'revised')
-  const parsedOld = revAttempt?.detail.match(/INR\s*([\d,]+)\s*(?:->|→)/)?.[1]
-  const oldTotal = firstTotal ?? (parsedOld ? Number(parsedOld.replace(/,/g, '')) : undefined)
-  const delta = revised && q && oldTotal ? q.total_inr - oldTotal : null
-  const deltaPct = delta != null && oldTotal ? delta / oldTotal : null
-  const revPct = revAttempt?.detail.match(/\(([+−-][\d.]+\s?%)\)/)?.[1]
-  const waiting = !q
-  const rec = o?.recommended
-  const verdict = o?.budget_verdict
+function LineComparison({ snap }: { snap: RunSnapshot }) {
+  if (!snap.takeoff || snap.quotes.length === 0) return null
+  const quotes = snap.quotes
   return (
-    <div
-      data-testid={`vendor-${row.id}`}
-      className={cx(
-        'relative rounded-xl border px-3.5 py-2.5 transition-all duration-500',
-        rec || chosen ? 'border-accent-400/40 bg-accent-400/[0.04] shadow-glow' : 'border-white/[0.06] bg-ink-850/70',
-      )}
-    >
-      <div className="flex items-center gap-2.5">
-        <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-white/[0.05] font-mono text-[11px] font-bold text-ink-100 ring-1 ring-inset ring-white/10">
-          {row.id}
-        </span>
-        <div className="min-w-0 flex-1">
-          <div className={cx('truncate text-[13px] font-semibold', waiting && row.name === row.id ? 'italic text-ink-400' : 'text-ink-50')}>
-            {waiting && row.name === row.id ? 'Awaiting quote…' : row.name}
-          </div>
-          <div className="truncate font-mono text-[10.5px] text-ink-400">
-            {q ? `${q.quote_id} · rev ${q.revision}` : `RFQ attempts: ${row.attempts.length}`}
-          </div>
-        </div>
-        {chosen ? (
-          <Badge tone="accent" className="font-semibold">
-            <CheckCircle2 className="h-3 w-3" /> Selected
-          </Badge>
-        ) : (
-          rec && (
-            <Badge tone="accent" className="font-semibold">
-              <Award className="h-3 w-3" /> Recommended
-            </Badge>
-          )
-        )}
-        <div className="text-right">
-          <div className={cx('num text-[17px] font-semibold leading-none', waiting ? 'text-ink-500' : 'text-ink-50')}>{total != null ? inr(total) : '—'}</div>
-          {revised && (
-            <div className="mt-1 flex justify-end">
-              {oldTotal != null && <span className="num mr-1.5 self-center text-[10.5px] text-ink-500 line-through">{inr(oldTotal)}</span>}
-              <Badge tone="danger" testId={`revised-${row.id}`} title={revAttempt?.detail}>
-                <TrendingUp className="h-3 w-3" />
-                Rev {q?.revision}
-                {deltaPct != null ? ` +${(deltaPct * 100).toFixed(1)} %` : revPct ? ` ${revPct}` : ''}
-              </Badge>
-            </div>
-          )}
-        </div>
+    <div className="border-t border-white/[0.06] px-2 pb-4 pt-4">
+      <h3 className="px-3 pb-2 text-sm font-semibold text-ink-100">Line-by-line unit prices</h3>
+      <div className="overflow-x-auto">
+        <table className="w-full min-w-[760px] text-sm">
+          <thead>
+            <tr className="border-b border-white/[0.06]">
+              <th className="th">Item (from the spec)</th>
+              <th className="th text-right">Qty</th>
+              {quotes.map((q) => (
+                <th key={q.vendor_id} className="th text-right">
+                  {q.vendor_id}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {snap.takeoff.lines.map((l) => {
+              const prices = quotes.map((q) => q.lines.find((x) => x.item_code === l.item_code)?.unit_price_inr)
+              const min = Math.min(...prices.filter((p): p is number => p != null))
+              return (
+                <tr key={l.item_code} className="border-b border-white/[0.04] last:border-0">
+                  <td className="px-4 py-2.5">
+                    <div className="text-ink-100">{l.description}</div>
+                    <div className="text-[13px] text-ink-400">
+                      <span className="font-mono text-[12px]">{l.item_code}</span> · {l.source.split(' ').slice(1).join(' ')}
+                    </div>
+                  </td>
+                  <td className="num px-4 py-2.5 text-right text-ink-200">
+                    {l.qty} {l.unit}
+                  </td>
+                  {prices.map((p, i) => (
+                    <td key={i} className={cx('num px-4 py-2.5 text-right', p === min ? 'text-emerald-300' : 'text-ink-200')}>
+                      {p != null ? inrFull(p) : '—'}
+                    </td>
+                  ))}
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
       </div>
-
-      {(q || o) && (
-        <div className="mt-2 grid grid-cols-4 gap-2">
-          <Metric icon={Clock} label="Lead" value={`${o?.lead_time_days ?? q?.lead_time_days ?? '—'} d`} />
-          <Metric icon={Truck} label="Delivery" value={o ? dayMonth(o.delivery_date) : '—'} />
-          <Metric
-            icon={o && o.float_days < 0 ? Ban : ShieldCheck}
-            label="Float"
-            value={o ? signed(o.float_days) : '—'}
-            tone={o ? (o.float_days < 0 ? 'text-rose-300' : o.float_days < 14 ? 'text-orange-300' : 'text-emerald-300') : undefined}
-          />
-          <div className="min-w-0">
-            <div className="text-[10px] font-medium uppercase tracking-[0.08em] text-ink-400">Reliability</div>
-            <div className="num mt-0.5 text-[12.5px] font-medium text-ink-100">{pct(q?.reliability ?? o?.reliability ?? 0)}</div>
-            <div className="mt-1 h-1 overflow-hidden rounded-full bg-white/[0.06]">
-              <div className="h-full rounded-full bg-sky-400/80" style={{ width: `${(q?.reliability ?? o?.reliability ?? 0) * 100}%` }} />
-            </div>
-          </div>
-        </div>
-      )}
-
-      <div className="mt-2 flex flex-wrap items-center gap-1.5">
-        {verdict && (
-          <Badge tone={VERDICT_TONE[verdict]} dot testId={`verdict-${row.id}`}>
-            Budget {verdict}
-          </Badge>
-        )}
-        {o && !o.meets_deadline && <Badge tone="danger">Misses deadline</Badge>}
-        {o && o.expedite_fee_inr > 0 && (
-          <Badge tone="info">
-            <Rocket className="h-3 w-3" /> Expedite {inr(o.expedite_fee_inr)}
-          </Badge>
-        )}
-        <span className="ml-auto flex items-center gap-1">
-          {row.attempts.map((a, i) => (
-            <span
-              key={i}
-              title={`${a.outcome} · ${a.detail}`}
-              className={cx(
-                'inline-flex items-center gap-1 rounded px-1.5 py-0.5 font-mono text-[10px] ring-1 ring-inset',
-                a.outcome === 'ok' && 'bg-emerald-400/10 text-emerald-300 ring-emerald-400/20',
-                a.outcome === 'timeout' && 'bg-orange-400/10 text-orange-300 ring-orange-400/25',
-                a.outcome === 'revised' && 'bg-rose-500/10 text-rose-300 ring-rose-400/25',
-                a.outcome === 'declined' && 'bg-white/[0.04] text-ink-300 ring-white/10',
-              )}
-            >
-              {a.outcome === 'timeout' ? <TimerOff className="h-2.5 w-2.5" /> : a.outcome === 'revised' ? <RefreshCw className="h-2.5 w-2.5" /> : null}#{a.attempt}{' '}
-              {a.outcome}
-            </span>
-          ))}
-          {o && <span className="num ml-1 text-[10.5px] text-ink-400">score {o.score.toFixed(2)}</span>}
-        </span>
-      </div>
-    </div>
-  )
-}
-
-function Metric({ icon: Icon, label, value, tone }: { icon: typeof Clock; label: string; value: string; tone?: string }) {
-  return (
-    <div className="min-w-0">
-      <div className="flex items-center gap-1 text-[10px] font-medium uppercase tracking-[0.08em] text-ink-400">
-        <Icon className="h-3 w-3" />
-        {label}
-      </div>
-      <div className={cx('num mt-0.5 text-[12.5px] font-medium', tone ?? 'text-ink-100')}>{value}</div>
     </div>
   )
 }

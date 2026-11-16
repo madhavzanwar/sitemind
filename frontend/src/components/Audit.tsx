@@ -38,7 +38,7 @@ export function Audit({ snap }: { snap: RunSnapshot }) {
               key={k}
               data-testid={`audit-view-${k}`}
               onClick={() => setView(k)}
-              className={cx('rounded-md px-3 py-1 text-[12px] font-semibold transition', view === k ? 'bg-ink-700 text-ink-50 shadow' : 'text-ink-400 hover:text-ink-100')}
+              className={cx('rounded-md px-3 py-1 text-[13px] font-semibold transition', view === k ? 'bg-ink-700 text-ink-50 shadow' : 'text-ink-400 hover:text-ink-100')}
             >
               {label}
             </button>
@@ -55,7 +55,7 @@ export function Audit({ snap }: { snap: RunSnapshot }) {
                   key={a ?? 'all'}
                   onClick={() => setActor(a)}
                   className={cx(
-                    'rounded-md px-2 py-0.5 text-[11px] font-medium transition',
+                    'rounded-md px-2 py-0.5 text-xs font-medium transition',
                     actor === a ? 'bg-accent-400/15 text-accent-300 ring-1 ring-inset ring-accent-400/30' : 'text-ink-400 hover:text-ink-100',
                   )}
                 >
@@ -76,7 +76,7 @@ export function Audit({ snap }: { snap: RunSnapshot }) {
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder={view === 'audit' ? 'Search actions, summaries…' : 'Search keys…'}
-              className="field h-8 w-64 py-1 pl-8 text-[12.5px]"
+              className="field h-8 w-64 py-1 pl-8 text-[13px]"
             />
           </div>
         </div>
@@ -108,7 +108,7 @@ function AuditTable({ rows }: { rows: AuditEntry[] }) {
   const [open, setOpen] = useState<Set<number>>(new Set())
   if (!rows.length) return <Empty icon={ScrollText} title="No audit entries" />
   return (
-    <table className="w-full text-[12.5px]" data-testid="audit-table">
+    <table className="w-full text-[13px]" data-testid="audit-table">
       <thead className="sticky top-0 z-10 bg-ink-900/95 backdrop-blur">
         <tr className="border-b border-white/[0.06]">
           <th className="th w-8" />
@@ -144,9 +144,9 @@ function AuditTable({ rows }: { rows: AuditEntry[] }) {
                 </td>
                 <td className="td num text-ink-500">{r.seq}</td>
                 <td className="td num whitespace-nowrap text-ink-300">{dateTime(r.sim_time)}</td>
-                <td className={cx('td font-mono text-[11.5px] font-medium', ACTOR_TONE[r.actor] ?? 'text-ink-200')}>{r.actor}</td>
+                <td className={cx('td font-mono text-xs font-medium', ACTOR_TONE[r.actor] ?? 'text-ink-200')}>{r.actor}</td>
                 <td className="td">
-                  <span className="rounded bg-white/[0.04] px-1.5 py-0.5 font-mono text-[11px] text-ink-100 ring-1 ring-inset ring-white/[0.06]">{r.action}</span>
+                  <span className="rounded bg-white/[0.04] px-1.5 py-0.5 font-mono text-xs text-ink-100 ring-1 ring-inset ring-white/[0.06]">{r.action}</span>
                 </td>
                 <td className="td max-w-0 text-ink-200">
                   <div className="truncate">{r.summary}</div>
@@ -158,13 +158,13 @@ function AuditTable({ rows }: { rows: AuditEntry[] }) {
                       <span className="h-1 w-10 overflow-hidden rounded-full bg-white/[0.06]">
                         <span className="block h-full rounded-full bg-sky-400" style={{ width: `${r.confidence * 100}%` }} />
                       </span>
-                      <span className="num text-[11.5px] text-ink-300">{pct(r.confidence)}</span>
+                      <span className="num text-xs text-ink-300">{pct(r.confidence)}</span>
                     </span>
                   ) : (
                     <span className="text-ink-600">—</span>
                   )}
                 </td>
-                <td className="td text-center">{r.plan_version != null && <span className="font-mono text-[11px] text-accent-300">v{r.plan_version}</span>}</td>
+                <td className="td text-center">{r.plan_version != null && <span className="font-mono text-xs text-accent-300">v{r.plan_version}</span>}</td>
               </tr>
               {isOpen && (
                 <tr className="border-b border-white/[0.04] bg-ink-950/50">
@@ -175,7 +175,7 @@ function AuditTable({ rows }: { rows: AuditEntry[] }) {
                       <Json label="inputs" value={r.inputs} />
                       <Json label="outputs" value={r.outputs} />
                     </div>
-                    <div className="mt-2 flex gap-4 font-mono text-[10.5px] text-ink-500">
+                    <div className="mt-2 flex gap-4 font-mono text-xs text-ink-500">
                       <span>task {r.task_id ?? '—'}</span>
                       <span>llm tokens {r.llm_tokens}</span>
                       <span>wall {new Date(r.wall_time).toLocaleTimeString()}</span>
@@ -195,12 +195,12 @@ function Json({ label, value }: { label: string; value: unknown }) {
   return (
     <div className="min-w-0 rounded-lg border border-white/[0.06] bg-ink-950/80">
       <div className="flex items-center justify-between border-b border-white/[0.05] px-3 py-1.5">
-        <span className="font-mono text-[10.5px] uppercase tracking-wider text-ink-400">{label}</span>
+        <span className="font-mono text-xs uppercase tracking-wider text-ink-400">{label}</span>
         <button onClick={() => void navigator.clipboard?.writeText(JSON.stringify(value, null, 2))} className="text-ink-500 hover:text-ink-200" aria-label="Copy JSON">
           <Copy className="h-3 w-3" />
         </button>
       </div>
-      <pre className="max-h-56 overflow-auto px-3 py-2 font-mono text-[11px] leading-relaxed text-ink-200">{JSON.stringify(value, null, 2)}</pre>
+      <pre className="max-h-56 overflow-auto px-3 py-2 font-mono text-xs leading-relaxed text-ink-200">{JSON.stringify(value, null, 2)}</pre>
     </div>
   )
 }
@@ -219,7 +219,7 @@ function LedgerTable({ rows }: { rows: LedgerEntry[] }) {
           </div>
           <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1">
             {dups.map((d) => (
-              <span key={d.idempotency_key} className="font-mono text-[11px] text-ink-200">
+              <span key={d.idempotency_key} className="font-mono text-xs text-ink-200">
                 <span className="text-emerald-300">×{d.executions}</span> {d.kind} · {d.idempotency_key.split(':').slice(1).join(':')}
               </span>
             ))}
@@ -227,7 +227,7 @@ function LedgerTable({ rows }: { rows: LedgerEntry[] }) {
         </div>
       </div>
     )}
-    <table className="w-full text-[12.5px]" data-testid="ledger-table">
+    <table className="w-full text-[13px]" data-testid="ledger-table">
       <thead className="sticky top-0 z-10 bg-ink-900/95 backdrop-blur">
         <tr className="border-b border-white/[0.06]">
           <th className="th">Idempotency key</th>
@@ -245,17 +245,17 @@ function LedgerTable({ rows }: { rows: LedgerEntry[] }) {
               <td className="td max-w-0">
                 <div className="flex items-center gap-2">
                   <KeyRound className={cx('h-3.5 w-3.5 shrink-0', dup ? 'text-emerald-400' : 'text-ink-500')} />
-                  <span className="truncate font-mono text-[11.5px] text-ink-100" title={r.idempotency_key}>
+                  <span className="truncate font-mono text-xs text-ink-100" title={r.idempotency_key}>
                     {r.idempotency_key}
                   </span>
                 </div>
               </td>
               <td className="td">
-                <span className="rounded bg-white/[0.04] px-1.5 py-0.5 font-mono text-[11px] text-ink-200 ring-1 ring-inset ring-white/[0.06]">{r.kind}</span>
+                <span className="rounded bg-white/[0.04] px-1.5 py-0.5 font-mono text-xs text-ink-200 ring-1 ring-inset ring-white/[0.06]">{r.kind}</span>
               </td>
               <td className="td num whitespace-nowrap text-ink-300">{dateTime(r.sim_time)}</td>
               <td className="td max-w-0">
-                <div className="truncate font-mono text-[11px] text-ink-400">{JSON.stringify(r.result)}</div>
+                <div className="truncate font-mono text-xs text-ink-400">{JSON.stringify(r.result)}</div>
               </td>
               <td className="td text-right">
                 {dup ? (

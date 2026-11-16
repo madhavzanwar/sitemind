@@ -15,6 +15,7 @@ ranked after every feasible one and are never recommended.
 from __future__ import annotations
 
 import hashlib
+import re
 from collections.abc import Iterable, Mapping
 
 from sitemind.models import BudgetCheck, DecisionMemo, Goal, Quote, ScheduleResult, VendorOption
@@ -45,6 +46,9 @@ def score_option(utilisation: float, float_days: int, reliability: float) -> flo
 
 
 def _inr_lakh(x: float) -> str:
+    """Indian short form: lakh below 1 crore, crore above."""
+    if abs(x) >= 1e7:
+        return f"INR {x / 1e7:,.2f} Cr"
     return f"INR {x / 1e5:,.1f} L"
 
 
@@ -72,6 +76,11 @@ def _option(
         if not sched.meets_deadline:
             why.append(f"misses required-on-site by {-sched.float_days} d")
         bits.append("INFEASIBLE: " + " and ".join(why))
+    docs = missing_documents_from_notes(quote.notes)
+    if docs:
+        bits.append(
+            f"submittal incomplete ({'; '.join(docs)}) - PO cannot be released until received"
+        )
     return VendorOption(
         option_id=option_id,
         vendor_id=quote.vendor_id,
@@ -87,6 +96,15 @@ def _option(
         score=score,
         rationale="; ".join(bits) + ".",
     )
+
+
+_MISSING_DOC = re.compile(r"Missing document: ([^.]+)\.")
+
+
+def missing_documents_from_notes(notes: str) -> list[str]:
+    """Documents a quote's notes flag as missing (written by :class:`VendorNetwork`)."""
+    m = _MISSING_DOC.search(notes or "")
+    return [d.strip() for d in m.group(1).split(";")] if m else []
 
 
 def is_feasible(o: VendorOption) -> bool:
@@ -162,18 +180,23 @@ def memo_risks(options: list[VendorOption]) -> list[str]:
             continue
         if o.float_days < LOW_FLOAT_DAYS:
             risks.append(
-                f"{o.option_id}: only {o.float_days} d float against the energisation "
-                "window; any slip in approvals or FAT eats it."
+                f"{o.option_id}: only {o.float_days} d float against the required-on-site "
+                "date; any slip in approvals or FAT eats it."
             )
         if o.reliability < LOW_RELIABILITY:
             risks.append(
                 f"{o.option_id}: {o.vendor_name} on-time record is {o.reliability:.0%}; "
                 "expect expediting effort and weekly progress audits."
             )
+        if "submittal incomplete" in o.rationale:
+            risks.append(
+                f"{o.option_id}: {o.vendor_name} submittal incomplete - chase the missing "
+                "document; PO release is blocked until it is received or formally waived."
+            )
         if o.budget_verdict == "warn":
             risks.append(
                 f"{o.option_id}: above the 90% budget warning line - little headroom "
-                "for variations or copper price movement."
+                "for variations or commodity price movement."
             )
         if o.expedite_fee_inr:
             risks.append(
@@ -228,8 +251,9 @@ def build_decision_memo(
             )
             if d_cost < 0 and d_float < 0:
                 lines.append(
-                    f"The {_inr_lakh(-d_cost)} saving buys schedule risk: missing the energisation "
-                    "window delays the data-hall handover, which costs far more than the delta."
+                    f"The {_inr_lakh(-d_cost)} saving buys schedule risk: missing the "
+                    "required-on-site date delays commissioning and handover, which costs far "
+                    "more than the delta."
                 )
     for o in options:
         if not is_feasible(o):

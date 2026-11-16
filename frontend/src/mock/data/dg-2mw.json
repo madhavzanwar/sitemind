@@ -1,0 +1,1104 @@
+{
+ "takeoff": {
+  "document": "dg_2mw_genset_spec.pdf",
+  "lines": [
+   {
+    "item_code": "DG-2000-11KV",
+    "description": "Diesel generator set, prime rated, 11 kV alternator",
+    "qty": 4,
+    "unit": "ea",
+    "rating": "2000 kWe / 2500 kVA",
+    "source": "dg_2mw_genset_spec.pdf p2 table 1 row 1"
+   },
+   {
+    "item_code": "ENCL-AC-75DBA",
+    "description": "Acoustic enclosure, 75 dB(A) @ 1 m",
+    "qty": 4,
+    "unit": "ea",
+    "rating": "75 dB(A)",
+    "source": "dg_2mw_genset_spec.pdf p2 table 1 row 2"
+   },
+   {
+    "item_code": "TANK-DAY-990L",
+    "description": "Fuel day tank with level transmitter",
+    "qty": 4,
+    "unit": "ea",
+    "rating": "990 L",
+    "source": "dg_2mw_genset_spec.pdf p2 table 1 row 3"
+   },
+   {
+    "item_code": "SYNC-PNL-11KV",
+    "description": "Synchronising & load-sharing panel",
+    "qty": 1,
+    "unit": "ea",
+    "rating": "11 kV, 4 incomers",
+    "source": "dg_2mw_genset_spec.pdf p3 table 1 row 4"
+   },
+   {
+    "item_code": "EXH-STACK-30M",
+    "description": "Exhaust stack with residential silencer",
+    "qty": 4,
+    "unit": "ea",
+    "rating": "30 m",
+    "source": "dg_2mw_genset_spec.pdf p3 table 1 row 5"
+   },
+   {
+    "item_code": "NGR-11KV-200A",
+    "description": "Neutral grounding resistor",
+    "qty": 4,
+    "unit": "ea",
+    "rating": "11 kV, 200 A, 10 s",
+    "source": "dg_2mw_genset_spec.pdf p3 table 1 row 6"
+   },
+   {
+    "item_code": "CBL-11KV-3C300",
+    "description": "11 kV XLPE cable, 3C × 300 mm² Al (allowance)",
+    "qty": 1200,
+    "unit": "m",
+    "rating": "11 kV",
+    "source": "dg_2mw_genset_spec.pdf p3 table 1 row 7"
+   }
+  ],
+  "confidence": 0.9,
+  "warnings": [
+   "CBL-11KV-3C300: cable length is an allowance (1200 m) — confirm with the final cable schedule (RFI raised)."
+  ]
+ },
+ "quotes_r1": [
+  {
+   "vendor_id": "D1",
+   "vendor_name": "Brahmaputra Power Gensets Pvt Ltd",
+   "quote_id": "Q-D1-20270112-R1",
+   "revision": 1,
+   "lines": [
+    {
+     "item_code": "DG-2000-11KV",
+     "qty": 4,
+     "unit_price_inr": 58500000.0,
+     "total_inr": 234000000.0
+    },
+    {
+     "item_code": "ENCL-AC-75DBA",
+     "qty": 4,
+     "unit_price_inr": 4800000.0,
+     "total_inr": 19200000.0
+    },
+    {
+     "item_code": "TANK-DAY-990L",
+     "qty": 4,
+     "unit_price_inr": 650000.0,
+     "total_inr": 2600000.0
+    },
+    {
+     "item_code": "SYNC-PNL-11KV",
+     "qty": 1,
+     "unit_price_inr": 24000000.0,
+     "total_inr": 24000000.0
+    },
+    {
+     "item_code": "EXH-STACK-30M",
+     "qty": 4,
+     "unit_price_inr": 2200000.0,
+     "total_inr": 8800000.0
+    },
+    {
+     "item_code": "NGR-11KV-200A",
+     "qty": 4,
+     "unit_price_inr": 950000.0,
+     "total_inr": 3800000.0
+    },
+    {
+     "item_code": "CBL-11KV-3C300",
+     "qty": 1200,
+     "unit_price_inr": 4200.0,
+     "total_inr": 5040000.0
+    }
+   ],
+   "freight_inr": 2800000.0,
+   "total_inr": 300240000.0,
+   "lead_time_days": 210,
+   "valid_until": "2027-02-28",
+   "reliability": 0.86,
+   "status": "received",
+   "received_at": "2027-01-12T15:00:00+05:30",
+   "notes": "Pune works; ex-works + freight to Chakan MIDC. CPCB IV+ emissions type-approval certificate not enclosed."
+  },
+  {
+   "vendor_id": "D2",
+   "vendor_name": "Coromandel Diesel Systems",
+   "quote_id": "Q-D2-20270112-R1",
+   "revision": 1,
+   "lines": [
+    {
+     "item_code": "DG-2000-11KV",
+     "qty": 4,
+     "unit_price_inr": 62010000.0,
+     "total_inr": 248040000.0
+    },
+    {
+     "item_code": "ENCL-AC-75DBA",
+     "qty": 4,
+     "unit_price_inr": 5088000.0,
+     "total_inr": 20352000.0
+    },
+    {
+     "item_code": "TANK-DAY-990L",
+     "qty": 4,
+     "unit_price_inr": 689000.0,
+     "total_inr": 2756000.0
+    },
+    {
+     "item_code": "SYNC-PNL-11KV",
+     "qty": 1,
+     "unit_price_inr": 25440000.0,
+     "total_inr": 25440000.0
+    },
+    {
+     "item_code": "EXH-STACK-30M",
+     "qty": 4,
+     "unit_price_inr": 2332000.0,
+     "total_inr": 9328000.0
+    },
+    {
+     "item_code": "NGR-11KV-200A",
+     "qty": 4,
+     "unit_price_inr": 1007000.0,
+     "total_inr": 4028000.0
+    },
+    {
+     "item_code": "CBL-11KV-3C300",
+     "qty": 1200,
+     "unit_price_inr": 4500.0,
+     "total_inr": 5400000.0
+    }
+   ],
+   "freight_inr": 2200000.0,
+   "total_inr": 317544000.0,
+   "lead_time_days": 180,
+   "valid_until": "2027-02-28",
+   "reliability": 0.92,
+   "status": "received",
+   "received_at": "2027-01-12T15:00:00+05:30",
+   "notes": "Hosur works; ex-works + freight to Chakan MIDC."
+  },
+  {
+   "vendor_id": "D3",
+   "vendor_name": "Saurashtra Engines & Alternators",
+   "quote_id": "Q-D3-20270112-R1",
+   "revision": 1,
+   "lines": [
+    {
+     "item_code": "DG-2000-11KV",
+     "qty": 4,
+     "unit_price_inr": 60255000.0,
+     "total_inr": 241020000.0
+    },
+    {
+     "item_code": "ENCL-AC-75DBA",
+     "qty": 4,
+     "unit_price_inr": 4944000.0,
+     "total_inr": 19776000.0
+    },
+    {
+     "item_code": "TANK-DAY-990L",
+     "qty": 4,
+     "unit_price_inr": 669500.0,
+     "total_inr": 2678000.0
+    },
+    {
+     "item_code": "SYNC-PNL-11KV",
+     "qty": 1,
+     "unit_price_inr": 24720000.0,
+     "total_inr": 24720000.0
+    },
+    {
+     "item_code": "EXH-STACK-30M",
+     "qty": 4,
+     "unit_price_inr": 2266000.0,
+     "total_inr": 9064000.0
+    },
+    {
+     "item_code": "NGR-11KV-200A",
+     "qty": 4,
+     "unit_price_inr": 978500.0,
+     "total_inr": 3914000.0
+    },
+    {
+     "item_code": "CBL-11KV-3C300",
+     "qty": 1200,
+     "unit_price_inr": 4300.0,
+     "total_inr": 5160000.0
+    }
+   ],
+   "freight_inr": 3500000.0,
+   "total_inr": 309832000.0,
+   "lead_time_days": 240,
+   "valid_until": "2027-02-28",
+   "reliability": 0.88,
+   "status": "received",
+   "received_at": "2027-01-12T15:00:00+05:30",
+   "notes": "Rajkot works; ex-works + freight to Chakan MIDC."
+  }
+ ],
+ "attempts_r1": [],
+ "options_initial": [
+  {
+   "option_id": "O-D2",
+   "vendor_id": "D2",
+   "vendor_name": "Coromandel Diesel Systems",
+   "total_inr": 317544000.0,
+   "lead_time_days": 180,
+   "delivery_date": "2027-09-05",
+   "float_days": 71,
+   "reliability": 0.92,
+   "expedite_fee_inr": 0.0,
+   "budget_verdict": "ok",
+   "meets_deadline": true,
+   "score": 0.729,
+   "recommended": true,
+   "rationale": "committed INR 3,334.2 L (87.7% of budget, ok); delivers 2027-09-05 (+71 d float); on-time record 92%"
+  },
+  {
+   "option_id": "O-D3",
+   "vendor_id": "D3",
+   "vendor_name": "Saurashtra Engines & Alternators",
+   "total_inr": 309832000.0,
+   "lead_time_days": 240,
+   "delivery_date": "2027-11-04",
+   "float_days": 11,
+   "reliability": 0.88,
+   "expedite_fee_inr": 0.0,
+   "budget_verdict": "ok",
+   "meets_deadline": true,
+   "score": 0.509,
+   "recommended": false,
+   "rationale": "committed INR 3,253.2 L (85.6% of budget, ok); delivers 2027-11-04 (+11 d float); on-time record 88%"
+  },
+  {
+   "option_id": "O-D1",
+   "vendor_id": "D1",
+   "vendor_name": "Brahmaputra Power Gensets Pvt Ltd",
+   "total_inr": 300240000.0,
+   "lead_time_days": 210,
+   "delivery_date": "2027-10-05",
+   "float_days": 41,
+   "reliability": 0.86,
+   "expedite_fee_inr": 0.0,
+   "budget_verdict": "ok",
+   "meets_deadline": true,
+   "score": 0.756,
+   "recommended": false,
+   "rationale": "committed INR 3,152.5 L (83.0% of budget, ok); delivers 2027-10-05 (+41 d float); on-time record 86%; INFEASIBLE: CPCB IV+ emissions certificate missing"
+  }
+ ],
+ "budgets_initial": [],
+ "quotes_refreshed": [
+  {
+   "vendor_id": "D1",
+   "vendor_name": "Brahmaputra Power Gensets Pvt Ltd",
+   "quote_id": "Q-D1-20270112-R1",
+   "revision": 1,
+   "lines": [
+    {
+     "item_code": "DG-2000-11KV",
+     "qty": 4,
+     "unit_price_inr": 58500000.0,
+     "total_inr": 234000000.0
+    },
+    {
+     "item_code": "ENCL-AC-75DBA",
+     "qty": 4,
+     "unit_price_inr": 4800000.0,
+     "total_inr": 19200000.0
+    },
+    {
+     "item_code": "TANK-DAY-990L",
+     "qty": 4,
+     "unit_price_inr": 650000.0,
+     "total_inr": 2600000.0
+    },
+    {
+     "item_code": "SYNC-PNL-11KV",
+     "qty": 1,
+     "unit_price_inr": 24000000.0,
+     "total_inr": 24000000.0
+    },
+    {
+     "item_code": "EXH-STACK-30M",
+     "qty": 4,
+     "unit_price_inr": 2200000.0,
+     "total_inr": 8800000.0
+    },
+    {
+     "item_code": "NGR-11KV-200A",
+     "qty": 4,
+     "unit_price_inr": 950000.0,
+     "total_inr": 3800000.0
+    },
+    {
+     "item_code": "CBL-11KV-3C300",
+     "qty": 1200,
+     "unit_price_inr": 4200.0,
+     "total_inr": 5040000.0
+    }
+   ],
+   "freight_inr": 2800000.0,
+   "total_inr": 300240000.0,
+   "lead_time_days": 210,
+   "valid_until": "2027-02-28",
+   "reliability": 0.86,
+   "status": "received",
+   "received_at": "2027-01-12T15:00:00+05:30",
+   "notes": "Pune works; ex-works + freight to Chakan MIDC. CPCB IV+ emissions type-approval certificate not enclosed."
+  },
+  {
+   "vendor_id": "D2",
+   "vendor_name": "Coromandel Diesel Systems",
+   "quote_id": "Q-D2-20270112-R2",
+   "revision": 2,
+   "lines": [
+    {
+     "item_code": "DG-2000-11KV",
+     "qty": 4,
+     "unit_price_inr": 71311500.0,
+     "total_inr": 285246000.0
+    },
+    {
+     "item_code": "ENCL-AC-75DBA",
+     "qty": 4,
+     "unit_price_inr": 5851200.0,
+     "total_inr": 23404800.0
+    },
+    {
+     "item_code": "TANK-DAY-990L",
+     "qty": 4,
+     "unit_price_inr": 792300.0,
+     "total_inr": 3169200.0
+    },
+    {
+     "item_code": "SYNC-PNL-11KV",
+     "qty": 1,
+     "unit_price_inr": 29256000.0,
+     "total_inr": 29256000.0
+    },
+    {
+     "item_code": "EXH-STACK-30M",
+     "qty": 4,
+     "unit_price_inr": 2681800.0,
+     "total_inr": 10727200.0
+    },
+    {
+     "item_code": "NGR-11KV-200A",
+     "qty": 4,
+     "unit_price_inr": 1158000.0,
+     "total_inr": 4632000.0
+    },
+    {
+     "item_code": "CBL-11KV-3C300",
+     "qty": 1200,
+     "unit_price_inr": 5100.0,
+     "total_inr": 6120000.0
+    }
+   ],
+   "freight_inr": 2200000.0,
+   "total_inr": 364755200.0,
+   "lead_time_days": 180,
+   "valid_until": "2027-02-28",
+   "reliability": 0.92,
+   "status": "revised",
+   "received_at": "2027-01-18T10:00:00+05:30",
+   "notes": "Revision 2: +15 % — USD/INR movement on imported engine blocks and steel price escalation on enclosures."
+  },
+  {
+   "vendor_id": "D3",
+   "vendor_name": "Saurashtra Engines & Alternators",
+   "quote_id": "Q-D3-20270112-R1",
+   "revision": 1,
+   "lines": [
+    {
+     "item_code": "DG-2000-11KV",
+     "qty": 4,
+     "unit_price_inr": 60255000.0,
+     "total_inr": 241020000.0
+    },
+    {
+     "item_code": "ENCL-AC-75DBA",
+     "qty": 4,
+     "unit_price_inr": 4944000.0,
+     "total_inr": 19776000.0
+    },
+    {
+     "item_code": "TANK-DAY-990L",
+     "qty": 4,
+     "unit_price_inr": 669500.0,
+     "total_inr": 2678000.0
+    },
+    {
+     "item_code": "SYNC-PNL-11KV",
+     "qty": 1,
+     "unit_price_inr": 24720000.0,
+     "total_inr": 24720000.0
+    },
+    {
+     "item_code": "EXH-STACK-30M",
+     "qty": 4,
+     "unit_price_inr": 2266000.0,
+     "total_inr": 9064000.0
+    },
+    {
+     "item_code": "NGR-11KV-200A",
+     "qty": 4,
+     "unit_price_inr": 978500.0,
+     "total_inr": 3914000.0
+    },
+    {
+     "item_code": "CBL-11KV-3C300",
+     "qty": 1200,
+     "unit_price_inr": 4300.0,
+     "total_inr": 5160000.0
+    }
+   ],
+   "freight_inr": 3500000.0,
+   "total_inr": 309832000.0,
+   "lead_time_days": 240,
+   "valid_until": "2027-02-28",
+   "reliability": 0.88,
+   "status": "received",
+   "received_at": "2027-01-12T15:00:00+05:30",
+   "notes": "Rajkot works; ex-works + freight to Chakan MIDC."
+  }
+ ],
+ "attempts_refresh": [
+  {
+   "vendor_id": "D2",
+   "attempt": 2,
+   "outcome": "revised",
+   "at": "2027-01-18T10:00:00+05:30",
+   "detail": "Q-D2-20270112-R2: INR 317,544,000 -> 364,755,200 (+14.9%). USD/INR + steel escalation"
+  }
+ ],
+ "options_replan": [
+  {
+   "option_id": "O-D1",
+   "vendor_id": "D1",
+   "vendor_name": "Brahmaputra Power Gensets Pvt Ltd",
+   "total_inr": 300240000.0,
+   "lead_time_days": 210,
+   "delivery_date": "2027-10-05",
+   "float_days": 41,
+   "reliability": 0.86,
+   "expedite_fee_inr": 0.0,
+   "budget_verdict": "ok",
+   "meets_deadline": true,
+   "score": 0.756,
+   "recommended": true,
+   "rationale": "committed INR 3,152.5 L (83.0% of budget, ok); delivers 2027-10-05 (+41 d float); on-time record 86%"
+  },
+  {
+   "option_id": "O-D2",
+   "vendor_id": "D2",
+   "vendor_name": "Coromandel Diesel Systems rev 2",
+   "total_inr": 364755200.0,
+   "lead_time_days": 180,
+   "delivery_date": "2027-09-05",
+   "float_days": 71,
+   "reliability": 0.92,
+   "expedite_fee_inr": 0.0,
+   "budget_verdict": "breach",
+   "meets_deadline": true,
+   "score": 0.533,
+   "recommended": false,
+   "rationale": "committed INR 3,829.9 L (100.8% of budget, breach); delivers 2027-09-05 (+71 d float); on-time record 92%; INFEASIBLE: over budget"
+  },
+  {
+   "option_id": "O-D3",
+   "vendor_id": "D3",
+   "vendor_name": "Saurashtra Engines & Alternators",
+   "total_inr": 309832000.0,
+   "lead_time_days": 285,
+   "delivery_date": "2027-12-19",
+   "float_days": -34,
+   "reliability": 0.88,
+   "expedite_fee_inr": 0.0,
+   "budget_verdict": "ok",
+   "meets_deadline": false,
+   "score": 0.38,
+   "recommended": false,
+   "rationale": "committed INR 3,253.2 L (85.6% of budget, ok); delivers 2027-12-19 (-34 d float); on-time record 88%; INFEASIBLE: misses required-on-site"
+  }
+ ],
+ "budgets_replan": [],
+ "schedules": {
+  "D1": {
+   "vendor_id": "D1",
+   "activities": [
+    {
+     "id": "PO",
+     "name": "PO issue",
+     "duration_days": 0,
+     "depends_on": [],
+     "early_start": 0,
+     "early_finish": 0,
+     "late_start": 41,
+     "late_finish": 41,
+     "slack_days": 41,
+     "critical": true
+    },
+    {
+     "id": "SUB",
+     "name": "Submittals / GA drawings",
+     "duration_days": 14,
+     "depends_on": [
+      "PO"
+     ],
+     "early_start": 0,
+     "early_finish": 14,
+     "late_start": 41,
+     "late_finish": 55,
+     "slack_days": 41,
+     "critical": true
+    },
+    {
+     "id": "APR",
+     "name": "Drawing approval",
+     "duration_days": 10,
+     "depends_on": [
+      "SUB"
+     ],
+     "early_start": 14,
+     "early_finish": 24,
+     "late_start": 55,
+     "late_finish": 65,
+     "slack_days": 41,
+     "critical": true
+    },
+    {
+     "id": "MFG",
+     "name": "Manufacture",
+     "duration_days": 210,
+     "depends_on": [
+      "APR"
+     ],
+     "early_start": 24,
+     "early_finish": 234,
+     "late_start": 65,
+     "late_finish": 275,
+     "slack_days": 41,
+     "critical": true
+    },
+    {
+     "id": "FAT",
+     "name": "Factory acceptance test",
+     "duration_days": 5,
+     "depends_on": [
+      "MFG"
+     ],
+     "early_start": 234,
+     "early_finish": 239,
+     "late_start": 275,
+     "late_finish": 280,
+     "slack_days": 41,
+     "critical": true
+    },
+    {
+     "id": "SHP",
+     "name": "Shipping to site",
+     "duration_days": 7,
+     "depends_on": [
+      "FAT"
+     ],
+     "early_start": 239,
+     "early_finish": 246,
+     "late_start": 280,
+     "late_finish": 287,
+     "slack_days": 41,
+     "critical": true
+    },
+    {
+     "id": "DEL",
+     "name": "Delivery",
+     "duration_days": 0,
+     "depends_on": [
+      "SHP"
+     ],
+     "early_start": 246,
+     "early_finish": 246,
+     "late_start": 287,
+     "late_finish": 287,
+     "slack_days": 41,
+     "critical": true
+    }
+   ],
+   "critical_path": [
+    "PO",
+    "SUB",
+    "APR",
+    "MFG",
+    "FAT",
+    "SHP",
+    "DEL"
+   ],
+   "po_issue_date": "2027-02-01",
+   "delivery_date": "2027-10-05",
+   "required_on_site": "2027-11-15",
+   "float_days": 41,
+   "meets_deadline": true
+  },
+  "D2": {
+   "vendor_id": "D2",
+   "activities": [
+    {
+     "id": "PO",
+     "name": "PO issue",
+     "duration_days": 0,
+     "depends_on": [],
+     "early_start": 0,
+     "early_finish": 0,
+     "late_start": 71,
+     "late_finish": 71,
+     "slack_days": 71,
+     "critical": true
+    },
+    {
+     "id": "SUB",
+     "name": "Submittals / GA drawings",
+     "duration_days": 14,
+     "depends_on": [
+      "PO"
+     ],
+     "early_start": 0,
+     "early_finish": 14,
+     "late_start": 71,
+     "late_finish": 85,
+     "slack_days": 71,
+     "critical": true
+    },
+    {
+     "id": "APR",
+     "name": "Drawing approval",
+     "duration_days": 10,
+     "depends_on": [
+      "SUB"
+     ],
+     "early_start": 14,
+     "early_finish": 24,
+     "late_start": 85,
+     "late_finish": 95,
+     "slack_days": 71,
+     "critical": true
+    },
+    {
+     "id": "MFG",
+     "name": "Manufacture",
+     "duration_days": 180,
+     "depends_on": [
+      "APR"
+     ],
+     "early_start": 24,
+     "early_finish": 204,
+     "late_start": 95,
+     "late_finish": 275,
+     "slack_days": 71,
+     "critical": true
+    },
+    {
+     "id": "FAT",
+     "name": "Factory acceptance test",
+     "duration_days": 5,
+     "depends_on": [
+      "MFG"
+     ],
+     "early_start": 204,
+     "early_finish": 209,
+     "late_start": 275,
+     "late_finish": 280,
+     "slack_days": 71,
+     "critical": true
+    },
+    {
+     "id": "SHP",
+     "name": "Shipping to site",
+     "duration_days": 7,
+     "depends_on": [
+      "FAT"
+     ],
+     "early_start": 209,
+     "early_finish": 216,
+     "late_start": 280,
+     "late_finish": 287,
+     "slack_days": 71,
+     "critical": true
+    },
+    {
+     "id": "DEL",
+     "name": "Delivery",
+     "duration_days": 0,
+     "depends_on": [
+      "SHP"
+     ],
+     "early_start": 216,
+     "early_finish": 216,
+     "late_start": 287,
+     "late_finish": 287,
+     "slack_days": 71,
+     "critical": true
+    }
+   ],
+   "critical_path": [
+    "PO",
+    "SUB",
+    "APR",
+    "MFG",
+    "FAT",
+    "SHP",
+    "DEL"
+   ],
+   "po_issue_date": "2027-02-01",
+   "delivery_date": "2027-09-05",
+   "required_on_site": "2027-11-15",
+   "float_days": 71,
+   "meets_deadline": true
+  },
+  "D3": {
+   "vendor_id": "D3",
+   "activities": [
+    {
+     "id": "PO",
+     "name": "PO issue",
+     "duration_days": 0,
+     "depends_on": [],
+     "early_start": 0,
+     "early_finish": 0,
+     "late_start": -34,
+     "late_finish": -34,
+     "slack_days": -34,
+     "critical": true
+    },
+    {
+     "id": "SUB",
+     "name": "Submittals / GA drawings",
+     "duration_days": 14,
+     "depends_on": [
+      "PO"
+     ],
+     "early_start": 0,
+     "early_finish": 14,
+     "late_start": -34,
+     "late_finish": -20,
+     "slack_days": -34,
+     "critical": true
+    },
+    {
+     "id": "APR",
+     "name": "Drawing approval",
+     "duration_days": 10,
+     "depends_on": [
+      "SUB"
+     ],
+     "early_start": 14,
+     "early_finish": 24,
+     "late_start": -20,
+     "late_finish": -10,
+     "slack_days": -34,
+     "critical": true
+    },
+    {
+     "id": "MFG",
+     "name": "Manufacture",
+     "duration_days": 285,
+     "depends_on": [
+      "APR"
+     ],
+     "early_start": 24,
+     "early_finish": 309,
+     "late_start": -10,
+     "late_finish": 275,
+     "slack_days": -34,
+     "critical": true
+    },
+    {
+     "id": "FAT",
+     "name": "Factory acceptance test",
+     "duration_days": 5,
+     "depends_on": [
+      "MFG"
+     ],
+     "early_start": 309,
+     "early_finish": 314,
+     "late_start": 275,
+     "late_finish": 280,
+     "slack_days": -34,
+     "critical": true
+    },
+    {
+     "id": "SHP",
+     "name": "Shipping to site",
+     "duration_days": 7,
+     "depends_on": [
+      "FAT"
+     ],
+     "early_start": 314,
+     "early_finish": 321,
+     "late_start": 280,
+     "late_finish": 287,
+     "slack_days": -34,
+     "critical": true
+    },
+    {
+     "id": "DEL",
+     "name": "Delivery",
+     "duration_days": 0,
+     "depends_on": [
+      "SHP"
+     ],
+     "early_start": 321,
+     "early_finish": 321,
+     "late_start": 287,
+     "late_finish": 287,
+     "slack_days": -34,
+     "critical": true
+    }
+   ],
+   "critical_path": [
+    "PO",
+    "SUB",
+    "APR",
+    "MFG",
+    "FAT",
+    "SHP",
+    "DEL"
+   ],
+   "po_issue_date": "2027-02-01",
+   "delivery_date": "2027-12-19",
+   "required_on_site": "2027-11-15",
+   "float_days": -34,
+   "meets_deadline": false
+  }
+ },
+ "expedite": {},
+ "memo": {
+  "memo_id": "MEMO-DG2MW-0002",
+  "title": "Project Alpha - 2 MW DG sets: vendor selection",
+  "situation": "Coromandel (D2) revised its quote +15 % (USD/INR, steel) and now breaches the ₹38 Cr ceiling; Saurashtra (D3) slipped its lead time by 45 d and misses the 15 Nov site date. Brahmaputra (D1) has now supplied its CPCB IV+ certificate.",
+  "options": [
+   {
+    "option_id": "O-D1",
+    "vendor_id": "D1",
+    "vendor_name": "Brahmaputra Power Gensets Pvt Ltd",
+    "total_inr": 300240000.0,
+    "lead_time_days": 210,
+    "delivery_date": "2027-10-05",
+    "float_days": 41,
+    "reliability": 0.86,
+    "expedite_fee_inr": 0.0,
+    "budget_verdict": "ok",
+    "meets_deadline": true,
+    "score": 0.756,
+    "recommended": true,
+    "rationale": "committed INR 3,152.5 L (83.0% of budget, ok); delivers 2027-10-05 (+41 d float); on-time record 86%"
+   },
+   {
+    "option_id": "O-D2",
+    "vendor_id": "D2",
+    "vendor_name": "Coromandel Diesel Systems rev 2",
+    "total_inr": 364755200.0,
+    "lead_time_days": 180,
+    "delivery_date": "2027-09-05",
+    "float_days": 71,
+    "reliability": 0.92,
+    "expedite_fee_inr": 0.0,
+    "budget_verdict": "breach",
+    "meets_deadline": true,
+    "score": 0.533,
+    "recommended": false,
+    "rationale": "committed INR 3,829.9 L (100.8% of budget, breach); delivers 2027-09-05 (+71 d float); on-time record 92%; INFEASIBLE: over budget"
+   },
+   {
+    "option_id": "O-D3",
+    "vendor_id": "D3",
+    "vendor_name": "Saurashtra Engines & Alternators",
+    "total_inr": 309832000.0,
+    "lead_time_days": 285,
+    "delivery_date": "2027-12-19",
+    "float_days": -34,
+    "reliability": 0.88,
+    "expedite_fee_inr": 0.0,
+    "budget_verdict": "ok",
+    "meets_deadline": false,
+    "score": 0.38,
+    "recommended": false,
+    "rationale": "committed INR 3,253.2 L (85.6% of budget, ok); delivers 2027-12-19 (-34 d float); on-time record 88%; INFEASIBLE: misses required-on-site"
+   }
+  ],
+  "recommendation": "O-D1",
+  "reasoning": "Recommend O-D1 - Brahmaputra Power Gensets Pvt Ltd: total INR 3,002.4 L ex-GST, delivery 2027-10-05 (+41 d float), on-time record 86%, score 0.76. It is the cheapest compliant offer and now holds a valid CPCB IV+ type-approval. Rejected O-D2 (Coromandel rev 2): over budget after the forex/steel revision. Rejected O-D3 (Saurashtra): the 45-day slip makes it late for the 15 Nov 2027 site date.",
+  "risks": [
+   "O-D1: on-time record 86%; insist on fortnightly works-progress reports and stage inspections.",
+   "O-D1: certificate received late — verify the CPCB IV+ type-approval number against the CPCB portal before PO release.",
+   "Forex exposure on imported engine blocks: fix the INR price in the PO (no PVC clause)."
+  ],
+  "asks": "Approve vendor selection for Project Alpha 2 MW DG sets: confirm O-D1 or pick one of the feasible options. Approval authorises a PO to be drafted for release by 2027-04-30."
+ },
+ "pos": {
+  "O-D1": {
+   "po_number": "PO-ALPHA-DG-0001",
+   "vendor_id": "D1",
+   "vendor_name": "Brahmaputra Power Gensets Pvt Ltd",
+   "project": "Project Alpha",
+   "lines": [
+    {
+     "line_no": 1,
+     "item_code": "DG-2000-11KV",
+     "description": "Diesel generator set, prime rated, 11 kV alternator (2000 kWe / 2500 kVA)",
+     "qty": 4,
+     "unit_price_inr": 58500000.0,
+     "total_inr": 234000000.0
+    },
+    {
+     "line_no": 2,
+     "item_code": "ENCL-AC-75DBA",
+     "description": "Acoustic enclosure, 75 dB(A) @ 1 m (75 dB(A))",
+     "qty": 4,
+     "unit_price_inr": 4800000.0,
+     "total_inr": 19200000.0
+    },
+    {
+     "line_no": 3,
+     "item_code": "TANK-DAY-990L",
+     "description": "Fuel day tank with level transmitter (990 L)",
+     "qty": 4,
+     "unit_price_inr": 650000.0,
+     "total_inr": 2600000.0
+    },
+    {
+     "line_no": 4,
+     "item_code": "SYNC-PNL-11KV",
+     "description": "Synchronising & load-sharing panel (11 kV, 4 incomers)",
+     "qty": 1,
+     "unit_price_inr": 24000000.0,
+     "total_inr": 24000000.0
+    },
+    {
+     "line_no": 5,
+     "item_code": "EXH-STACK-30M",
+     "description": "Exhaust stack with residential silencer (30 m)",
+     "qty": 4,
+     "unit_price_inr": 2200000.0,
+     "total_inr": 8800000.0
+    },
+    {
+     "line_no": 6,
+     "item_code": "NGR-11KV-200A",
+     "description": "Neutral grounding resistor (11 kV, 200 A, 10 s)",
+     "qty": 4,
+     "unit_price_inr": 950000.0,
+     "total_inr": 3800000.0
+    },
+    {
+     "line_no": 7,
+     "item_code": "CBL-11KV-3C300",
+     "description": "11 kV XLPE cable, 3C × 300 mm² Al (allowance) (11 kV)",
+     "qty": 1200,
+     "unit_price_inr": 4200.0,
+     "total_inr": 5040000.0
+    }
+   ],
+   "subtotal_inr": 297440000.0,
+   "freight_inr": 2800000.0,
+   "expedite_fee_inr": 0.0,
+   "gst_inr": 54043200.0,
+   "total_inr": 354283200.0,
+   "delivery_date": "2027-10-05",
+   "payment_terms": "10% advance against ABG, 80% against delivery & inspection, 10% after load-bank test",
+   "incoterms": "DAP Project Alpha site, Chakan MIDC (Incoterms 2020)",
+   "terms": [
+    "CPCB IV+ certificate is a condition of dispatch",
+    "LDs 0.5 %/week capped at 10 %",
+    "24-month warranty"
+   ],
+   "status": "draft",
+   "issued_at": null,
+   "markdown": "# Purchase Order PO-ALPHA-DG-0001\n\n**Project:** Project Alpha - 2 MW DG sets  \n**Status:** DRAFT  \n**PO date:** 2027-02-01  \n**Contractual delivery:** 2027-10-05  \n**Vendor quote:** Q-D1-20270112-R1 (rev 1)\n\n## Parties\n\n| | |\n|---|---|\n| **Vendor** | Brahmaputra Power Gensets Pvt Ltd (D1), Pune (synthetic) |\n| **Bill to** | Alpha Data Centres Pvt Ltd (synthetic), Pune, Maharashtra |\n| **Ship to** | Project Alpha site - 24 MW Tier-III Data Centre, Chakan MIDC Phase II, Pune 410501 |\n| **Incoterms** | DAP Project Alpha site, Chakan MIDC (Incoterms 2020) |\n| **Payment terms** | 10% advance against ABG, 80% against delivery & inspection, 10% after load-bank test |\n\n## Lines\n\n| # | Item code | Description | Qty | Unit price (INR) | Amount (INR) |\n|---:|---|---|---:|---:|---:|\n| 1 | `DG-2000-11KV` | Diesel generator set, prime rated, 11 kV alternator (2000 kWe / 2500 kVA) | 4 | 58,500,000.00 | 234,000,000.00 |\n| 2 | `ENCL-AC-75DBA` | Acoustic enclosure, 75 dB(A) @ 1 m (75 dB(A)) | 4 | 4,800,000.00 | 19,200,000.00 |\n| 3 | `TANK-DAY-990L` | Fuel day tank with level transmitter (990 L) | 4 | 650,000.00 | 2,600,000.00 |\n| 4 | `SYNC-PNL-11KV` | Synchronising & load-sharing panel (11 kV, 4 incomers) | 1 | 24,000,000.00 | 24,000,000.00 |\n| 5 | `EXH-STACK-30M` | Exhaust stack with residential silencer (30 m) | 4 | 2,200,000.00 | 8,800,000.00 |\n| 6 | `NGR-11KV-200A` | Neutral grounding resistor (11 kV, 200 A, 10 s) | 4 | 950,000.00 | 3,800,000.00 |\n| 7 | `CBL-11KV-3C300` | 11 kV XLPE cable, 3C × 300 mm² Al (allowance) (11 kV) | 1200 | 4,200.00 | 5,040,000.00 |\n\n## Totals\n\n| | Amount (INR) |\n|---|---:|\n| Subtotal | 297,440,000.00 |\n| Freight | 2,800,000.00 |\n| GST 18 % | 54,043,200.00 |\n| **Total payable** | **354,283,200.00** |\n\n## Key terms\n\n- CPCB IV+ type-approval certificate and test report are conditions of dispatch.\n- 12-hour load-bank test at site; FAT witnessed by Alpha EPC.\n- LDs 0.5 % per week of delay, capped at 10 %.\n- Warranty 24 months from commissioning or 30 months from delivery."
+  },
+  "O-D3": {
+   "po_number": "PO-ALPHA-DG-0001",
+   "vendor_id": "D3",
+   "vendor_name": "Saurashtra Engines & Alternators",
+   "project": "Project Alpha",
+   "lines": [
+    {
+     "line_no": 1,
+     "item_code": "DG-2000-11KV",
+     "description": "Diesel generator set, prime rated, 11 kV alternator (2000 kWe / 2500 kVA)",
+     "qty": 4,
+     "unit_price_inr": 60255000.0,
+     "total_inr": 241020000.0
+    },
+    {
+     "line_no": 2,
+     "item_code": "ENCL-AC-75DBA",
+     "description": "Acoustic enclosure, 75 dB(A) @ 1 m (75 dB(A))",
+     "qty": 4,
+     "unit_price_inr": 4944000.0,
+     "total_inr": 19776000.0
+    },
+    {
+     "line_no": 3,
+     "item_code": "TANK-DAY-990L",
+     "description": "Fuel day tank with level transmitter (990 L)",
+     "qty": 4,
+     "unit_price_inr": 669500.0,
+     "total_inr": 2678000.0
+    },
+    {
+     "line_no": 4,
+     "item_code": "SYNC-PNL-11KV",
+     "description": "Synchronising & load-sharing panel (11 kV, 4 incomers)",
+     "qty": 1,
+     "unit_price_inr": 24720000.0,
+     "total_inr": 24720000.0
+    },
+    {
+     "line_no": 5,
+     "item_code": "EXH-STACK-30M",
+     "description": "Exhaust stack with residential silencer (30 m)",
+     "qty": 4,
+     "unit_price_inr": 2266000.0,
+     "total_inr": 9064000.0
+    },
+    {
+     "line_no": 6,
+     "item_code": "NGR-11KV-200A",
+     "description": "Neutral grounding resistor (11 kV, 200 A, 10 s)",
+     "qty": 4,
+     "unit_price_inr": 978500.0,
+     "total_inr": 3914000.0
+    },
+    {
+     "line_no": 7,
+     "item_code": "CBL-11KV-3C300",
+     "description": "11 kV XLPE cable, 3C × 300 mm² Al (allowance) (11 kV)",
+     "qty": 1200,
+     "unit_price_inr": 4300.0,
+     "total_inr": 5160000.0
+    }
+   ],
+   "subtotal_inr": 306332000.0,
+   "freight_inr": 3500000.0,
+   "expedite_fee_inr": 0.0,
+   "gst_inr": 55769760.0,
+   "total_inr": 365601760.0,
+   "delivery_date": "2027-12-19",
+   "payment_terms": "10% advance against ABG, 80% against delivery & inspection, 10% after load-bank test",
+   "incoterms": "DAP Project Alpha site, Chakan MIDC (Incoterms 2020)",
+   "terms": [
+    "CPCB IV+ certificate is a condition of dispatch",
+    "LDs 0.5 %/week capped at 10 %",
+    "24-month warranty"
+   ],
+   "status": "draft",
+   "issued_at": null,
+   "markdown": "# Purchase Order PO-ALPHA-DG-0001\n\n**Project:** Project Alpha - 2 MW DG sets  \n**Status:** DRAFT  \n**PO date:** 2027-02-01  \n**Contractual delivery:** 2027-12-19  \n**Vendor quote:** Q-D3-20270112-R1 (rev 1)\n\n## Parties\n\n| | |\n|---|---|\n| **Vendor** | Saurashtra Engines & Alternators (D3), Rajkot (synthetic) |\n| **Bill to** | Alpha Data Centres Pvt Ltd (synthetic), Pune, Maharashtra |\n| **Ship to** | Project Alpha site - 24 MW Tier-III Data Centre, Chakan MIDC Phase II, Pune 410501 |\n| **Incoterms** | DAP Project Alpha site, Chakan MIDC (Incoterms 2020) |\n| **Payment terms** | 10% advance against ABG, 80% against delivery & inspection, 10% after load-bank test |\n\n## Lines\n\n| # | Item code | Description | Qty | Unit price (INR) | Amount (INR) |\n|---:|---|---|---:|---:|---:|\n| 1 | `DG-2000-11KV` | Diesel generator set, prime rated, 11 kV alternator (2000 kWe / 2500 kVA) | 4 | 60,255,000.00 | 241,020,000.00 |\n| 2 | `ENCL-AC-75DBA` | Acoustic enclosure, 75 dB(A) @ 1 m (75 dB(A)) | 4 | 4,944,000.00 | 19,776,000.00 |\n| 3 | `TANK-DAY-990L` | Fuel day tank with level transmitter (990 L) | 4 | 669,500.00 | 2,678,000.00 |\n| 4 | `SYNC-PNL-11KV` | Synchronising & load-sharing panel (11 kV, 4 incomers) | 1 | 24,720,000.00 | 24,720,000.00 |\n| 5 | `EXH-STACK-30M` | Exhaust stack with residential silencer (30 m) | 4 | 2,266,000.00 | 9,064,000.00 |\n| 6 | `NGR-11KV-200A` | Neutral grounding resistor (11 kV, 200 A, 10 s) | 4 | 978,500.00 | 3,914,000.00 |\n| 7 | `CBL-11KV-3C300` | 11 kV XLPE cable, 3C × 300 mm² Al (allowance) (11 kV) | 1200 | 4,300.00 | 5,160,000.00 |\n\n## Totals\n\n| | Amount (INR) |\n|---|---:|\n| Subtotal | 306,332,000.00 |\n| Freight | 3,500,000.00 |\n| GST 18 % | 55,769,760.00 |\n| **Total payable** | **365,601,760.00** |\n\n## Key terms\n\n- CPCB IV+ type-approval certificate and test report are conditions of dispatch.\n- 12-hour load-bank test at site; FAT witnessed by Alpha EPC.\n- LDs 0.5 % per week of delay, capped at 10 %.\n- Warranty 24 months from commissioning or 30 months from delivery."
+  }
+ }
+}

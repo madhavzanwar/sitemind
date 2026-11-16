@@ -11,6 +11,7 @@ from typing import Any
 
 from sitemind.models import Goal, POLine, PurchaseOrder, Quote, TakeoffResult, VendorOption
 from sitemind.specialists._data import vendor_profile
+from sitemind.specialists.packages import package_for_vendor, package_po_terms
 
 GST_RATE = 0.18
 SHIP_TO = (
@@ -86,7 +87,10 @@ def draft_po(
     taxable = _r2(subtotal + freight + fee)
     gst = _r2(taxable * GST_RATE)
     total = _r2(taxable + gst)
-    terms = list(STANDARD_TERMS)
+    try:
+        terms = package_po_terms(package_for_vendor(quote.vendor_id)) or list(STANDARD_TERMS)
+    except KeyError:
+        terms = list(STANDARD_TERMS)
     ros = goal.required_on_site.isoformat() if goal.required_on_site else "n/a"
     terms.insert(
         0,

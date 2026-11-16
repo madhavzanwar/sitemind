@@ -1,4 +1,5 @@
 {
+  "package_id": "swgr-480v",
   "name": "demo",
   "description": "Deterministic chaos for the Project Alpha demo: V1 times out twice, V2 revises its price on refresh (copper surcharge, discount withdrawn), V3's standard lead time misses the energisation window unless expedited.",
   "required_on_site": "2027-07-30",
@@ -6,7 +7,10 @@
   "sim_start": "2027-01-11T09:00:00+05:30",
   "vendors": {
     "V1": {
-      "timeout_on_attempts": [1, 2],
+      "timeout_on_attempts": [
+        1,
+        2
+      ],
       "timeout_hours": 24,
       "revision_on_refresh": null
     },

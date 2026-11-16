@@ -16,6 +16,7 @@ budget-<V>         budget       budget check for vendor V
 negotiate-<V>      quotes       (re-plan) re-quote / negotiate a revised price with V
 expedite-<V>       schedule     (re-plan) evaluate V's expedite offer (schedule + budget)
 chase-<V>          quotes       (re-plan) final chase of an unresponsive vendor, then exclude
+docs-<V>           quotes       (event) chase a missing submittal document; gates PO release
 rank               approvals    rank options, write decision memo
 escalate           approvals    (re-plan) escalate the trade-off to the project manager
 approve-vendor     approvals    HITL: vendor selection
@@ -47,6 +48,7 @@ ACTION_SPECIALIST = {
     "negotiate": "quotes",
     "expedite": "schedule",
     "chase": "quotes",
+    "docs": "quotes",
     "rank": "approvals",
     "escalate": "approvals",
     "approve-vendor": "approvals",
@@ -65,6 +67,7 @@ ALLOWANCE_INR = {
     "negotiate": 15_000.0,
     "expedite": 8_000.0,
     "chase": 3_000.0,
+    "docs": 2_500.0,
     "rank": 10_000.0,
     "escalate": 2_000.0,
     "approve-vendor": 0.0,
@@ -73,7 +76,7 @@ ALLOWANCE_INR = {
     "send-po": 2_000.0,
 }
 _ID_RE = re.compile(r"^T(?P<n>\d+)-(?P<rest>.+)$")
-_VENDOR_RE = re.compile(r"^V\d+$")
+_VENDOR_RE = re.compile(r"^[A-Z]{1,3}\d+$")  # V1, D2, ...: vendor ids
 
 
 class PlanError(ValueError):
@@ -246,7 +249,7 @@ def base_risks(goal: Goal) -> list[Risk]:
     return [
         Risk(
             id="R1-lead-time",
-            title=f"Switchgear manufacturing lead time (16-24 weeks) vs on-site date {ros}",
+            title=f"{goal.package} manufacturing lead time vs on-site date {ros}",
             likelihood="high",
             impact="high",
             mitigation="Compute CPM float per vendor; prefer on-time options and price expedite "
@@ -254,7 +257,7 @@ def base_risks(goal: Goal) -> list[Risk]:
         ),
         Risk(
             id="R2-price-volatility",
-            title="Copper-linked price volatility and short quote validity",
+            title="Commodity / forex-linked price volatility and short quote validity",
             likelihood="medium",
             impact="high",
             mitigation="Refresh every quote before evaluation and re-check budget on any revision.",
@@ -298,6 +301,7 @@ def _deadlines(start: date, need_by: date) -> dict[str, date]:
         "negotiate": clamp(need_by - timedelta(days=15)),
         "expedite": clamp(need_by - timedelta(days=15)),
         "chase": clamp(need_by - timedelta(days=15)),
+        "docs": clamp(need_by - timedelta(days=4)),
         "rank": clamp(need_by - timedelta(days=12)),
         "escalate": clamp(need_by - timedelta(days=10)),
         "approve-vendor": clamp(need_by - timedelta(days=7)),
@@ -430,6 +434,14 @@ def replan(
     * ``deadline_break:<V>`` -> evaluate V's expedite offer (if any)
     * ``vendor_unresponsive:<V>`` -> final chase, then exclude
     * ``approval_rejected:<task_id>`` -> redo the decision (or PO) downstream of that approval
+
+    Live-event triggers (``<kind>:<vendor|ALL>:<event id>``, see ``graph.apply_event``):
+
+    * ``price_change`` -> budget re-check of that vendor, re-rank, escalate, re-approve
+    * ``lead_slip`` / ``late_reply`` -> CPM re-check of that vendor, re-rank, escalate, ...
+    * ``site_date`` -> CPM re-check of every priced vendor, re-rank, escalate, ...
+    * ``document_missing`` (``...:po`` suffix = PO approval superseded) -> chase task gating
+      the PO release
     """
     triggers = [trigger] if isinstance(trigger, str) else list(trigger)
     new = plan.model_copy(deep=True)
@@ -585,6 +597,8 @@ def replan(
             prev = [c.id]
             changes.append(f"add {c.id}")
 
+    _event_replan(new, triggers, facts, add, skip, changes)
+
     if not changes:
         changes.append("no structural change")
 
@@ -632,6 +646,114 @@ def replan(
         new.rationale = fallback
     validate_plan(new)
     return new
+
+
+EVENT_REDECIDE = {
+    "price_change": "budget",
+    "lead_slip": "schedule",
+    "late_reply": "schedule",
+    "site_date": "schedule",
+}
+DECISION_CHAIN = ("rank", "escalate", "approve-vendor", "draft-po", "approve-po", "send-po")
+_LIVE = (TaskStatus.pending, TaskStatus.ready, TaskStatus.waiting_human)
+
+
+def _event_replan(
+    new: Plan,
+    triggers: Sequence[str],
+    facts: dict[str, Any],
+    add: Any,
+    skip: Any,
+    changes: list[str],
+) -> None:
+    """Re-plan for live events: redo the decision path with fresh evaluation tasks."""
+    redecide: list[tuple[str, str]] = []  # (eval action, vendor)
+    docs: list[tuple[str, bool]] = []  # (vendor, supersede PO approval)
+    for trig in triggers:
+        kind, _, rest = trig.partition(":")
+        vendor, _, tail = rest.partition(":")
+        if kind in EVENT_REDECIDE:
+            vendors = (
+                sorted(
+                    k
+                    for k, q in (facts.get("quotes") or {}).items()
+                    if q.get("status") not in ("timeout", "declined") and q.get("lines")
+                )
+                if vendor == "ALL"
+                else [vendor]
+            )
+            redecide += [(EVENT_REDECIDE[kind], v) for v in vendors]
+        elif kind == "document_missing":
+            docs.append((vendor, tail.endswith(":po")))
+
+    def live_tasks(actions: Sequence[str]) -> list[PlanTask]:
+        return [t for t in new.tasks if task_action(t)[0] in actions and t.status in _LIVE]
+
+    docs_ids: list[str] = []
+    for vendor, supersede_po in docs:
+        if any(task_action(t) == ("docs", vendor) and t.status in _LIVE for t in new.tasks):
+            continue
+        d = add(
+            "docs",
+            f"Chase missing submittal from {vendor} (PO release blocked until received)",
+            [],
+            vendor=vendor,
+            note=f"event: document_missing:{vendor}",
+        )
+        docs_ids.append(d.id)
+        changes.append(f"add {d.id}")
+        if supersede_po and not redecide:
+            old = live_tasks(("approve-po", "send-po"))
+            for t in old:
+                skip(t, f"PO release blocked: document missing from {vendor}")
+            drafts = [
+                t.id
+                for t in new.tasks
+                if task_action(t)[0] == "draft-po" and t.status == TaskStatus.done
+            ]
+            prev = [d.id, *drafts[-1:]]
+            a = add("approve-po", "Human approval: PO release (after document received)", prev)
+            add("send-po", "Transmit the PO to the vendor (idempotent)", [a.id])
+            changes += [f"add {a.id}"]
+        elif not redecide:
+            for t in live_tasks(("approve-po",)):
+                t.depends_on = sorted({*t.depends_on, d.id})
+                changes.append(f"gate {t.id} on {d.id}")
+
+    if not redecide:
+        return
+    seen: set[tuple[str, str]] = set()
+    evals: list[str] = []
+    for action, vendor in redecide:
+        if (action, vendor) in seen:
+            continue
+        seen.add((action, vendor))
+        t = add(
+            action,
+            f"Re-check {action} for {vendor} after live event",
+            [],
+            vendor=vendor,
+            note="event re-evaluation",
+        )
+        evals.append(t.id)
+        changes.append(f"add {t.id}")
+    why = "decision invalidated by live event"
+    for t in live_tasks(DECISION_CHAIN):
+        skip(t, why)
+    # live negotiation / expedite / chase work still feeds the new ranking
+    feeders = [t.id for t in live_tasks(("negotiate", "expedite", "chase"))]
+    rank = add(
+        "rank",
+        "Re-rank options after live event; rewrite decision memo",
+        sorted({*evals, *feeders}),
+    )
+    esc = add("escalate", "Inform / escalate to the project manager: plan changed", [rank.id])
+    appr = add("approve-vendor", "Human approval: vendor selection (re-submitted)", [esc.id])
+    draft = add("draft-po", "Draft the purchase order for the selected vendor", [appr.id])
+    gate = [t.id for t in live_tasks(("docs",))]
+    appo = add("approve-po", "Human approval: PO release", sorted({draft.id, *gate}))
+    add("send-po", "Transmit the PO to the vendor (idempotent)", [appo.id])
+    changes += [f"add {rank.id}", f"add {esc.id}", f"redo approvals ({appr.id}, {appo.id})"]
 
 
 def _trigger_facts(facts: dict[str, Any], triggers: Sequence[str]) -> str:

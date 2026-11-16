@@ -1,0 +1,142 @@
+{
+  "package_id": "dg-2mw",
+  "currency": "INR",
+  "price_basis": "Unit prices ex-works, ex-GST (18% GST charged on invoice, input tax credit recoverable). Freight (ODC trailers + crane unloading) quoted separately to Project Alpha site, Chakan MIDC Phase II, Pune 410501.",
+  "list_prices_inr": {
+    "DG-2000-11KV": 62000000,
+    "ENCL-AC-75DBA": 4200000,
+    "TANK-DAY-990L": 650000,
+    "SYNC-PNL-11KV": 24000000,
+    "EXH-STACK-30M": 1800000,
+    "NGR-11KV-200A": 720000,
+    "CBL-11KV-3C300": 3900
+  },
+  "rate_card": {
+    "genset": {
+      "unit": "ea",
+      "rate_inr": 62000000,
+      "per_rating": {
+        "regex": "(\\d{3,4})\\s*kVA\\b",
+        "rate_inr": 24800
+      },
+      "basis": "INR 24,800 per kVA (11 kV, prime rated)"
+    },
+    "enclosure": {
+      "unit": "ea",
+      "rate_inr": 4200000,
+      "basis": "per acoustic enclosure"
+    },
+    "fuel-system": {
+      "unit": "ea",
+      "rate_inr": 650000,
+      "per_rating": {
+        "regex": "(\\d{3,5})\\s*L\\b",
+        "rate_inr": 660
+      },
+      "basis": "INR 660 per litre of tank capacity"
+    },
+    "synchronising-panel": {
+      "unit": "ea",
+      "rate_inr": 24000000,
+      "basis": "per synchronising panel (4 incomers)"
+    },
+    "exhaust": {
+      "unit": "ea",
+      "rate_inr": 1800000,
+      "basis": "per stack set incl. silencer"
+    },
+    "ngr": {
+      "unit": "ea",
+      "rate_inr": 720000,
+      "basis": "per NGR"
+    },
+    "cabling": {
+      "unit": "m",
+      "rate_inr": 3900,
+      "basis": "per metre, 11 kV XLPE 3C x 300 Al"
+    }
+  },
+  "vendors": {
+    "D1": {
+      "vendor_id": "D1",
+      "name": "Tarangini Gensets Pvt Ltd",
+      "city": "Pune, Maharashtra",
+      "gstin": "27AAACT0000D1Z4",
+      "contact": "bids@tarangini-gensets.example",
+      "reliability": 0.84,
+      "lead_time_days": 245,
+      "quote_validity_days": 30,
+      "response_hours": 28,
+      "freight_inr": 1800000,
+      "early_order_discount_pct": 0.0,
+      "payment_terms": "10% advance against ABG, 80% pro-rata against despatch, 10% after site load test",
+      "incoterms": "DAP Project Alpha site, Chakan MIDC (Incoterms 2020)",
+      "rate_card_factor": 0.95,
+      "unit_prices_inr": {
+        "DG-2000-11KV": 58900000,
+        "ENCL-AC-75DBA": 3906000,
+        "TANK-DAY-990L": 624000,
+        "SYNC-PNL-11KV": 22800000,
+        "EXH-STACK-30M": 1746000,
+        "NGR-11KV-200A": 676800,
+        "CBL-11KV-3C300": 3800
+      },
+      "expedite": null,
+      "notes": "Lowest price; Pune works close to site, but engine allocation is tight and on-time record is 84%."
+    },
+    "D2": {
+      "vendor_id": "D2",
+      "name": "Corvane Diesel Systems",
+      "city": "Hosur, Tamil Nadu",
+      "gstin": "33AAACC0000D2Z5",
+      "contact": "projects@corvane-diesel.example",
+      "reliability": 0.92,
+      "lead_time_days": 180,
+      "quote_validity_days": 15,
+      "response_hours": 22,
+      "freight_inr": 2200000,
+      "early_order_discount_pct": 0.0,
+      "payment_terms": "20% advance against ABG, 70% against despatch, 10% against PBG",
+      "incoterms": "CPT Project Alpha site, Chakan MIDC (Incoterms 2020)",
+      "rate_card_factor": 1.04,
+      "unit_prices_inr": {
+        "DG-2000-11KV": 64480000,
+        "ENCL-AC-75DBA": 4410000,
+        "TANK-DAY-990L": 663000,
+        "SYNC-PNL-11KV": 24960000,
+        "EXH-STACK-30M": 1854000,
+        "NGR-11KV-200A": 756000,
+        "CBL-11KV-3C300": 4000
+      },
+      "expedite": null,
+      "notes": "Shortest lead time and best on-time record (92%); imported engine blocks priced in USD, validity 15 days."
+    },
+    "D3": {
+      "vendor_id": "D3",
+      "name": "Halvik Engines & Alternators",
+      "city": "Rajkot, Gujarat",
+      "gstin": "24AAACH0000D3Z6",
+      "contact": "tenders@halvik-engines.example",
+      "reliability": 0.88,
+      "lead_time_days": 240,
+      "quote_validity_days": 45,
+      "response_hours": 40,
+      "freight_inr": 3500000,
+      "early_order_discount_pct": 0.0,
+      "payment_terms": "Nil advance, 90% within 30 days of delivery, 10% retention released after site acceptance",
+      "incoterms": "DAP Project Alpha site, Chakan MIDC (Incoterms 2020)",
+      "rate_card_factor": 0.98,
+      "unit_prices_inr": {
+        "DG-2000-11KV": 60760000,
+        "ENCL-AC-75DBA": 4074000,
+        "TANK-DAY-990L": 650000,
+        "SYNC-PNL-11KV": 23760000,
+        "EXH-STACK-30M": 1728000,
+        "NGR-11KV-200A": 720000,
+        "CBL-11KV-3C300": 3800
+      },
+      "expedite": null,
+      "notes": "Mid-priced, 88% on-time; alternators sourced from a sister plant whose capacity for 2027 is not yet confirmed."
+    }
+  }
+}

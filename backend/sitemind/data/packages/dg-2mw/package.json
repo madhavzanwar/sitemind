@@ -1,0 +1,157 @@
+{
+  "package_id": "dg-2mw",
+  "title": "2 MW DG sets",
+  "description": "4 x 2 MW 11 kV diesel generator sets with acoustic enclosures, fuel day tanks, synchronising panel, exhaust stacks, NGRs and 11 kV cabling for Project Alpha.",
+  "keywords": [
+    "dg set",
+    "dg sets",
+    "diesel generator",
+    "diesel generators",
+    "diesel genset",
+    "diesel gensets",
+    "generator set",
+    "generator sets",
+    "genset",
+    "gensets",
+    "generator",
+    "generators",
+    "2 mw",
+    "dg"
+  ],
+  "spec_document": "dg_2mw_genset_spec.pdf",
+  "vendor_ids": [
+    "D1",
+    "D2",
+    "D3"
+  ],
+  "default_goal_text": "Get the 2 MW DG sets for Project Alpha ordered by 2027-04-30 within budget ₹38 Cr",
+  "default_project": "Project Alpha",
+  "default_need_by": "2027-04-30",
+  "default_budget_inr": 380000000,
+  "required_on_site": "2027-11-15",
+  "categories": [
+    {
+      "id": "genset",
+      "title": "Diesel generator set",
+      "item_codes": [
+        "DG-2000-11KV"
+      ],
+      "keywords": [
+        "generator set",
+        "diesel generator",
+        "genset",
+        "dg set",
+        "alternator"
+      ]
+    },
+    {
+      "id": "enclosure",
+      "title": "Acoustic enclosure",
+      "item_codes": [
+        "ENCL-AC-75DBA"
+      ],
+      "keywords": [
+        "acoustic enclosure",
+        "enclosure",
+        "canopy"
+      ]
+    },
+    {
+      "id": "fuel-system",
+      "title": "Fuel system",
+      "item_codes": [
+        "TANK-DAY-990L"
+      ],
+      "keywords": [
+        "day tank",
+        "fuel tank",
+        "fuel",
+        "diesel storage"
+      ]
+    },
+    {
+      "id": "synchronising-panel",
+      "title": "Synchronising panel",
+      "item_codes": [
+        "SYNC-PNL-11KV"
+      ],
+      "keywords": [
+        "synchronising",
+        "synchronizing",
+        "load-sharing",
+        "load sharing",
+        "amf panel"
+      ]
+    },
+    {
+      "id": "exhaust",
+      "title": "Exhaust system",
+      "item_codes": [
+        "EXH-STACK-30M"
+      ],
+      "keywords": [
+        "exhaust",
+        "stack",
+        "silencer",
+        "chimney"
+      ]
+    },
+    {
+      "id": "ngr",
+      "title": "Neutral grounding resistor",
+      "item_codes": [
+        "NGR-11KV-200A"
+      ],
+      "keywords": [
+        "neutral grounding",
+        "neutral earthing",
+        "ngr",
+        "grounding resistor"
+      ]
+    },
+    {
+      "id": "cabling",
+      "title": "MV cabling",
+      "item_codes": [
+        "CBL-11KV-3C300"
+      ],
+      "keywords": [
+        "cable",
+        "xlpe",
+        "cabling"
+      ]
+    }
+  ],
+  "cross_checks": [
+    {
+      "item_code": "DG-2000-11KV",
+      "page_marker": "GENERATOR DATASHEET",
+      "mode": "value",
+      "pattern": "Number of DG sets\\s+(\\d+)",
+      "what": "datasheet 'Number of DG sets'"
+    },
+    {
+      "item_code": "EXH-STACK-30M",
+      "page_marker": "GENERATOR DATASHEET",
+      "mode": "value",
+      "pattern": "Exhaust stacks\\s+(\\d+)",
+      "what": "datasheet 'Exhaust stacks'"
+    },
+    {
+      "item_code": "CBL-11KV-3C300",
+      "page_marker": "GENERATOR DATASHEET",
+      "mode": "value",
+      "pattern": "11 kV cable route length \\(approx\\.\\)\\s+([\\d,]+)\\s*m",
+      "what": "datasheet cable route length (linear, m)"
+    }
+  ],
+  "po_terms": [
+    "Liquidated damages: 0.5% of order value per week (or part) of delay beyond the contractual delivery date, capped at 10% of order value.",
+    "Warranty: 24 months from commissioning or 30 months from delivery, whichever is earlier, or 5,000 running hours; defects rectified at site within 72 h of notice.",
+    "Factory acceptance test: witnessed load test per ISO 8528-6 (100% / 110% load, transient response), 5 days, Owner and Engineer present; despatch only after signed FAT report.",
+    "Submittals: GA, foundation and exhaust layouts, fuel schematic, alternator data, synchronising logic and protection settings within 14 days of PO; Engineer review 10 days.",
+    "Compliance: ISO 8528, IEC 60034 alternators, CPCB IV+ / MoEFCC emission norms with type-approval certificate enclosed before PO release, PESO approval for fuel storage where applicable.",
+    "Bank guarantees: advance against ABG of equal value; 10% performance bank guarantee valid for the warranty period plus 3 months.",
+    "Price basis: firm, ex-GST; GST 18% charged on invoice per prevailing law."
+  ]
+}

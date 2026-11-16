@@ -338,6 +338,8 @@ export interface RunSnapshot {
   current_node: string | null
   llm: LlmInfo
   error: string | null
+  package_id: string
+  events: InjectedEvent[]
 }
 
 export interface CreateRunRequest {
@@ -349,9 +351,102 @@ export interface CreateRunRequest {
   scenario?: 'demo' | 'happy'
   step_delay_s?: number | null
   auto_start?: boolean
+  package_id?: string
+  spec_upload_id?: string | null
 }
 
 export interface Health {
   status: string
   llm: { provider: string; model: string; reachable: boolean }
+}
+
+// ------------------------------------------------------------------ v2: packages, goal parsing,
+// spec upload, live event injection
+export interface PackageSpec {
+  package_id: string
+  title: string
+  description: string
+  keywords: string[]
+  spec_document: string
+  vendor_ids: string[]
+  default_goal_text: string
+  default_project: string
+  default_need_by: ISODate
+  default_budget_inr: number
+  required_on_site: ISODate
+}
+
+export interface GoalParseRequest {
+  text: string
+}
+
+export interface GoalParseResult {
+  package_id: string | null
+  package: string | null
+  project: string | null
+  need_by: ISODate | null
+  budget_inr: number | null
+  confidence: number
+  evidence: Record<string, string>
+  missing: string[]
+  questions: string[]
+  supported: boolean
+}
+
+export interface SpecUpload {
+  upload_id: string
+  filename: string
+  pages: number
+  size_bytes: number
+  package_id: string | null
+  takeoff: TakeoffResult | null
+}
+
+export type EventType =
+  | 'vendor_late_reply'
+  | 'price_change'
+  | 'date_slip'
+  | 'document_missing'
+  | 'tool_failure'
+  | 'approver_unavailable'
+  | 'restart'
+
+export interface EventParamSpec {
+  name: string
+  label: string
+  kind: 'int' | 'float' | 'choice' | 'text'
+  default: unknown
+  choices: string[]
+  unit: string
+  min: number | null
+  max: number | null
+}
+
+export interface EventTypeSpec {
+  type: EventType
+  title: string
+  description: string
+  needs_vendor: boolean
+  params: EventParamSpec[]
+}
+
+export interface InjectEventRequest {
+  type: EventType
+  vendor_id?: string | null
+  params?: Record<string, unknown>
+  note?: string | null
+}
+
+export interface InjectedEvent {
+  id: string
+  run_id: string
+  type: EventType
+  vendor_id: string | null
+  params: Record<string, unknown>
+  note: string | null
+  status: 'pending' | 'applied' | 'ignored'
+  received_at: ISODateTime
+  applied_sim_time: ISODateTime | null
+  outcome: string | null
+  triggers: string[]
 }

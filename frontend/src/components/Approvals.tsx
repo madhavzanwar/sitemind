@@ -27,8 +27,8 @@ export function Approvals({
   const sel = snap.approvals.find((a) => a.id === selId) ?? pending[0] ?? decided[0] ?? null
 
   return (
-    <div className="grid h-full min-h-0 grid-cols-[380px_minmax(0,1fr)] gap-4" data-testid="approvals-inbox">
-      <Card title="Inbox" icon={Inbox} subtitle={`${pending.length} pending`} bodyClassName="overflow-auto p-3">
+    <div className="grid gap-4 lg:grid-cols-[340px_minmax(0,1fr)]" data-testid="approvals-inbox">
+      <Card title="Inbox" icon={Inbox} subtitle={`${pending.length} pending`} bodyClassName="p-3" className="self-start">
         {snap.approvals.length === 0 ? (
           <Empty icon={Inbox} title="Nothing to approve" hint="The agent asks for a human decision before selecting a vendor and before releasing the PO." />
         ) : (
@@ -44,7 +44,7 @@ export function Approvals({
           </div>
         )}
       </Card>
-      <div className="min-h-0 overflow-auto">
+      <div className="min-w-0">
         {sel ? (
           <div data-testid="approval-detail" data-kind={sel.kind} data-status={sel.status}>
             <Detail key={sel.id} a={sel} snap={snap} onDecide={onDecide} busy={busy} />
@@ -55,26 +55,31 @@ export function Approvals({
   )
 }
 
+const isSuperseded = (a: ApprovalRequest) => a.status === 'rejected' && (a.decided_by ?? '').startsWith('system: superseded')
+
 function Item({ a, active, onClick }: { a: ApprovalRequest; active: boolean; onClick: () => void }) {
-  const tone = a.status === 'pending' ? 'human' : a.status === 'approved' ? 'success' : 'danger'
+  const sup = isSuperseded(a)
+  const tone = a.status === 'pending' ? 'human' : a.status === 'approved' ? 'success' : sup ? 'neutral' : 'danger'
   return (
     <button
       onClick={onClick}
       data-testid={`approval-item-${a.kind}`}
+      data-status={sup ? 'superseded' : a.status}
       className={cx(
-        'w-full rounded-xl border p-3 text-left transition',
-        active ? 'border-accent-400/40 bg-accent-400/[0.05]' : 'border-white/[0.06] bg-ink-850/60 hover:border-white/15',
+        'w-full rounded-xl border p-3.5 text-left transition',
+        active ? 'border-accent-400/40 bg-accent-400/[0.06]' : 'border-transparent bg-white/[0.03] hover:bg-white/[0.06]',
+        sup && 'opacity-75',
       )}
     >
       <div className="flex items-center gap-2">
         <Badge tone={tone} dot>
-          {a.status}
+          {sup ? 'superseded' : a.status}
         </Badge>
-        <span className="text-[11px] font-medium text-ink-400">{KIND_LABEL[a.kind]}</span>
-        <span className="num ml-auto text-[10.5px] text-ink-500">{dateTime(a.requested_at)}</span>
+        <span className="text-xs font-medium text-ink-400">{KIND_LABEL[a.kind]}</span>
+        <span className="num ml-auto text-xs text-ink-500">{dateTime(a.requested_at)}</span>
       </div>
-      <div className="mt-1.5 text-[13px] font-semibold text-ink-50">{a.title}</div>
-      <div className="mt-0.5 line-clamp-2 text-[12px] leading-snug text-ink-300">{a.summary}</div>
+      <div className={cx('mt-2 text-sm font-semibold text-ink-50', sup && 'line-through decoration-ink-400/60')}>{a.title}</div>
+      <div className="mt-1 line-clamp-2 text-[13px] leading-snug text-ink-300">{sup ? `Superseded by ${(a.decided_by ?? '').replace('system: superseded by ', '')}: ${a.comment ?? ''}` : a.summary}</div>
     </button>
   )
 }
@@ -105,13 +110,19 @@ function Detail({
       icon={a.kind === 'po_release' ? FileSignature : Award}
       subtitle={memo?.memo_id ?? a.po?.po_number}
       right={
-        <Badge tone={pending ? 'human' : a.status === 'approved' ? 'success' : 'danger'} dot>
-          {pending ? 'Awaiting decision' : `${a.status} by ${a.decided_by ?? '—'}`}
+        <Badge tone={pending ? 'human' : a.status === 'approved' ? 'success' : isSuperseded(a) ? 'neutral' : 'danger'} dot>
+          {pending ? 'Awaiting your decision' : isSuperseded(a) ? 'Superseded' : `${a.status} by ${a.decided_by ?? '—'}`}
         </Badge>
       }
       bodyClassName="p-6"
     >
-      <div className="grid grid-cols-[minmax(0,1fr)_340px] gap-8">
+      {isSuperseded(a) && (
+        <div data-testid="superseded-banner" className="mb-6 rounded-xl bg-white/[0.05] px-4 py-3 text-sm text-ink-200">
+          <span className="font-semibold text-ink-50">This request was superseded</span> by {(a.decided_by ?? '').replace('system: superseded by ', 'event ')}
+          {a.comment ? ` — ${a.comment}` : ''} The agent re-planned and asked again with a fresh memo.
+        </div>
+      )}
+      <div className="grid gap-8 2xl:grid-cols-[minmax(0,1fr)_340px]">
         <div className="min-w-0 space-y-6">
           {memo ? (
             <>
@@ -120,7 +131,7 @@ function Detail({
               </Section>
               <Section icon={ListChecks} title="Options">
                 <div className="overflow-hidden rounded-xl border border-white/[0.06]">
-                  <table className="w-full text-[12.5px]">
+                  <table className="w-full text-[13px]">
                     <thead className="bg-white/[0.025]">
                       <tr>
                         <th className="th w-10" />
@@ -162,7 +173,7 @@ function Detail({
                             </td>
                             <td className="td">
                               <div className="flex items-center gap-2">
-                                <span className="font-mono text-[11px] text-ink-400">{o.option_id}</span>
+                                <span className="font-mono text-xs text-ink-400">{o.option_id}</span>
                                 <span className="font-semibold text-ink-50">{o.vendor_name}</span>
                                 {o.option_id === memo.recommendation && (
                                   <Badge tone="accent">
@@ -170,7 +181,7 @@ function Detail({
                                   </Badge>
                                 )}
                               </div>
-                              <div className="mt-0.5 flex gap-2 text-[11px]">
+                              <div className="mt-0.5 flex gap-2 text-xs">
                                 {o.expedite_fee_inr > 0 && <span className="text-sky-300">incl. expedite {inr(o.expedite_fee_inr)}</span>}
                                 {o.budget_verdict === 'breach' && <span className="text-rose-300">infeasible · over budget</span>}
                                 {!o.meets_deadline && <span className="text-rose-300">infeasible · misses ROS</span>}
@@ -198,7 +209,7 @@ function Detail({
               </Section>
               <div className="grid grid-cols-2 gap-6">
                 <Section icon={Lightbulb} title="Recommendation & reasoning">
-                  <p className="text-[13.5px] leading-relaxed text-ink-200">{memo.reasoning}</p>
+                  <p className="text-sm leading-relaxed text-ink-200">{memo.reasoning}</p>
                 </Section>
                 <Section icon={ShieldAlert} title="Risks">
                   <ul className="space-y-2">
@@ -219,16 +230,16 @@ function Detail({
           )}
         </div>
 
-        <aside className="space-y-4">
+        <aside className="grid content-start gap-4 md:grid-cols-2 2xl:grid-cols-1">
           {memo && <RecCard memo={memo} budget={snap.goal.budget_inr} />}
           <div className="rounded-xl border border-violet-400/20 bg-violet-400/[0.05] p-4">
             <Label className="text-violet-300">The ask</Label>
-            <p className="mt-1.5 text-[13.5px] leading-relaxed text-ink-100">{memo?.asks ?? (a.kind === 'po_release' && a.po ? `Release ${a.po.po_number} to ${a.po.vendor_name}? On approval the agent dispatches it exactly once — the send is recorded under an idempotency key, so a crash or retry can never double-order.` : a.summary)}</p>
+            <p className="mt-1.5 text-sm leading-relaxed text-ink-100">{memo?.asks ?? (a.kind === 'po_release' && a.po ? `Release ${a.po.po_number} to ${a.po.vendor_name}? On approval the agent dispatches it exactly once — the send is recorded under an idempotency key, so a crash or retry can never double-order.` : a.summary)}</p>
           </div>
           {pending ? (
-            <div className="space-y-3 rounded-xl border border-white/[0.06] bg-ink-850/60 p-4">
+            <div className="space-y-3 rounded-xl bg-white/[0.03] p-4">
               {a.kind === 'vendor_selection' && opt && (
-                <div className="text-[12.5px] text-ink-300">
+                <div className="text-[13px] text-ink-300">
                   Selected: <span className="font-semibold text-ink-50">{options.find((o) => o.option_id === opt)?.vendor_name ?? opt}</span>
                 </div>
               )}
@@ -251,15 +262,15 @@ function Detail({
                   Reject
                 </Button>
               </div>
-              {killed && <p className="text-[11.5px] leading-snug text-orange-300">Worker is offline — your decision is stored and the run resumes from its checkpoint.</p>}
-              <p className="text-[11px] text-ink-500">Decision is recorded with idempotency key {a.id}</p>
+              {killed && <p className="text-xs leading-snug text-orange-300">Worker is offline — your decision is stored and the run resumes from its checkpoint.</p>}
+              <p className="text-xs text-ink-500">Decision is recorded with idempotency key {a.id}</p>
             </div>
           ) : (
-            <div className="space-y-2 rounded-xl border border-white/[0.06] bg-ink-850/60 p-4 text-[12.5px]">
+            <div className="space-y-2 rounded-xl bg-white/[0.03] p-4 text-[13px]">
               <div className="flex items-center gap-2 font-semibold">
-                {a.status === 'approved' ? <CheckCircle2 className="h-4 w-4 text-emerald-400" /> : <XCircle className="h-4 w-4 text-rose-400" />}
-                <span className="capitalize text-ink-50">{a.status}</span>
-                {a.decided_at && <span className="num ml-auto text-[11px] font-normal text-ink-400">{dateTime(a.decided_at)}</span>}
+                {a.status === 'approved' ? <CheckCircle2 className="h-4 w-4 text-emerald-400" /> : <XCircle className={cx('h-4 w-4', isSuperseded(a) ? 'text-ink-400' : 'text-rose-400')} />}
+                <span className="capitalize text-ink-50">{isSuperseded(a) ? 'Superseded' : a.status}</span>
+                {a.decided_at && <span className="num ml-auto text-xs font-normal text-ink-400">{dateTime(a.decided_at)}</span>}
               </div>
               {a.decided_option && <div className="text-ink-300">Option <span className="font-mono text-ink-100">{a.decided_option}</span></div>}
               <div className="text-ink-300">By {a.decided_by}</div>
@@ -280,7 +291,7 @@ function PoSummary({ a }: { a: ApprovalRequest }) {
         <p className="text-[14px] leading-relaxed text-ink-200">{a.summary}</p>
       </Section>
       <div className="overflow-hidden rounded-xl border border-white/[0.06]">
-        <table className="w-full text-[12.5px]">
+        <table className="w-full text-[13px]">
           <thead className="bg-white/[0.025]">
             <tr>
               <th className="th">#</th>
@@ -295,7 +306,7 @@ function PoSummary({ a }: { a: ApprovalRequest }) {
             {po.lines.map((l) => (
               <tr key={l.line_no} className="border-t border-white/[0.05]">
                 <td className="td num text-ink-400">{l.line_no}</td>
-                <td className="td font-mono text-[11.5px] text-accent-200">{l.item_code}</td>
+                <td className="td font-mono text-xs text-accent-200">{l.item_code}</td>
                 <td className="td text-ink-200">{l.description}</td>
                 <td className="td num text-right">{l.qty}</td>
                 <td className="td num text-right">{inrFull(l.unit_price_inr)}</td>
@@ -319,7 +330,7 @@ function PoSummary({ a }: { a: ApprovalRequest }) {
           </div>
         ))}
       </div>
-      <div className="text-[12.5px] text-ink-300">
+      <div className="text-[13px] text-ink-300">
         Delivery <span className="text-ink-100">{dayMonth(po.delivery_date)}</span> · {po.incoterms} · {po.payment_terms}
       </div>
     </div>
@@ -329,9 +340,9 @@ function PoSummary({ a }: { a: ApprovalRequest }) {
 function Section({ icon: Icon, title, children }: { icon: typeof Inbox; title: string; children: React.ReactNode }) {
   return (
     <section>
-      <div className="mb-2 flex items-center gap-2">
-        <Icon className="h-3.5 w-3.5 text-accent-400" />
-        <Label>{title}</Label>
+      <div className="mb-2.5 flex items-center gap-2">
+        <Icon className="h-4 w-4 text-accent-400" />
+        <h3 className="text-sm font-semibold text-ink-100">{title}</h3>
       </div>
       {children}
     </section>
@@ -347,7 +358,7 @@ function RecCard({ memo, budget }: { memo: NonNullable<ApprovalRequest['memo']>;
       <div className="flex items-center gap-2">
         <Award className="h-4 w-4 text-accent-300" />
         <Label className="text-accent-300">Agent recommends</Label>
-        <span className="ml-auto font-mono text-[11px] text-accent-200">{o.option_id}</span>
+        <span className="ml-auto font-mono text-xs text-accent-200">{o.option_id}</span>
       </div>
       <div className="mt-2 text-[16px] font-semibold text-ink-50">{o.vendor_name}</div>
       <div className="mt-3 grid grid-cols-3 gap-3">

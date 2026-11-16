@@ -1,39 +1,47 @@
-"""Access to the bundled synthetic data (vendor catalogue, scenarios, sample spec PDF)."""
+"""Backward-compatible access to bundled data (aliases for the default ``swgr-480v`` package).
+
+New code should use :mod:`sitemind.specialists.packages`.
+"""
 
 from __future__ import annotations
 
-import json
-from functools import lru_cache
-from pathlib import Path
 from typing import Any
 
-DATA_DIR = Path(__file__).resolve().parent.parent / "data"
-SPEC_PDF = DATA_DIR / "project_alpha_480V_switchgear_spec.pdf"
-SCENARIOS = ("demo", "happy")
+from sitemind.specialists.packages import (
+    DATA_DIR,
+    DEFAULT_PACKAGE,
+    SCENARIOS,
+    load_package_catalog,
+    load_package_scenario,
+    package_for_vendor,
+    package_spec_pdf,
+)
+
+SPEC_PDF = package_spec_pdf(DEFAULT_PACKAGE)
+
+__all__ = [
+    "DATA_DIR",
+    "SCENARIOS",
+    "SPEC_PDF",
+    "load_scenario",
+    "load_vendors",
+    "vendor_profile",
+]
 
 
-@lru_cache(maxsize=1)
-def _vendors_raw() -> str:
-    return (DATA_DIR / "vendors.json").read_text(encoding="utf-8")
-
-
-def load_vendors() -> dict[str, Any]:
-    """Return a fresh copy of ``data/vendors.json`` (catalogue, price tables, terms)."""
-    data: dict[str, Any] = json.loads(_vendors_raw())
-    return data
+def load_vendors(package_id: str = DEFAULT_PACKAGE) -> dict[str, Any]:
+    """Fresh copy of a package's ``vendors.json`` (default: switchgear)."""
+    return load_package_catalog(package_id)
 
 
 def vendor_profile(vendor_id: str) -> dict[str, Any]:
-    """Return one vendor's catalogue entry; raises ``KeyError`` for unknown vendors."""
-    profile: dict[str, Any] = load_vendors()["vendors"][vendor_id]
+    """One vendor's catalogue entry, searched across all packages; ``KeyError`` if unknown."""
+    profile: dict[str, Any] = load_package_catalog(package_for_vendor(vendor_id))["vendors"][
+        vendor_id
+    ]
     return profile
 
 
-def load_scenario(name: str = "demo") -> dict[str, Any]:
-    """Load ``data/scenario_<name>.json`` (``demo`` = injected failures, ``happy`` = none)."""
-    if name not in SCENARIOS:
-        raise ValueError(f"unknown scenario {name!r}; expected one of {SCENARIOS}")
-    data: dict[str, Any] = json.loads(
-        (DATA_DIR / f"scenario_{name}.json").read_text(encoding="utf-8")
-    )
-    return data
+def load_scenario(name: str = "demo", package_id: str = DEFAULT_PACKAGE) -> dict[str, Any]:
+    """Load ``scenario_<name>.json`` of a package (``demo`` = injected failures, ``happy`` = none)."""
+    return load_package_scenario(package_id, name)

@@ -101,7 +101,13 @@ def refresh_quotes(
                     outcome="revised",
                     at=now,
                     detail=f"{new.quote_id}: INR {q.total_inr:,.0f} -> {new.total_inr:,.0f} "
-                    f"({pct:+.1f}%). {new.notes}",
+                    f"({pct:+.1f}%)"
+                    + (
+                        f", lead {q.lead_time_days} -> {new.lead_time_days} d"
+                        if new.lead_time_days != q.lead_time_days
+                        else ""
+                    )
+                    + f". {new.notes}",
                 )
             )
         else:

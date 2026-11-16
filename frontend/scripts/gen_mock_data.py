@@ -59,6 +59,6 @@ out = {
     "memo": dump(memo),
     "pos": {k: dump(v) for k, v in pos.items()},
 }
-dest = Path(__file__).resolve().parents[1] / "src" / "mock" / "specialists.json"
+dest = Path(__file__).resolve().parents[1] / "src" / "mock" / "data" / "swgr-480v.json"
 dest.write_text(json.dumps(out, indent=1, ensure_ascii=False))
 print("wrote", dest, {k: len(v) if isinstance(v, (list, dict)) else 1 for k, v in out.items()})

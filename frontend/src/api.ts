@@ -1,6 +1,17 @@
 // REST client for the SiteMind FastAPI backend (see docs/CONTRACT.md). In VITE_MOCK=1 mode
 // every call is served by the in-browser mock in src/mock/server.ts.
-import type { ApprovalDecision, CreateRunRequest, Health, RunSnapshot, SpecialistSpec } from './types'
+import type {
+  ApprovalDecision,
+  CreateRunRequest,
+  EventTypeSpec,
+  GoalParseResult,
+  Health,
+  InjectEventRequest,
+  PackageSpec,
+  RunSnapshot,
+  SpecialistSpec,
+  SpecUpload,
+} from './types'
 import { mockApi } from './mock/server'
 
 export const IS_MOCK = import.meta.env.VITE_MOCK === '1' || new URLSearchParams(window.location.search).has('mock')
@@ -38,7 +49,18 @@ async function req<T>(path: string, init?: RequestInit & { json?: unknown }): Pr
 const realApi = {
   health: () => req<Health>('/health'),
   registry: () => req<SpecialistSpec[]>('/registry'),
-  defaults: () => req<CreateRunRequest>('/demo/defaults'),
+  defaults: (packageId?: string) =>
+    req<CreateRunRequest>(`/demo/defaults${packageId ? `?package_id=${encodeURIComponent(packageId)}` : ''}`),
+  packages: () => req<PackageSpec[]>('/packages'),
+  parseGoal: (text: string) => req<GoalParseResult>('/goal/parse', { method: 'POST', json: { text } }),
+  uploadSpec: async (file: File): Promise<SpecUpload> => {
+    const fd = new FormData()
+    fd.append('file', file)
+    return req<SpecUpload>('/specs', { method: 'POST', body: fd })
+  },
+  eventTypes: () => req<EventTypeSpec[]>('/event-types'),
+  injectEvent: (id: string, body: InjectEventRequest) =>
+    req<RunSnapshot>(`/runs/${encodeURIComponent(id)}/events`, { method: 'POST', json: body }),
   listRuns: () => req<RunSnapshot[]>('/runs'),
   createRun: (body: CreateRunRequest) => req<RunSnapshot>('/runs', { method: 'POST', json: body }),
   getRun: (id: string) => req<RunSnapshot>(`/runs/${encodeURIComponent(id)}`),

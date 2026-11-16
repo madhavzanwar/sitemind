@@ -6,6 +6,7 @@ WAL mode with a busy timeout, and writes that must be atomic use ``BEGIN IMMEDIA
 
 from __future__ import annotations
 
+import contextlib
 import json
 import os
 import sqlite3
@@ -21,7 +22,9 @@ from .models import (
     ApprovalRequest,
     AuditEntry,
     Goal,
+    InjectedEvent,
     LedgerEntry,
+    SpecUpload,
     TimelineEvent,
 )
 
@@ -110,7 +113,36 @@ CREATE TABLE IF NOT EXISTS outbox (
     sender_pid INTEGER
 );
 CREATE INDEX IF NOT EXISTS outbox_run ON outbox(run_id);
+CREATE TABLE IF NOT EXISTS events (
+    run_id TEXT NOT NULL,
+    id TEXT NOT NULL,
+    seq INTEGER NOT NULL,
+    type TEXT NOT NULL,
+    vendor_id TEXT,
+    params TEXT NOT NULL DEFAULT '{}',
+    note TEXT,
+    status TEXT NOT NULL,
+    received_at TEXT NOT NULL,
+    applied_sim_time TEXT,
+    outcome TEXT,
+    triggers TEXT NOT NULL DEFAULT '[]',
+    PRIMARY KEY (run_id, id)
+);
+CREATE TABLE IF NOT EXISTS uploads (
+    upload_id TEXT PRIMARY KEY,
+    path TEXT NOT NULL,
+    data TEXT NOT NULL,
+    created TEXT NOT NULL
+);
 """
+
+# columns added after v1 (ALTER TABLE for databases created by older builds)
+MIGRATIONS = {
+    "runs": {
+        "package_id": "TEXT NOT NULL DEFAULT 'swgr-480v'",
+        "spec_path": "TEXT",
+    },
+}
 
 
 def utcnow() -> datetime:
@@ -180,6 +212,8 @@ class RunRow:
     step_delay: float | None
     created: datetime
     updated: datetime
+    package_id: str = "swgr-480v"
+    spec_path: str | None = None
 
 
 class Store:
@@ -190,6 +224,12 @@ class Store:
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
         with self._conn() as c:
             c.executescript(SCHEMA)
+            for table, cols in MIGRATIONS.items():
+                have = {r["name"] for r in c.execute(f"PRAGMA table_info({table})")}
+                for col, decl in cols.items():
+                    if col not in have:
+                        with contextlib.suppress(sqlite3.OperationalError):  # concurrent add
+                            c.execute(f"ALTER TABLE {table} ADD COLUMN {col} {decl}")
 
     # ------------------------------------------------------------------ plumbing
     @contextmanager
@@ -224,12 +264,15 @@ class Store:
         scenario: str,
         sim_start: datetime,
         step_delay: float | None = None,
+        *,
+        package_id: str = "swgr-480v",
+        spec_path: str | None = None,
     ) -> RunRow:
         now = _iso(None)
         with self._tx() as c:
             c.execute(
                 "INSERT INTO runs(run_id, goal, scenario, status, sim_now, sim_start, step_delay,"
-                " created, updated) VALUES (?,?,?,?,?,?,?,?,?)",
+                " created, updated, package_id, spec_path) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
                 (
                     run_id,
                     goal.model_dump_json(),
@@ -240,6 +283,8 @@ class Store:
                     step_delay,
                     now,
                     now,
+                    package_id,
+                    spec_path,
                 ),
             )
         row = self.get_run(run_id)
@@ -265,6 +310,8 @@ class Store:
             step_delay=r["step_delay"],
             created=datetime.fromisoformat(r["created"]),
             updated=datetime.fromisoformat(r["updated"]),
+            package_id=r["package_id"] or "swgr-480v",
+            spec_path=r["spec_path"],
         )
 
     def get_run(self, run_id: str) -> RunRow | None:
@@ -650,3 +697,117 @@ class Store:
             d["payload"] = json.loads(d["payload"])
             out.append(d)
         return out
+
+    # ------------------------------------------------------------------ live events (v2)
+    def add_event(
+        self,
+        run_id: str,
+        *,
+        type: str,
+        vendor_id: str | None,
+        params: dict[str, Any],
+        note: str | None,
+        status: str = "pending",
+        outcome: str | None = None,
+    ) -> InjectedEvent:
+        """Record an injected event; ids are ``ev-<n>`` per run, allocated atomically."""
+        with self._tx() as c:
+            seq = int(
+                c.execute(
+                    "SELECT COALESCE(MAX(seq),0)+1 FROM events WHERE run_id=?", (run_id,)
+                ).fetchone()[0]
+            )
+            eid = f"ev-{seq}"
+            c.execute(
+                "INSERT INTO events(run_id, id, seq, type, vendor_id, params, note, status,"
+                " received_at, outcome) VALUES (?,?,?,?,?,?,?,?,?,?)",
+                (
+                    run_id,
+                    eid,
+                    seq,
+                    type,
+                    vendor_id,
+                    _dump(params),
+                    note,
+                    status,
+                    _iso(None),
+                    outcome,
+                ),
+            )
+        ev = self.get_event(run_id, eid)
+        assert ev is not None
+        return ev
+
+    @staticmethod
+    def _event_from_row(r: sqlite3.Row) -> InjectedEvent:
+        return InjectedEvent(
+            id=r["id"],
+            run_id=r["run_id"],
+            type=r["type"],
+            vendor_id=r["vendor_id"],
+            params=json.loads(r["params"]),
+            note=r["note"],
+            status=r["status"],
+            received_at=datetime.fromisoformat(r["received_at"]),
+            applied_sim_time=(
+                datetime.fromisoformat(r["applied_sim_time"]) if r["applied_sim_time"] else None
+            ),
+            outcome=r["outcome"],
+            triggers=json.loads(r["triggers"]),
+        )
+
+    def get_event(self, run_id: str, event_id: str) -> InjectedEvent | None:
+        with self._conn() as c:
+            r = c.execute(
+                "SELECT * FROM events WHERE run_id=? AND id=?", (run_id, event_id)
+            ).fetchone()
+        return self._event_from_row(r) if r else None
+
+    def list_events(self, run_id: str, status: str | None = None) -> list[InjectedEvent]:
+        q = "SELECT * FROM events WHERE run_id=?"
+        params: tuple[Any, ...] = (run_id,)
+        if status:
+            q += " AND status=?"
+            params = (run_id, status)
+        with self._conn() as c:
+            rows = c.execute(q + " ORDER BY seq", params).fetchall()
+        return [self._event_from_row(r) for r in rows]
+
+    def update_event(
+        self,
+        run_id: str,
+        event_id: str,
+        *,
+        status: str,
+        outcome: str | None = None,
+        applied_sim_time: datetime | None = None,
+        triggers: list[str] | None = None,
+    ) -> None:
+        with self._tx() as c:
+            c.execute(
+                "UPDATE events SET status=?, outcome=?, applied_sim_time=?, triggers=?"
+                " WHERE run_id=? AND id=?",
+                (
+                    status,
+                    outcome,
+                    applied_sim_time.isoformat() if applied_sim_time else None,
+                    _dump(triggers or []),
+                    run_id,
+                    event_id,
+                ),
+            )
+
+    # ------------------------------------------------------------------ spec uploads (v2)
+    def save_upload(self, upload: SpecUpload, path: str) -> None:
+        with self._tx() as c:
+            c.execute(
+                "INSERT OR REPLACE INTO uploads(upload_id, path, data, created) VALUES (?,?,?,?)",
+                (upload.upload_id, path, upload.model_dump_json(), _iso(None)),
+            )
+
+    def get_upload(self, upload_id: str) -> tuple[SpecUpload, str] | None:
+        with self._conn() as c:
+            r = c.execute(
+                "SELECT path, data FROM uploads WHERE upload_id=?", (upload_id,)
+            ).fetchone()
+        return (SpecUpload.model_validate_json(r["data"]), r["path"]) if r else None

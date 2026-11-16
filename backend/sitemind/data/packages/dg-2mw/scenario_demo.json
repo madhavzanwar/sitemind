@@ -1,0 +1,35 @@
+{
+  "package_id": "dg-2mw",
+  "name": "demo",
+  "description": "Deterministic chaos for the DG package: D1 omits its CPCB IV+ emissions certificate, D2 revises its price +15% on refresh (USD/INR + steel), D3's lead time slips 45 days on refresh and misses the commissioning window.",
+  "required_on_site": "2027-11-15",
+  "need_by": "2027-04-30",
+  "sim_start": "2027-01-11T09:00:00+05:30",
+  "vendors": {
+    "D1": {
+      "timeout_on_attempts": [],
+      "revision_on_refresh": null,
+      "missing_documents": [
+        "CPCB IV+ emissions type-approval certificate"
+      ]
+    },
+    "D2": {
+      "timeout_on_attempts": [],
+      "revision_on_refresh": {
+        "price_uplift_pct": 15.0,
+        "withdraw_discount": false,
+        "lead_time_delta_days": 0,
+        "reason": "+15% - USD/INR movement on imported engine blocks and HR-steel escalation on enclosures and tanks; 15-day validity lapsed"
+      }
+    },
+    "D3": {
+      "timeout_on_attempts": [],
+      "revision_on_refresh": {
+        "price_uplift_pct": 0.0,
+        "withdraw_discount": false,
+        "lead_time_delta_days": 45,
+        "reason": "Lead time slips +45 days: sister-plant alternator line re-allocated to an export order"
+      }
+    }
+  }
+}

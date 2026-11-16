@@ -1,0 +1,46 @@
+{
+  "package_id": "swgr-480v",
+  "title": "480 V switchgear",
+  "description": "Main LV switchgear line-ups, tie and feeder breakers, ATS, PQ meters, SPDs and Cu busway for the 24 MW data hall.",
+  "keywords": ["switchgear", "switchboard", "480 v", "480v", "lv panel", "lv switchgear", "acb", "busway", "breakers"],
+  "spec_document": "project_alpha_480V_switchgear_spec.pdf",
+  "vendor_ids": ["V1", "V2", "V3"],
+  "default_goal_text": "Get the 480 V switchgear package for Project Alpha ordered by 2027-03-15 within budget ₹4.6 Cr",
+  "default_project": "Project Alpha",
+  "default_need_by": "2027-03-15",
+  "default_budget_inr": 46000000,
+  "required_on_site": "2027-07-30",
+  "categories": [
+    {"id": "switchgear-lineup", "title": "Switchgear lineup", "item_codes": ["SWGR-MAIN-4000A"],
+     "keywords": ["switchgear lineup", "switchboard", "lineup", "line-up", "lv panel", "pcc", "main lv"]},
+    {"id": "breaker", "title": "Circuit breaker", "item_codes": ["BKR-TIE-4000A", "BKR-FDR-1600A", "BKR-FDR-800A"],
+     "keywords": ["breaker", "acb", "mccb", "vcb", "bus-tie", "feeder"]},
+    {"id": "ats", "title": "Automatic transfer switch", "item_codes": ["ATS-1200A-4P"],
+     "keywords": ["transfer switch", "ats", "changeover"]},
+    {"id": "metering", "title": "Metering", "item_codes": ["MTR-PQ-02S"],
+     "keywords": ["meter", "metering", "power quality", "multifunction"]},
+    {"id": "surge", "title": "Surge protection", "item_codes": ["SPD-T1-200KA"],
+     "keywords": ["surge", "spd", "lightning"]},
+    {"id": "busway", "title": "Busway / bus duct", "item_codes": ["BUSWAY-4000A-CU"],
+     "keywords": ["busway", "bus duct", "busduct", "bus trunking", "rising main"]}
+  ],
+  "cross_checks": [
+    {"item_code": "SWGR-MAIN-4000A", "page_marker": "SINGLE-LINE DIAGRAM", "mode": "count_unique", "pattern": "\\bSWGR-([A-Z]\\d) 4000A\\b", "what": "SWGR-xx incomer tags"},
+    {"item_code": "BKR-TIE-4000A", "page_marker": "SINGLE-LINE DIAGRAM", "mode": "count_unique", "pattern": "\\b(TIE-[A-Z]) 4000A\\b", "what": "TIE-x tags"},
+    {"item_code": "BKR-FDR-1600A", "page_marker": "SINGLE-LINE DIAGRAM", "mode": "count_unique", "pattern": "\\bFDR ([A-Z]\\d-\\d{2}) 1600A\\b", "what": "FDR xx-nn 1600A tags"},
+    {"item_code": "BKR-FDR-800A", "page_marker": "SINGLE-LINE DIAGRAM", "mode": "count_unique", "pattern": "\\bFDR ([A-Z]\\d-\\d{2}) 800A\\b", "what": "FDR xx-nn 800A tags"},
+    {"item_code": "ATS-1200A-4P", "page_marker": "SINGLE-LINE DIAGRAM", "mode": "count_unique", "pattern": "\\b(ATS-\\d) 1200A\\b", "what": "ATS-n tags"},
+    {"item_code": "MTR-PQ-02S", "page_marker": "SINGLE-LINE DIAGRAM", "mode": "count_unique", "pattern": "\\b(PQM-[A-Z0-9-]+)\\b", "what": "PQM-xx tags"},
+    {"item_code": "SPD-T1-200KA", "page_marker": "SINGLE-LINE DIAGRAM", "mode": "count_unique", "pattern": "\\b(SPD-[A-Z]\\d) 200kA\\b", "what": "SPD-xx tags"},
+    {"item_code": "BUSWAY-4000A-CU", "page_marker": "SINGLE-LINE DIAGRAM", "mode": "sum", "pattern": "\\bBD-[A-Z]\\d\\s+BUSWAY\\s+4000A\\s+CU\\s+(\\d+)\\s*m\\b", "what": "BD-xx run lengths (linear, m)"}
+  ],
+  "po_terms": [
+    "Liquidated damages: 0.5% of order value per week (or part) of delay beyond the contractual delivery date, capped at 10% of order value.",
+    "Warranty: 24 months from energisation or 30 months from delivery, whichever is earlier; defects rectified at site within 72 h of notice.",
+    "Factory acceptance test: witnessed by Owner and Engineer (5 days) with 14 days' notice; despatch only after signed FAT report and release note.",
+    "Submittals: GA, SLD, wiring diagrams and protection coordination study within 14 days of PO; Engineer review 10 days; manufacture only on approved drawings.",
+    "Compliance: IEC 61439-1/-2 type-tested assemblies, 65 kA 1 s, arc-fault containment per IEC TR 61641; type-test certificates with the first submittal.",
+    "Bank guarantees: advance against ABG of equal value; 10% performance bank guarantee valid for the warranty period plus 3 months.",
+    "Price basis: firm, ex-GST; GST 18% charged on invoice per prevailing law."
+  ]
+}

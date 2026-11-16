@@ -43,6 +43,7 @@ export default {
       keyframes: {
         'fade-up': { from: { opacity: '0', transform: 'translateY(6px)' }, to: { opacity: '1', transform: 'none' } },
         'slide-in': { from: { opacity: '0', transform: 'translateX(24px)' }, to: { opacity: '1', transform: 'none' } },
+        'fade-in': { from: { opacity: '0' }, to: { opacity: '1' } },
         pulseRing: {
           '0%': { boxShadow: '0 0 0 0 rgba(255,178,36,0.5)' },
           '70%': { boxShadow: '0 0 0 8px rgba(255,178,36,0)' },
@@ -53,7 +54,8 @@ export default {
       },
       animation: {
         'fade-up': 'fade-up .35s cubic-bezier(.2,.8,.2,1) both',
-        'slide-in': 'slide-in .4s cubic-bezier(.2,.8,.2,1) both',
+        'slide-in': 'slide-in .28s cubic-bezier(.2,.8,.2,1) both',
+        'fade-in': 'fade-in .2s ease-out both',
         'pulse-ring': 'pulseRing 1.6s ease-out infinite',
         scan: 'scan 2.2s linear infinite',
         dash: 'dash 1s linear infinite',

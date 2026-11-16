@@ -72,14 +72,14 @@ export function PoPackage({ snap }: { snap: RunSnapshot }) {
                   >
                     <s.icon className="h-4 w-4" />
                   </div>
-                  <span className={cx('text-[11px] font-medium', s.done ? 'text-ink-100' : 'text-ink-500')}>{s.label}</span>
+                  <span className={cx('text-xs font-medium', s.done ? 'text-ink-100' : 'text-ink-500')}>{s.label}</span>
                 </div>
                 {i < stages.length - 1 && <div className={cx('mx-2 mb-5 h-px flex-1', stages[i + 1]!.done ? 'bg-emerald-400/50' : 'bg-white/10')} />}
               </div>
             ))}
           </div>
           {po.issued_at && (
-            <div className="mt-3 text-center text-[12px] text-ink-300">
+            <div className="mt-3 text-center text-[13px] text-ink-300">
               Issued <span className="num text-ink-100">{dateTime(po.issued_at)}</span> ·{' '}
               <span className="text-emerald-300">{Math.round((Date.parse(`${snap.goal.need_by}T00:00:00+05:30`) - Date.parse(po.issued_at)) / 86_400_000)} d before need-by</span>
             </div>
@@ -105,14 +105,14 @@ export function PoPackage({ snap }: { snap: RunSnapshot }) {
                 {inr(po.total_inr)}
               </dd>
             </div>
-            <div className="text-right font-mono text-[11px] text-ink-500">{inrFull(po.total_inr)}</div>
+            <div className="text-right font-mono text-xs text-ink-500">{inrFull(po.total_inr)}</div>
           </dl>
           <Button data-testid="po-download" variant="primary" icon={Download} className="mt-4 w-full" onClick={() => void download()}>
             Download PO package (.md)
           </Button>
         </Card>
 
-        <Card title="Delivery & terms" icon={Truck} bodyClassName="space-y-3 p-4 text-[12.5px]">
+        <Card title="Delivery & terms" icon={Truck} bodyClassName="space-y-3 p-4 text-[13px]">
           <div className="flex justify-between">
             <span className="text-ink-400">Delivery</span>
             <span className="num text-ink-100">{fullDate(po.delivery_date)}</span>
@@ -135,11 +135,11 @@ export function PoPackage({ snap }: { snap: RunSnapshot }) {
 
         <Card title="Approval chain" icon={CheckCircle2} bodyClassName="space-y-2.5 p-4">
           {appr.map((a) => (
-            <div key={a.id} className="flex items-start gap-2.5 text-[12.5px]">
+            <div key={a.id} className="flex items-start gap-2.5 text-[13px]">
               {a.status === 'approved' ? <CheckCircle2 className="mt-0.5 h-4 w-4 text-emerald-400" /> : <Clock className="mt-0.5 h-4 w-4 text-violet-300" />}
               <div className="min-w-0">
                 <div className="text-ink-100">{a.title}</div>
-                <div className="text-[11.5px] text-ink-400">
+                <div className="text-xs text-ink-400">
                   {a.status === 'approved' ? `${a.decided_by} · ${a.decided_at ? dateTime(a.decided_at) : ''}` : 'pending'}
                 </div>
               </div>

@@ -18,7 +18,7 @@ import subprocess
 import sys
 import time
 import traceback
-from datetime import datetime
+from datetime import date, datetime
 from pathlib import Path
 from typing import Any
 
@@ -26,11 +26,13 @@ from langgraph.types import Command
 
 from .config import IST, SIM_START, Settings, get_settings
 from .graph import (
+    EVENT_TYPES,
     build_graph,
     count_checkpoints,
     initial_state,
     make_runtime,
     open_checkpointer,
+    package_scenario,
 )
 from .llm import LLM
 from .models import (
@@ -38,7 +40,11 @@ from .models import (
     ApprovalStatus,
     BudgetBurn,
     CreateRunRequest,
+    EventType,
     Goal,
+    InjectedEvent,
+    InjectEventRequest,
+    PackageSpec,
     Plan,
     PurchaseOrder,
     Quote,
@@ -51,7 +57,7 @@ from .models import (
     VendorOption,
     WorkerInfo,
 )
-from .specialists._data import load_scenario
+from .specialists.packages import get_package
 from .store import Store, pid_alive, utcnow
 
 ACTIVE = {"running", "created"}
@@ -101,7 +107,15 @@ def _decision_for(store: Store, approval_id: str | None) -> dict[str, Any] | Non
     }
 
 
-def run_worker(run_id: str, resume_value: dict[str, Any] | None = None) -> str:
+def _unapplied_events(store: Store, run_id: str) -> list[InjectedEvent]:
+    return [e for e in store.list_events(run_id, "pending") if e.type != EventType.restart]
+
+
+def run_worker(
+    run_id: str,
+    resume_value: dict[str, Any] | None = None,
+    on_step: Any = None,
+) -> str:
     """Run the graph for ``run_id`` until completion / human wait. Returns final status."""
     settings = get_settings()
     store = get_store(settings)
@@ -127,6 +141,7 @@ def run_worker(run_id: str, resume_value: dict[str, Any] | None = None) -> str:
         run_id, pid=os.getpid(), status="running", worker_started_at=utcnow(), error=None
     )
     rt = make_runtime(run_id, store, settings)
+    rt.on_step = on_step
     saver, conn = open_checkpointer(settings)
     try:
         graph = build_graph(rt, saver)
@@ -139,6 +154,8 @@ def run_worker(run_id: str, resume_value: dict[str, Any] | None = None) -> str:
             pending = _pending_interrupt(snap)
             if pending is not None:
                 decision = resume_value or _decision_for(store, pending.get("approval_id"))
+                if decision is None and _unapplied_events(store, run_id):
+                    decision = {"decision": "wake"}  # live event: leave the approval wait
                 if decision is None:
                     store.update_run(run_id, status="waiting_human")
                     return "waiting_human"
@@ -182,6 +199,15 @@ def run_worker(run_id: str, resume_value: dict[str, Any] | None = None) -> str:
             store.update_run(run_id, status=status)
         else:
             status = "running"
+        if status in ("completed", "failed"):
+            for ev in store.list_events(run_id, "pending"):
+                store.update_event(
+                    run_id, ev.id, status="ignored", outcome=f"Run already {status}."
+                )
+        elif status == "waiting_human" and _unapplied_events(store, run_id):
+            # an event arrived while this worker was parking: process it now
+            print(f"[worker {os.getpid()}] pending events while parked; re-waking", flush=True)
+            return run_worker(run_id, {"decision": "wake"}, on_step)
         print(f"[worker {os.getpid()}] run {run_id} -> {status}", flush=True)
         return status
     except Exception as exc:
@@ -228,27 +254,121 @@ def new_run_id() -> str:
     return f"run-{datetime.now(IST):%Y%m%d-%H%M%S}-{secrets.token_hex(2)}"
 
 
+def package_spec(package_id: str) -> PackageSpec | None:
+    try:
+        return get_package(package_id)
+    except KeyError:
+        return None
+
+
 def create_run(req: CreateRunRequest, *, spawn: bool = True) -> RunSnapshot:
     store = get_store()
-    scenario = load_scenario(req.scenario)
+    pkg = package_spec(req.package_id)
+    if pkg is None:
+        raise RunError(422, f"unknown package {req.package_id!r}; see GET /api/packages")
+    scenario = package_scenario(req.package_id, req.scenario)
     sim_start = datetime.fromisoformat(scenario.get("sim_start", SIM_START.isoformat()))
-    ros = scenario.get("required_on_site")
+    ros = scenario.get("required_on_site") or (pkg.required_on_site.isoformat() if pkg else None)
+    package_title = req.package
+    if pkg is not None and req.package == CreateRunRequest.model_fields["package"].default:
+        package_title = pkg.title  # request left the v1 default: use the package's own title
+    spec_path: str | None = None
+    if req.spec_upload_id:
+        up = store.get_upload(req.spec_upload_id)
+        if up is None:
+            raise RunError(404, f"unknown spec upload {req.spec_upload_id}")
+        spec_path = up[1]
     goal = Goal(
         text=req.goal_text,
         project=req.project,
-        package=req.package,
+        package=package_title,
         need_by=req.need_by,
-        required_on_site=datetime.fromisoformat(ros).date() if ros else None,
+        required_on_site=date.fromisoformat(str(ros)[:10]) if ros else None,
         budget_inr=req.budget_inr,
     )
     run_id = new_run_id()
-    store.create_run(run_id, goal, req.scenario, sim_start, req.step_delay_s)
+    store.create_run(
+        run_id,
+        goal,
+        req.scenario,
+        sim_start,
+        req.step_delay_s,
+        package_id=req.package_id,
+        spec_path=spec_path,
+    )
     store.add_timeline(
         run_id,
         TimelineEvent(sim_time=sim_start, lane="system", label="Run created", kind="info"),
     )
     if req.auto_start and spawn:
         spawn_worker(run_id)
+    return snapshot(run_id)
+
+
+def inject_event(run_id: str, req: InjectEventRequest, *, spawn: bool = True) -> RunSnapshot:
+    """Record a live event and make sure a worker processes it now."""
+    store = get_store()
+    run = store.get_run(run_id)
+    if run is None:
+        raise RunError(404, "run not found")
+    spec = next((e for e in EVENT_TYPES if e.type == req.type), None)
+    if spec is not None and spec.needs_vendor and not req.vendor_id:
+        raise RunError(422, f"{req.type.value} needs a vendor_id")
+    if req.type == EventType.date_slip and (
+        req.params.get("target", "lead_time") == "lead_time" and not req.vendor_id
+    ):
+        raise RunError(422, "date_slip on lead_time needs a vendor_id")
+    vendors = make_runtime(run_id, store).network.vendor_ids()
+    if req.vendor_id and req.vendor_id not in vendors:
+        raise RunError(422, f"unknown vendor {req.vendor_id}; this package has {vendors}")
+    params = {
+        p.name: req.params.get(p.name, p.default) for p in (spec.params if spec else [])
+    } | dict(req.params)
+    if run.status in ("completed", "failed"):
+        store.add_event(
+            run_id,
+            type=req.type.value,
+            vendor_id=req.vendor_id,
+            params=params,
+            note=req.note,
+            status="ignored",
+            outcome=f"Ignored: run already {run.status}.",
+        )
+        return snapshot(run_id)
+    ev = store.add_event(
+        run_id, type=req.type.value, vendor_id=req.vendor_id, params=params, note=req.note
+    )
+    store.add_timeline(
+        run_id,
+        TimelineEvent(
+            sim_time=run.sim_now,
+            lane="human",
+            label=f"Injected {ev.id}: {ev.type.value} {ev.vendor_id or ''}".strip(),
+            kind="human",
+        ),
+        dedupe_key=f"{run_id}:inject:{ev.id}",
+    )
+    if req.type == EventType.restart:
+        alive = bool(run.pid and pid_alive(run.pid))
+        kill_run(run_id)
+        n = count_checkpoints(get_settings(), run_id)
+        if spawn and run.status != "created":
+            spawn_worker(run_id)
+        store.update_event(
+            run_id,
+            ev.id,
+            status="applied",
+            outcome=(
+                f"Worker pid {run.pid} {'SIGKILLed' if alive else 'was not running'}; a new "
+                f"worker resumes from checkpoint #{n}."
+            ),
+            applied_sim_time=run.sim_now,
+        )
+        return snapshot(run_id)
+    if spawn and run.status != "created":
+        alive = bool(run.pid and pid_alive(run.pid))
+        if run.status in ("waiting_human", "killed") or not alive:
+            spawn_worker(run_id)
     return snapshot(run_id)
 
 
@@ -411,6 +531,8 @@ def snapshot(run_id: str, *, light: bool = False) -> RunSnapshot:
         current_node=run.current_node,
         llm=llm,
         error=run.error,
+        package_id=run.package_id,
+        events=store.list_events(run_id),
     )
 
 

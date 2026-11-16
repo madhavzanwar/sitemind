@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import secrets
 import threading
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
@@ -9,25 +10,40 @@ from datetime import date
 from pathlib import Path
 from typing import Any
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, PlainTextResponse, Response
 
 from . import __version__
 from .config import get_settings
+from .graph import EVENT_TYPES
 from .llm import LLM
-from .models import ApprovalDecision, CreateRunRequest, RunSnapshot, SpecialistSpec
+from .models import (
+    ApprovalDecision,
+    CreateRunRequest,
+    EventTypeSpec,
+    GoalParseRequest,
+    GoalParseResult,
+    InjectEventRequest,
+    PackageSpec,
+    RunSnapshot,
+    SpecialistSpec,
+    SpecUpload,
+)
 from .runner import (
     RunError,
     create_run,
     decide_approval,
     get_store,
+    inject_event,
     kill_run,
     list_snapshots,
     resume_run,
     snapshot,
 )
+from .specialists.packages import get_package, list_packages, match_package
 from .specialists.registry import REGISTRY
+from .specialists.takeoff import run_takeoff
 
 
 @asynccontextmanager
@@ -46,17 +62,27 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-DEMO_DEFAULTS = CreateRunRequest(
-    goal_text=(
-        "Get the 480 V switchgear package for Project Alpha ordered by 2027-03-15 "
-        "within budget ₹4.6 Cr"
-    ),
-    project="Project Alpha",
-    package="480 V switchgear",
-    need_by=date(2027, 3, 15),
-    budget_inr=46_000_000,
-    scenario="demo",
-)
+MAX_UPLOAD_BYTES = 10 * 1024 * 1024
+
+
+def demo_defaults_for(package_id: str = "swgr-480v") -> CreateRunRequest:
+    """The demo goal for a package, straight from its ``package.json``."""
+    try:
+        pkg = get_package(package_id)
+    except KeyError as exc:
+        raise HTTPException(404, f"unknown package {package_id!r}") from exc
+    return CreateRunRequest(
+        goal_text=pkg.default_goal_text,
+        project=pkg.default_project,
+        package=pkg.title,
+        need_by=pkg.default_need_by,
+        budget_inr=pkg.default_budget_inr,
+        scenario="demo",
+        package_id=pkg.package_id,
+    )
+
+
+DEMO_DEFAULTS = demo_defaults_for("swgr-480v")
 
 
 def _call(fn: Any, *args: Any, **kw: Any) -> Any:
@@ -129,8 +155,87 @@ def po_markdown(run_id: str) -> Response:
 
 
 @app.get("/api/demo/defaults", response_model=CreateRunRequest)
-def demo_defaults() -> CreateRunRequest:
-    return DEMO_DEFAULTS
+def demo_defaults(package_id: str = "swgr-480v") -> CreateRunRequest:
+    return demo_defaults_for(package_id)
+
+
+# --------------------------------------------------------------------------- v2: packages,
+# goal parsing, spec upload, live events
+
+
+@app.get("/api/packages", response_model=list[PackageSpec])
+def packages() -> list[PackageSpec]:
+    return list_packages()
+
+
+def _parse_goal_fn() -> Any:
+    import importlib
+
+    for mod in ("sitemind.specialists", "sitemind.specialists.goal", "sitemind.specialists.goals"):
+        try:
+            f = getattr(importlib.import_module(mod), "parse_goal", None)
+        except ImportError:
+            f = None
+        if f is not None:
+            return f
+    raise HTTPException(503, "goal parser not available")
+
+
+@app.post("/api/goal/parse", response_model=GoalParseResult)
+def goal_parse(req: GoalParseRequest) -> GoalParseResult:
+    res: GoalParseResult = _parse_goal_fn()(req.text, date.today())
+    return res
+
+
+@app.post("/api/specs", response_model=SpecUpload)
+async def upload_spec(file: UploadFile = File(...)) -> SpecUpload:
+    data = await file.read(MAX_UPLOAD_BYTES + 1)
+    if len(data) > MAX_UPLOAD_BYTES:
+        raise HTTPException(413, "spec PDF larger than 10 MB")
+    if not data.startswith(b"%PDF"):
+        raise HTTPException(415, "not a PDF file")
+    settings = get_settings()
+    updir = settings.data_dir / "uploads"
+    updir.mkdir(parents=True, exist_ok=True)
+    upload_id = f"up-{secrets.token_hex(6)}"
+    path = updir / f"{upload_id}.pdf"
+    path.write_bytes(data)
+    try:
+        import pdfplumber
+
+        with pdfplumber.open(path) as pdf:
+            pages = len(pdf.pages)
+            text = "\n".join((pg.extract_text() or "") for pg in pdf.pages[:6])
+    except Exception as exc:
+        path.unlink(missing_ok=True)
+        raise HTTPException(422, f"unreadable PDF: {type(exc).__name__}") from exc
+    package_id = match_package(text)[0]
+    takeoff = None
+    try:
+        takeoff = run_takeoff(path, package_id)
+    except Exception:  # preview is best effort; the run's takeoff task reports problems
+        takeoff = None
+    up = SpecUpload(
+        upload_id=upload_id,
+        filename=Path(file.filename or "spec.pdf").name,
+        pages=pages,
+        size_bytes=len(data),
+        package_id=package_id,
+        takeoff=takeoff,
+    )
+    get_store().save_upload(up, str(path))
+    return up
+
+
+@app.get("/api/event-types", response_model=list[EventTypeSpec])
+def event_types() -> list[EventTypeSpec]:
+    return list(EVENT_TYPES)
+
+
+@app.post("/api/runs/{run_id}/events", response_model=RunSnapshot)
+def post_event(run_id: str, req: InjectEventRequest) -> RunSnapshot:
+    snap: RunSnapshot = _call(inject_event, run_id, req)
+    return snap
 
 
 # --------------------------------------------------------------------------- SPA

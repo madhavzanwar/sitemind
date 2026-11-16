@@ -1,25 +1,31 @@
 // Mock implementation of the SiteMind REST API (VITE_MOCK=1). Runs progress in-browser on a timer.
-import type { ApprovalDecision, CreateRunRequest, Health, RunSnapshot, SpecialistSpec } from '../types'
+import type {
+  ApprovalDecision,
+  CreateRunRequest,
+  EventTypeSpec,
+  GoalParseResult,
+  Health,
+  InjectEventRequest,
+  PackageSpec,
+  RunSnapshot,
+  SpecialistSpec,
+  SpecUpload,
+} from '../types'
 import { MockEngine } from './engine'
-import { DEFAULTS } from './scenario'
+import { defaultsFor, EVENT_TYPES, PACKAGES, STORIES } from './packages'
+import { parseGoal } from './parse'
 
-export type FixtureStage = 'planning' | 'quotes' | 'replan' | 'approval' | 'killed' | 'po-approval' | 'completed'
+export type FixtureStage = 'planning' | 'quotes' | 'replan' | 'approval' | 'killed' | 'po-approval' | 'completed' | 'event' | 'dg-approval' | 'dg-completed'
 
 const runs = new Map<string, MockEngine>()
 const timers = new Map<string, number>()
 let runSeq = 0
 
-function clone<T>(x: T): T {
-  return structuredClone(x)
-}
+const clone = <T,>(x: T): T => structuredClone(x)
 
 function schedule(id: string, delayMs: number) {
   if (timers.has(id)) return
-  const h = window.setInterval(() => {
-    const e = runs.get(id)
-    if (!e) return
-    e.tick()
-  }, delayMs)
+  const h = window.setInterval(() => runs.get(id)?.tick(), delayMs)
   timers.set(id, h)
 }
 
@@ -31,15 +37,21 @@ function newEngine(req: CreateRunRequest): MockEngine {
   return e
 }
 
-/** Run an engine synchronously to a named stage (used for fixtures + screenshots). */
+/** Run an engine synchronously to a named stage (fixtures + screenshots). */
 export function buildFixture(stage: FixtureStage): MockEngine {
-  const e = newEngine(DEFAULTS)
+  const dg = stage.startsWith('dg-')
+  const e = newEngine(defaultsFor(dg ? 'dg-2mw' : 'swgr-480v'))
   const ticks = (n: number) => {
     for (let i = 0; i < n; i++) e.tick()
   }
   const approve = (kind: 'vendor_selection' | 'po_release', comment?: string) => {
     const a = e.snap.approvals.find((x) => x.kind === kind && x.status === 'pending')
     if (a) e.decide(a.id, { decision: 'approve', option_id: a.memo?.recommendation ?? null, comment })
+  }
+  const crash = () => {
+    ticks(6)
+    e.kill()
+    e.resume()
   }
   switch (stage) {
     case 'planning':
@@ -52,35 +64,41 @@ export function buildFixture(stage: FixtureStage): MockEngine {
       ticks(10)
       break
     case 'approval':
-      ticks(6)
-      e.kill()
-      e.resume()
+      crash()
       ticks(20)
       break
     case 'killed':
-      ticks(6)
-      e.kill()
-      e.resume()
+      crash()
       ticks(5)
       e.kill()
       break
-    case 'po-approval':
-      ticks(6)
-      e.kill()
-      e.resume()
+    case 'event': {
+      crash()
       ticks(20)
-      approve('vendor_selection', 'Go with Anvil expedite — tie the ₹26 L fee to the delivery milestone.')
+      const rec = e.snap.options.find((o) => o.recommended)
+      e.inject({ type: 'price_change', vendor_id: rec?.vendor_id, params: { pct: 12 }, note: 'Steel surcharge notified by phone' })
+      e.inject({ type: 'approver_unavailable', params: { days: 2 } })
+      ticks(1)
+      e.inject({ type: 'vendor_late_reply', vendor_id: 'V1', params: { days: 4 } })
+      break
+    }
+    case 'po-approval':
+      crash()
+      ticks(20)
+      approve('vendor_selection', 'Approved — tie any expedite fee to the delivery milestone.')
       ticks(5)
       break
     case 'completed':
-      ticks(6)
-      e.kill()
-      e.resume()
+    case 'dg-completed':
+      crash()
       ticks(20)
-      approve('vendor_selection', 'Go with Anvil expedite — tie the ₹26 L fee to the delivery milestone.')
+      approve('vendor_selection', 'Approved — tie any expedite fee to the delivery milestone.')
       ticks(5)
       approve('po_release', 'Released.')
       ticks(5)
+      break
+    case 'dg-approval':
+      ticks(20)
       break
   }
   return e
@@ -92,13 +110,13 @@ const delayMs = () => {
 }
 
 const REGISTRY: SpecialistSpec[] = [
-  { name: 'planner', title: 'Planner', description: 'Goal → task DAG, risks; re-plans on change', inputs: ['Goal'], outputs: ['Plan'], deterministic: false, side_effects: false, mcp_tool: 'plan_goal' },
-  { name: 'takeoff', title: 'Spec / Takeoff', description: 'Extracts BOQ lines from spec PDF', inputs: ['pdf'], outputs: ['TakeoffResult'], deterministic: true, side_effects: false, mcp_tool: 'run_takeoff' },
-  { name: 'quotes', title: 'Quotes', description: 'RFQs with retries', inputs: ['TakeoffLine[]'], outputs: ['QuotesResult'], deterministic: true, side_effects: true, mcp_tool: 'collect_quotes' },
-  { name: 'schedule', title: 'Schedule', description: 'CPM float per vendor', inputs: ['Quote'], outputs: ['ScheduleResult'], deterministic: true, side_effects: false, mcp_tool: 'schedule_for_quote' },
-  { name: 'budget', title: 'Budget', description: 'Budget verdict incl. contingency', inputs: ['Quote'], outputs: ['BudgetCheck'], deterministic: true, side_effects: false, mcp_tool: 'check_budget' },
-  { name: 'approvals', title: 'Approvals', description: 'Ranks options, drafts decision memo', inputs: ['VendorOption[]'], outputs: ['DecisionMemo'], deterministic: false, side_effects: true, mcp_tool: 'build_decision_memo' },
-  { name: 'po', title: 'Purchase Order', description: 'Drafts and sends the PO', inputs: ['VendorOption'], outputs: ['PurchaseOrder'], deterministic: true, side_effects: true, mcp_tool: 'draft_po' },
+  { name: 'planner', title: 'Planner', description: 'Turns the goal into a task plan with risks; re-plans when the world changes', inputs: ['Goal'], outputs: ['Plan'], deterministic: false, side_effects: false, mcp_tool: 'plan_goal' },
+  { name: 'takeoff', title: 'Spec takeoff', description: 'Reads the spec PDF into a cited bill of quantities', inputs: ['pdf'], outputs: ['TakeoffResult'], deterministic: true, side_effects: false, mcp_tool: 'takeoff_from_pdf' },
+  { name: 'quotes', title: 'Quotes', description: 'Sends RFQs, retries silent vendors, levels the bids', inputs: ['TakeoffLine[]'], outputs: ['QuotesResult'], deterministic: true, side_effects: true, mcp_tool: 'request_vendor_quotes' },
+  { name: 'schedule', title: 'Schedule', description: 'Critical-path float for every vendor against the site date', inputs: ['Quote'], outputs: ['ScheduleResult'], deterministic: true, side_effects: false, mcp_tool: 'compute_schedule' },
+  { name: 'budget', title: 'Budget', description: 'Commitment vs ceiling, with contingency', inputs: ['Quote'], outputs: ['BudgetCheck'], deterministic: true, side_effects: false, mcp_tool: 'check_budget' },
+  { name: 'approvals', title: 'Approvals', description: 'Ranks options and writes the decision memo', inputs: ['VendorOption[]'], outputs: ['DecisionMemo'], deterministic: false, side_effects: true, mcp_tool: 'rank_vendor_options' },
+  { name: 'po', title: 'Purchase order', description: 'Drafts the PO and sends it exactly once', inputs: ['VendorOption'], outputs: ['PurchaseOrder'], deterministic: true, side_effects: true, mcp_tool: 'draft_purchase_order' },
 ]
 
 function get(id: string): MockEngine {
@@ -107,6 +125,8 @@ function get(id: string): MockEngine {
   return e
 }
 
+let uploadSeq = 0
+
 export const mockApi = {
   async health(): Promise<Health> {
     return { status: 'ok', llm: { provider: 'ollama', model: 'qwen2.5:3b', reachable: true } }
@@ -114,8 +134,36 @@ export const mockApi = {
   async registry(): Promise<SpecialistSpec[]> {
     return REGISTRY
   },
-  async defaults(): Promise<CreateRunRequest> {
-    return clone(DEFAULTS)
+  async defaults(packageId?: string): Promise<CreateRunRequest> {
+    return defaultsFor(packageId)
+  },
+  async packages(): Promise<PackageSpec[]> {
+    return clone(PACKAGES)
+  },
+  async parseGoal(text: string): Promise<GoalParseResult> {
+    await new Promise((r) => setTimeout(r, 120))
+    return parseGoal(text)
+  },
+  async uploadSpec(file: File): Promise<SpecUpload> {
+    await new Promise((r) => setTimeout(r, 700))
+    const name = file.name.toLowerCase()
+    const pkg = /dg|gen|diesel/.test(name) ? 'dg-2mw' : 'swgr-480v'
+    const tk = clone(STORIES[pkg]!.data.takeoff)
+    tk.document = file.name
+    tk.lines = tk.lines.map((l) => ({ ...l, source: l.source.replace(/^[^ ]+/, file.name) }))
+    tk.confidence = Math.max(0.6, tk.confidence - 0.07)
+    tk.warnings = [...tk.warnings, 'Uploaded document: table headers mapped by name (item, description, qty, unit, rating); please review quantities.']
+    return { upload_id: `up-${++uploadSeq}`, filename: file.name, pages: 4, size_bytes: file.size, package_id: pkg, takeoff: tk }
+  },
+  async eventTypes(): Promise<EventTypeSpec[]> {
+    return clone(EVENT_TYPES)
+  },
+  async injectEvent(id: string, body: InjectEventRequest): Promise<RunSnapshot> {
+    const e = get(id)
+    e.inject(body)
+    if (e.snap.status !== 'completed') e.tick()
+    schedule(id, delayMs())
+    return clone(e.snap)
   },
   async listRuns(): Promise<RunSnapshot[]> {
     return [...runs.values()].map((e) => clone(e.snap))
@@ -154,7 +202,7 @@ export const mockApi = {
   /** Preload a fixture run (paused unless `live`). Returns its id. */
   loadFixture(stage: FixtureStage, live = false): string {
     const e = buildFixture(stage)
-    if (live && e.snap.status === 'running') schedule(e.snap.run_id, delayMs())
+    if (live && e.snap.status !== 'completed') schedule(e.snap.run_id, delayMs())
     return e.snap.run_id
   },
 }

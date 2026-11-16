@@ -12,12 +12,17 @@
     height: 100%;
   }
   body {
-    @apply bg-ink-950 font-sans text-ink-100 antialiased;
+    @apply bg-ink-950 font-sans text-sm text-ink-100 antialiased;
     font-feature-settings: 'cv11', 'ss01', 'ss03', 'tnum' 0;
     background-image:
       radial-gradient(1200px 600px at 15% -10%, rgba(255, 178, 36, 0.06), transparent 60%),
       radial-gradient(900px 500px at 110% 10%, rgba(56, 189, 248, 0.045), transparent 60%);
     background-attachment: fixed;
+  }
+  :focus-visible {
+    outline: 2px solid rgba(255, 178, 36, 0.75);
+    outline-offset: 2px;
+    border-radius: 6px;
   }
   ::selection {
     background: rgba(255, 178, 36, 0.3);
@@ -35,11 +40,8 @@
 
 @layer components {
   .card {
-    @apply rounded-2xl border border-white/[0.06] bg-ink-900/80 backdrop-blur-sm;
-    box-shadow:
-      inset 0 1px 0 0 rgba(255, 255, 255, 0.03),
-      0 1px 2px rgba(0, 0, 0, 0.4),
-      0 12px 32px -16px rgba(0, 0, 0, 0.7);
+    @apply rounded-2xl border border-white/[0.06] bg-ink-900;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
   }
   .num {
     font-variant-numeric: tabular-nums;
@@ -58,10 +60,13 @@
     background-size: 24px 24px;
   }
   .th {
-    @apply px-3 py-2 text-left text-[10.5px] font-semibold uppercase tracking-[0.1em] text-ink-400;
+    @apply px-4 py-2.5 text-left text-xs font-medium text-ink-400;
   }
   .td {
-    @apply px-3 py-2.5 align-middle;
+    @apply px-4 py-3 align-middle;
+  }
+  .focus-ring {
+    @apply outline-none focus-visible:ring-2 focus-visible:ring-accent-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950;
   }
 }
 
@@ -70,10 +75,10 @@
   @apply mb-1 text-2xl font-semibold tracking-tight text-ink-50;
 }
 .po-md h2 {
-  @apply mb-3 mt-8 border-b border-white/[0.06] pb-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-accent-300;
+  @apply mb-3 mt-8 border-b border-white/[0.06] pb-2 text-[15px] font-semibold text-accent-300;
 }
 .po-md p {
-  @apply my-2 text-[13.5px] leading-relaxed text-ink-200;
+  @apply my-2 text-sm leading-relaxed text-ink-200;
 }
 .po-md strong {
   @apply font-semibold text-ink-50;
@@ -82,17 +87,17 @@
   @apply my-2 space-y-1.5 pl-0;
 }
 .po-md li {
-  @apply relative pl-5 text-[13px] leading-relaxed text-ink-200;
+  @apply relative pl-5 text-sm leading-relaxed text-ink-200;
 }
 .po-md li::before {
   content: '';
   @apply absolute left-1 top-[0.6em] h-1.5 w-1.5 rounded-sm bg-accent-400/70;
 }
 .po-md table {
-  @apply my-3 w-full border-collapse overflow-hidden rounded-lg text-[12.5px];
+  @apply my-3 w-full border-collapse overflow-hidden rounded-lg text-[13px];
 }
 .po-md thead th {
-  @apply border-b border-white/10 bg-white/[0.03] px-3 py-2 text-[10.5px] font-semibold uppercase tracking-[0.08em] text-ink-400;
+  @apply border-b border-white/10 bg-white/[0.03] px-3 py-2 text-left text-xs font-medium text-ink-400;
 }
 .po-md td {
   @apply border-b border-white/[0.05] px-3 py-2 text-ink-200;
@@ -102,7 +107,7 @@
   display: none;
 }
 .po-md td:nth-child(n + 4) {
-  @apply font-mono text-[12px];
+  @apply font-mono text-[13px];
 }
 .po-md tr:last-child td {
   @apply border-b-0;

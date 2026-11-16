@@ -16,8 +16,8 @@ from the wall clock).
 
 from __future__ import annotations
 
-import sys
 from pathlib import Path
+from typing import Any
 
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A3, A4, landscape
@@ -26,12 +26,11 @@ from reportlab.lib.units import mm
 from reportlab.pdfgen.canvas import Canvas
 from reportlab.platypus import Paragraph, Table, TableStyle
 
-OUT = (
-    Path(__file__).resolve().parents[1]
-    / "sitemind"
-    / "data"
-    / "project_alpha_480V_switchgear_spec.pdf"
-)
+BACKEND = Path(__file__).resolve().parents[1]
+PKG_DIR = BACKEND / "sitemind" / "data" / "packages"
+OUT = PKG_DIR / "swgr-480v" / "project_alpha_480V_switchgear_spec.pdf"
+DG_OUT = PKG_DIR / "dg-2mw" / "dg_2mw_genset_spec.pdf"
+CHILLER_OUT = BACKEND / "tests" / "fixtures" / "chiller_schedule_thirdparty.pdf"
 
 DOC_NO = "PA-EL-SPC-480-001"
 REV = "B"
@@ -381,6 +380,204 @@ def build(out: Path = OUT) -> Path:
     return out
 
 
+# ============================================================================ dg-2mw package
+
+DG_DOC = "PA-ME-SPC-DG-002"
+# (tag, equipment, specification, quantity, uom, notes)
+DG_MAIN: list[tuple[str, str, str, str, str, str]] = [
+    ("DG-2000-11KV", "Diesel generator set, prime rated, 11 kV alternator", "2000 kWe / 2500 kVA",
+     "4", "Nos", "N+1 for 6 MW IT load"),
+    ("ENCL-AC-75DBA", "Acoustic enclosure, 75 dB(A) @ 1 m", "75 dB(A)", "4", "Nos",
+     "Weatherproof, IP54"),
+    ("TANK-DAY-990L", "Fuel day tank with level transmitter", "990 L", "4", "Nos",
+     "Double-wall, bunded"),
+    ("SYNC-PNL-11KV", "Synchronising & load-sharing panel", "11 kV, 4 incomers", "1", "Set",
+     "PLC based, redundant"),
+]
+DG_ANC: list[tuple[str, str, str, str, str, str]] = [
+    ("EXH-STACK-30M", "Exhaust stack with residential silencer", "30 m", "4", "Sets",
+     "CPCB stack height"),
+    ("NGR-11KV-200A", "Neutral grounding resistor", "11 kV, 200 A, 10 s", "4", "Nos",
+     "Outdoor, IP33"),
+    ("CBL-11KV-3C300", "11 kV XLPE cable, 3C x 300 sq mm Al (allowance)", "11 kV", "1,200", "m",
+     "Allowance - see datasheet"),
+]
+DG_DATASHEET: list[tuple[str, str]] = [
+    ("Application", "Standby / prime power for Data Hall Blocks A and B"),
+    ("Number of DG sets", "4"),
+    ("Rating per set", "2000 kWe prime / 2500 kVA at 0.8 pf, ISO 8528-1"),
+    ("Voltage / frequency", "11 kV, 3-phase, 50 Hz"),
+    ("Engine", "4-stroke, turbocharged, aftercooled, electronic governing"),
+    ("Emissions", "CPCB IV+ (MoEFCC) compliant; type-approval certificate mandatory"),
+    ("Noise", "75 dB(A) at 1 m (free field), acoustic enclosure"),
+    ("Fuel", "HSD; 990 L day tank per set, 48 h bulk storage by others"),
+    ("Exhaust stacks", "4"),
+    ("11 kV cable route length (approx.)", "1,350 m"),
+    ("Neutral earthing", "NGR, 200 A for 10 s per set"),
+    ("Testing", "Witnessed FAT per ISO 8528-6 (100 % / 110 % load), 5 days"),
+    ("Required on site", "2027-11-15 (DG commissioning window)"),
+    ("PO to be placed by", "2027-04-30"),
+]
+
+
+def _grid(data: list[list[str]], widths: list[float], head_bg: Any) -> Table:
+    t = Table(data, colWidths=widths, repeatRows=1)
+    t.setStyle(
+        TableStyle(
+            [
+                ("GRID", (0, 0), (-1, -1), 0.4, colors.HexColor("#334155")),
+                ("FONT", (0, 0), (-1, 0), "Helvetica-Bold", 8.5),
+                ("FONT", (0, 1), (-1, -1), "Helvetica", 8),
+                ("BACKGROUND", (0, 0), (-1, 0), head_bg),
+                ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+            ]
+        )
+    )
+    return t
+
+
+def _dg_footer(c: Canvas, w: float, sheet: str) -> None:
+    c.setFillColor(colors.HexColor("#0f766e"))
+    c.rect(0, 0, w, 12 * mm, stroke=0, fill=1)
+    c.setFillColor(colors.white)
+    c.setFont("Helvetica", 7)
+    c.drawString(12 * mm, 5 * mm, f"{DG_DOC} Rev A  |  Project Alpha - Chakan MIDC  |  {sheet}  |  "
+                 "Synthetic document for SiteMind demo")
+    c.setFillColor(colors.black)
+
+
+def build_dg(out: Path = DG_OUT) -> Path:
+    out.parent.mkdir(parents=True, exist_ok=True)
+    c = Canvas(str(out), pagesize=A4, invariant=1)
+    c.setTitle(f"{DG_DOC} - 2 MW diesel generator sets - equipment list & datasheet")
+    c.setAuthor("Alpha EPC Mechanical (synthetic)")
+    w, h = A4
+    # page 1: banner cover
+    c.setFillColor(colors.HexColor("#0f766e"))
+    c.rect(0, h - 90 * mm, w, 90 * mm, stroke=0, fill=1)
+    c.setFillColor(colors.white)
+    c.setFont("Helvetica-Bold", 24)
+    c.drawString(18 * mm, h - 40 * mm, "2 MW DIESEL GENERATOR SETS")
+    c.setFont("Helvetica", 12)
+    c.drawString(18 * mm, h - 52 * mm, "Equipment list, datasheet and scope of supply")
+    c.drawString(18 * mm, h - 62 * mm, "Project Alpha - 24 MW Tier-III Data Centre, Chakan MIDC, Pune")
+    c.setFillColor(colors.black)
+    c.setFont("Helvetica", 10)
+    y = h - 110 * mm
+    for k, v in [("Document", f"{DG_DOC} Rev A"), ("Discipline", "Mechanical / Electrical"),
+                 ("Package", "DG-01 Standby generation"), ("Status", "Issued for enquiry")]:
+        c.drawString(18 * mm, y, f"{k}:")
+        c.drawString(55 * mm, y, v)
+        y -= 7 * mm
+    _dg_footer(c, w, "Page 1 of 4")
+    c.showPage()
+    # page 2: equipment list (two ruled tables, different headers from the switchgear spec)
+    lw, lh = landscape(A4)
+    c.setPageSize((lw, lh))
+    c.setFont("Helvetica-Bold", 13)
+    c.drawString(15 * mm, lh - 20 * mm, "EQUIPMENT LIST - DG-01 STANDBY GENERATION")
+    widths = [34 * mm, 95 * mm, 40 * mm, 20 * mm, 14 * mm, 52 * mm]
+    head = ["Tag", "Equipment", "Specification", "Quantity", "UoM", "Notes"]
+    y = lh - 28 * mm
+    for title, rows in (("A. Main equipment", DG_MAIN), ("B. Ancillaries", DG_ANC)):
+        c.setFont("Helvetica-Bold", 9)
+        c.drawString(15 * mm, y, title)
+        t = _grid([head] + [list(r) for r in rows], widths, colors.HexColor("#0f766e"))
+        _, th = t.wrap(0, 0)
+        t.drawOn(c, 15 * mm, y - 3 * mm - th)
+        y -= th + 14 * mm
+    _dg_footer(c, lw, "Page 2 of 4")
+    c.showPage()
+    c.setPageSize((w, h))
+    # page 3: datasheet (parameter/value - not a quantity schedule)
+    c.setFont("Helvetica-Bold", 13)
+    c.drawString(15 * mm, h - 20 * mm, "GENERATOR DATASHEET")
+    t = _grid([["Parameter", "Value"]] + [list(r) for r in DG_DATASHEET], [62 * mm, 118 * mm],
+              colors.HexColor("#334155"))
+    _, th = t.wrap(0, 0)
+    t.drawOn(c, 15 * mm, h - 28 * mm - th)
+    _dg_footer(c, w, "Page 3 of 4")
+    c.showPage()
+    # page 4: scope & submittals (prose)
+    styles = getSampleStyleSheet()
+    body = ParagraphStyle("b", parent=styles["BodyText"], fontName="Helvetica", fontSize=9.5,
+                          leading=13)
+    c.setFont("Helvetica-Bold", 13)
+    c.drawString(15 * mm, h - 20 * mm, "SCOPE OF SUPPLY & SUBMITTALS")
+    y = h - 28 * mm
+    for txt in [
+        "<b>Scope.</b> Supply, witnessed FAT, delivery DAP site, supervision of erection and "
+        "commissioning of four 2 MW 11 kV DG sets with acoustic enclosures, day tanks, exhaust "
+        "systems, NGRs, synchronising panel and 11 kV cabling (allowance).",
+        "<b>Submittals.</b> GA, foundation loads, exhaust and fuel schematics, alternator data, "
+        "synchronising logic within 14 days of PO; Engineer review 10 days.",
+        "<b>Emissions.</b> CPCB IV+ type-approval certificate shall accompany the offer; the PO "
+        "will not be released without it.",
+        "<b>Commercial.</b> Prices firm in INR ex-works, freight separately, GST 18 % extra. "
+        "Liquidated damages 0.5 % per week capped at 10 %. Warranty 24 months from commissioning.",
+    ]:
+        p = Paragraph(txt, body)
+        _, ph = p.wrap(w - 30 * mm, 200)
+        p.drawOn(c, 15 * mm, y - ph)
+        y -= ph + 5 * mm
+    _dg_footer(c, w, "Page 4 of 4")
+    c.showPage()
+    c.save()
+    return out
+
+
+# ============================================================================ third-party fixture
+
+
+def build_chiller_fixture(out: Path = CHILLER_OUT) -> Path:
+    """A one-page HVAC chiller schedule from a 'third party': unruled text table, other headers."""
+    out.parent.mkdir(parents=True, exist_ok=True)
+    c = Canvas(str(out), pagesize=landscape(A4), invariant=1)
+    c.setTitle("Mech schedule M-601 - chilled water plant")
+    w, h = landscape(A4)
+    c.setFont("Times-Bold", 14)
+    c.drawString(20 * mm, h - 20 * mm, "M-601  CHILLED WATER PLANT - MECHANICAL EQUIPMENT SCHEDULE")
+    c.setFont("Times-Roman", 9)
+    c.drawString(20 * mm, h - 27 * mm, "Consultant: Northfield MEP Associates (fictional)   Rev 0")
+    xs = [20 * mm, 45 * mm, 125 * mm, 175 * mm, 200 * mm]
+    head = ["Mark", "Equipment", "Duty / Capacity", "No. Off", "Location"]
+    rows = [
+        ["CH-1", "Water-cooled centrifugal chiller", "1000 TR", "4", "Plant room L0"],
+        ["CHWP-1", "Primary chilled water pump", "180 m3/h @ 32 m", "6", "Plant room L0"],
+        ["CT-1", "Induced-draft cooling tower cell", "1250 TR", "4", "Roof"],
+        ["AHU-1", "Air handling unit, double skin", "25000 CMH", "12", "Data hall"],
+        ["EXP-1", "Expansion vessel", "2000 L", "2", "Plant room L0"],
+    ]
+    y = h - 40 * mm
+    c.setFont("Times-Bold", 10)
+    for x, t in zip(xs, head, strict=True):
+        c.drawString(x, y, t)
+    c.setFont("Times-Roman", 10)
+    for row in rows:
+        y -= 7 * mm
+        for x, t in zip(xs, row, strict=True):
+            c.drawString(x, y, t)
+    c.setFont("Times-Italic", 8)
+    c.drawString(20 * mm, y - 12 * mm, "All equipment to be selected for 40 C ambient. Quantities are "
+                 "for tender only.")
+    c.showPage()
+    c.save()
+    return out
+
+
+BUILDERS = {"swgr-480v": (build, OUT), "dg-2mw": (build_dg, DG_OUT),
+            "chiller-fixture": (build_chiller_fixture, CHILLER_OUT)}
+
+
 if __name__ == "__main__":
-    path = build(Path(sys.argv[1]) if len(sys.argv) > 1 else OUT)
-    print(path)
+    import argparse
+
+    ap = argparse.ArgumentParser(description="Generate SiteMind sample spec PDFs")
+    ap.add_argument("--package", default="swgr-480v", choices=[*BUILDERS, "all"])
+    ap.add_argument("out", nargs="?", help="output path (single package only)")
+    args = ap.parse_args()
+    names = list(BUILDERS) if args.package == "all" else [args.package]
+    for name in names:
+        fn, default = BUILDERS[name]
+        print(fn(Path(args.out) if args.out and len(names) == 1 else default))
