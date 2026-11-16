@@ -366,6 +366,8 @@ class RunSnapshot(BaseModel):
     current_node: str | None = None
     llm: dict[str, Any] = {}  # {"provider": "ollama", "model": "...", "calls": n}
     error: str | None = None
+    package_id: str = "swgr-480v"  # which procurement package catalogue this run uses
+    events: list[InjectedEvent] = []  # live events injected by a person/judge (v2)
 
 
 class CreateRunRequest(BaseModel):
@@ -374,6 +376,106 @@ class CreateRunRequest(BaseModel):
     package: str = "480 V switchgear"
     need_by: date
     budget_inr: float
-    scenario: Literal["demo", "happy"] = "demo"  # demo = with injected failures
+    scenario: Literal["demo", "happy"] = "demo"  # demo = scripted failures; happy = none
     step_delay_s: float | None = None  # wall-clock pacing per step (demo)
     auto_start: bool = True
+    package_id: str = "swgr-480v"  # see GET /api/packages
+    spec_upload_id: str | None = None  # use an uploaded spec PDF instead of the package sample
+
+
+# --------------------------------------------------------------------------- v2: packages,
+# goal parsing, spec upload, live event injection
+
+
+class PackageSpec(BaseModel):
+    """A procurement package the agent knows how to buy (catalogue + sample spec)."""
+
+    package_id: str  # "swgr-480v", "dg-2mw", ...
+    title: str  # "480 V switchgear"
+    description: str
+    keywords: list[str]  # used by the goal parser ("switchgear", "genset", "DG", ...)
+    spec_document: str  # bundled sample spec PDF filename
+    vendor_ids: list[str]
+    default_goal_text: str
+    default_project: str
+    default_need_by: date
+    default_budget_inr: float
+    required_on_site: date
+
+
+class GoalParseRequest(BaseModel):
+    text: str
+
+
+class GoalParseResult(BaseModel):
+    """Structured reading of a plain-English goal; never guesses silently."""
+
+    package_id: str | None = None
+    package: str | None = None
+    project: str | None = None
+    need_by: date | None = None
+    budget_inr: float | None = None
+    confidence: float = Field(ge=0, le=1)
+    evidence: dict[str, str] = {}  # field -> exact text span it came from
+    missing: list[str] = []  # fields that could not be read
+    questions: list[str] = []  # what the agent would ask the human
+    supported: bool = True  # False => no catalogue for this package: hand to a human
+
+
+class SpecUpload(BaseModel):
+    upload_id: str
+    filename: str
+    pages: int
+    size_bytes: int
+    package_id: str | None = None  # best-matching package for the document
+    takeoff: TakeoffResult | None = None  # preview takeoff on the uploaded PDF
+
+
+class EventType(StrEnum):
+    vendor_late_reply = "vendor_late_reply"  # params: days
+    price_change = "price_change"  # params: pct (+/-)
+    date_slip = "date_slip"  # params: days, target: "lead_time" | "required_on_site"
+    document_missing = "document_missing"  # params: document
+    tool_failure = "tool_failure"  # params: tool (specialist name), count
+    approver_unavailable = "approver_unavailable"  # params: days
+    restart = "restart"  # SIGKILL the worker, then resume it from the checkpoint
+
+
+class EventParamSpec(BaseModel):
+    name: str
+    label: str
+    kind: Literal["int", "float", "choice", "text"]
+    default: Any = None
+    choices: list[str] = []
+    unit: str = ""
+    min: float | None = None
+    max: float | None = None
+
+
+class EventTypeSpec(BaseModel):
+    type: EventType
+    title: str
+    description: str
+    needs_vendor: bool = False
+    params: list[EventParamSpec] = []
+
+
+class InjectEventRequest(BaseModel):
+    type: EventType
+    vendor_id: str | None = None
+    params: dict[str, Any] = {}
+    note: str | None = None
+
+
+class InjectedEvent(BaseModel):
+    id: str  # "ev-<n>"
+    run_id: str
+    type: EventType
+    vendor_id: str | None = None
+    params: dict[str, Any] = {}
+    note: str | None = None
+    status: Literal["pending", "applied", "ignored"] = "pending"
+    received_at: datetime  # wall clock
+    applied_sim_time: datetime | None = None
+    outcome: str | None = None  # what the agent did about it, in one sentence
+    triggers: list[str] = []  # re-plan triggers it caused
