@@ -48,3 +48,58 @@ def test_cross_check_counts_and_linear_runs() -> None:
 
 def test_takeoff_is_deterministic() -> None:
     assert run_takeoff(SPEC_PDF) == run_takeoff(str(SPEC_PDF))
+
+
+# ------------------------------------------------------------------ v2: any PDF
+
+FIXTURE = Path(__file__).parent / "fixtures" / "chiller_schedule_thirdparty.pdf"
+
+
+def test_takeoff_dg_spec_different_layout() -> None:
+    from sitemind.specialists import package_spec_pdf
+
+    r = run_takeoff(package_spec_pdf("dg-2mw"))  # package auto-detected
+    got = {ln.item_code: (ln.qty, ln.unit) for ln in r.lines}
+    assert got == {
+        "DG-2000-11KV": (4, "ea"),
+        "ENCL-AC-75DBA": (4, "ea"),
+        "TANK-DAY-990L": (4, "ea"),
+        "SYNC-PNL-11KV": (1, "set"),
+        "EXH-STACK-30M": (4, "set"),
+        "NGR-11KV-200A": (4, "ea"),
+        "CBL-11KV-3C300": (1200, "m"),
+    }
+    assert r.lines[0].rating == "2000 kWe / 2500 kVA"
+    assert r.lines[4].source.endswith("p2 table 2 row 1")  # second table on the sheet
+    assert len(r.warnings) == 1 and "1350 m" in r.warnings[0]  # datasheet cross-check
+    assert r.confidence == 0.92
+    assert r == run_takeoff(package_spec_pdf("dg-2mw"), "dg-2mw")
+
+
+def test_takeoff_foreign_unruled_pdf() -> None:
+    r = run_takeoff(FIXTURE)
+    assert [(ln.item_code, ln.qty) for ln in r.lines] == [
+        ("CH-1", 4),
+        ("CHWP-1", 6),
+        ("CT-1", 4),
+        ("AHU-1", 12),
+        ("EXP-1", 2),
+    ]
+    assert r.lines[0].description == "Water-cooled centrifugal chiller"
+    assert r.lines[0].rating == "1000 TR"
+    assert all(" p1 text row " in ln.source for ln in r.lines)
+    assert any("page text" in w for w in r.warnings)
+    assert sum("does not match a category" in w for w in r.warnings) == 5  # kept, flagged
+    assert any("hand to a human" in w for w in r.warnings)
+    assert r.confidence <= 0.5
+
+
+def test_header_mapping_and_qty_parsing() -> None:
+    from sitemind.specialists.takeoff import header_role, map_columns, parse_qty
+
+    assert map_columns(
+        ["Sl. No.", "Tag No", "Item Description", "Duty / Capacity", "No. Off", "UoM", "Remarks"]
+    ) == {"code": 1, "description": 2, "rating": 3, "qty": 4, "unit": 5}
+    assert header_role("Item") is None and header_role("Item Code") == "code"
+    assert parse_qty("1,200 m") == (1200, "m") and parse_qty("4 Nos") == (4, "ea")
+    assert parse_qty("TBC") is None

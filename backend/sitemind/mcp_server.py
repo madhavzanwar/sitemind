@@ -22,12 +22,16 @@ from typing import Any
 
 from sitemind.models import Goal, Quote, TakeoffResult, VendorOption
 from sitemind.specialists import (
+    DEFAULT_PACKAGE,
     REGISTRY,
-    SPEC_PDF,
     build_decision_memo,
     collect_quotes,
     draft_po,
-    load_scenario,
+    get_package,
+    list_packages,
+    load_package_scenario,
+    package_spec_pdf,
+    parse_goal,
     rank_options,
     refresh_quotes,
     run_takeoff,
@@ -49,21 +53,18 @@ def _server_class() -> Any:
 IST = timezone(timedelta(hours=5, minutes=30))
 DEFAULT_NOW = datetime(2027, 1, 11, 9, 0, tzinfo=IST)
 DEFAULT_PO_DATE = date(2027, 1, 20)
-DEFAULT_ROS = date(2027, 7, 30)
+DEFAULT_ROS = date(2027, 7, 30)  # swgr-480v; other packages use their PackageSpec dates
 DEFAULT_NEED_BY = date(2027, 3, 15)
 DEFAULT_BUDGET = 46_000_000.0
-DEFAULT_GOAL = (
-    "Get the 480 V switchgear package for Project Alpha ordered by 2027-03-15 within budget "
-    "INR 4.6 Cr"
-)
 
 mcp: Any = _server_class()(
     "sitemind",
     instructions=(
-        "SiteMind procurement specialists for Project Alpha (480 V switchgear). All arithmetic is "
-        "deterministic; money is INR ex-GST unless stated. Typical flow: takeoff_from_pdf -> "
-        "request_vendor_quotes -> compute_schedule / check_budget -> rank_vendor_options -> "
-        "draft_purchase_order."
+        "SiteMind procurement specialists for Project Alpha. Packages: call list_packages "
+        "(e.g. 'swgr-480v' 480 V switchgear, 'dg-2mw' 2 MW DG sets); most tools take a "
+        "package_id. All arithmetic is deterministic; money is INR ex-GST unless stated. Typical "
+        "flow: parse_goal -> takeoff_from_pdf -> request_vendor_quotes -> compute_schedule / "
+        "check_budget -> rank_vendor_options -> draft_purchase_order."
     ),
 )
 
@@ -76,6 +77,18 @@ def _dump(obj: Any) -> Any:
     return obj
 
 
+def _goal(package_id: str, required_on_site: date, budget_inr: float) -> Goal:
+    pkg = get_package(package_id)
+    return Goal(
+        text=pkg.default_goal_text,
+        project=pkg.default_project,
+        package=pkg.title,
+        need_by=pkg.default_need_by,
+        required_on_site=required_on_site,
+        budget_inr=budget_inr,
+    )
+
+
 def _evaluate(
     scenario: str,
     po_issue_date: date,
@@ -83,10 +96,11 @@ def _evaluate(
     budget_inr: float,
     refreshed: bool,
     pdf_path: str | None = None,
+    package_id: str = DEFAULT_PACKAGE,
 ) -> tuple[TakeoffResult, list[Quote], list[VendorOption], dict[str, Any]]:
     """Run takeoff -> quotes (-> refresh) -> schedule + budget -> ranking for a scenario."""
-    takeoff = run_takeoff(pdf_path or SPEC_PDF)
-    net = VendorNetwork(load_scenario(scenario))
+    takeoff = run_takeoff(pdf_path or package_spec_pdf(package_id), package_id)
+    net = VendorNetwork(load_package_scenario(package_id, scenario))
     res = collect_quotes(net, net.vendor_ids(), takeoff.lines, DEFAULT_NOW)
     quotes = res.quotes
     attempts = list(res.attempts)
@@ -101,16 +115,41 @@ def _evaluate(
         "attempts": _dump(attempts),
         "schedules": _dump(schedules),
         "budgets": _dump(budgets),
+        "missing_documents": {v: net.missing_documents(v) for v in net.vendor_ids()},
     }
     return takeoff, quotes, options, extra
 
 
+def _defaults(
+    package_id: str, required_on_site: date | None, budget_inr: float | None
+) -> tuple[date, float]:
+    pkg = get_package(package_id)
+    return (required_on_site or pkg.required_on_site, budget_inr or pkg.default_budget_inr)
+
+
+@mcp.tool(name="list_packages")
+def list_packages_() -> list[dict[str, Any]]:
+    """List the procurement packages SiteMind can buy (id, title, keywords, vendors, default
+    goal, need-by, budget, required-on-site date)."""
+    return [p.model_dump(mode="json") for p in list_packages()]
+
+
+@mcp.tool(name="parse_goal")
+def parse_goal_(text: str, today: date | None = None) -> dict[str, Any]:
+    """Parse a plain-English procurement goal into package / project / need-by / budget with the
+    exact evidence span for each, missing fields and questions; unsupported packages come back
+    with supported=false (hand to a human). Deterministic."""
+    out: dict[str, Any] = parse_goal(text, today or DEFAULT_NOW.date()).model_dump(mode="json")
+    return out
+
+
 @mcp.tool()
-def takeoff_from_pdf(pdf_path: str | None = None) -> dict[str, Any]:
-    """Extract the equipment schedule (quantities, ratings, page refs) from a spec PDF and
-    cross-check it against the single-line diagram. Defaults to the bundled Project Alpha spec."""
-    path = Path(pdf_path) if pdf_path else SPEC_PDF
-    result: dict[str, Any] = run_takeoff(path).model_dump(mode="json")
+def takeoff_from_pdf(pdf_path: str | None = None, package_id: str | None = None) -> dict[str, Any]:
+    """Extract the equipment schedule (quantities, ratings, page refs) from any spec PDF,
+    classify lines to package categories and cross-check against drawing/datasheet pages.
+    Defaults to the bundled sample spec of package_id (or 480 V switchgear)."""
+    path = Path(pdf_path) if pdf_path else package_spec_pdf(package_id or DEFAULT_PACKAGE)
+    result: dict[str, Any] = run_takeoff(path, package_id).model_dump(mode="json")
     return result
 
 
@@ -121,12 +160,15 @@ def request_vendor_quotes(
     now: datetime = DEFAULT_NOW,
     max_attempts: int = 3,
     refresh: bool = False,
+    package_id: str = DEFAULT_PACKAGE,
+    overrides: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Send RFQs for the bundled takeoff to the mock vendor network (scenario 'demo' or 'happy'),
-    retrying timeouts up to max_attempts. With refresh=true, quotes are re-confirmed 3 days later
-    and any price revision is returned. Includes available expedite offers."""
-    takeoff = run_takeoff(SPEC_PDF)
-    net = VendorNetwork(load_scenario(scenario))
+    """Send RFQs for the package's sample takeoff to the mock vendor network (scenario 'demo' or
+    'happy'), retrying timeouts up to max_attempts. With refresh=true, quotes are re-confirmed 3
+    days later and any revision is returned. `overrides` replays live events (VendorNetwork
+    overrides). Includes expedite offers and missing documents."""
+    takeoff = run_takeoff(package_spec_pdf(package_id), package_id)
+    net = VendorNetwork(load_package_scenario(package_id, scenario), overrides=overrides)
     res = collect_quotes(net, vendor_ids or net.vendor_ids(), takeoff.lines, now, max_attempts)
     quotes, attempts = res.quotes, list(res.attempts)
     if refresh:
@@ -136,6 +178,7 @@ def request_vendor_quotes(
         "quotes": _dump(quotes),
         "attempts": _dump(attempts),
         "expedite_offers": [o.model_dump(mode="json") for o in net.expedite_offers().values()],
+        "missing_documents": {v: net.missing_documents(v) for v in net.vendor_ids()},
     }
 
 
@@ -173,27 +216,24 @@ def check_budget(
 def rank_vendor_options(
     scenario: str = "demo",
     po_issue_date: date = DEFAULT_PO_DATE,
-    required_on_site: date = DEFAULT_ROS,
-    budget_inr: float = DEFAULT_BUDGET,
+    required_on_site: date | None = None,
+    budget_inr: float | None = None,
     refreshed: bool = True,
+    package_id: str = DEFAULT_PACKAGE,
 ) -> dict[str, Any]:
-    """Evaluate every vendor option for the scenario (incl. expedited variants), rank them by
-    weighted score (cost 40 %, float 35 %, reliability 25 %; breach / late = infeasible) and
-    return the decision memo."""
+    """Evaluate every vendor option for the package + scenario (incl. expedited variants), rank
+    them by weighted score (cost 40 %, float 35 %, reliability 25 %; breach / late =
+    infeasible) and return the decision memo. Dates/budget default to the package's."""
+    ros, budget = _defaults(package_id, required_on_site, budget_inr)
     _, _, options, extra = _evaluate(
-        scenario, po_issue_date, required_on_site, budget_inr, refreshed
-    )
-    goal = Goal(
-        text=DEFAULT_GOAL,
-        need_by=DEFAULT_NEED_BY,
-        required_on_site=required_on_site,
-        budget_inr=budget_inr,
+        scenario, po_issue_date, ros, budget, refreshed, package_id=package_id
     )
     situation = (
-        f"Scenario '{scenario}': quotes {'after refresh' if refreshed else 'as first received'}; "
-        f"PO issue {po_issue_date.isoformat()}, required on site {required_on_site.isoformat()}."
+        f"{get_package(package_id).title}, scenario '{scenario}': quotes "
+        f"{'after refresh' if refreshed else 'as first received'}; PO issue "
+        f"{po_issue_date.isoformat()}, required on site {ros.isoformat()}."
     )
-    memo = build_decision_memo(goal, options, situation)
+    memo = build_decision_memo(_goal(package_id, ros, budget), options, situation)
     return {"options": _dump(options), "memo": memo.model_dump(mode="json"), **extra}
 
 
@@ -201,15 +241,17 @@ def rank_vendor_options(
 def draft_purchase_order(
     option_id: str | None = None,
     scenario: str = "demo",
-    po_number: str = "PA-PO-480-0001",
+    po_number: str = "PA-PO-0001",
     po_issue_date: date = DEFAULT_PO_DATE,
-    required_on_site: date = DEFAULT_ROS,
-    budget_inr: float = DEFAULT_BUDGET,
+    required_on_site: date | None = None,
+    budget_inr: float | None = None,
+    package_id: str = DEFAULT_PACKAGE,
 ) -> dict[str, Any]:
-    """Draft the purchase order (lines, freight, expedite, GST 18 %, terms, markdown package)
+    """Draft the purchase order (lines, freight, expedite, GST 18 %, package terms, markdown)
     for an option id from rank_vendor_options (default: the recommended option)."""
+    ros, budget = _defaults(package_id, required_on_site, budget_inr)
     takeoff, quotes, options, _ = _evaluate(
-        scenario, po_issue_date, required_on_site, budget_inr, refreshed=True
+        scenario, po_issue_date, ros, budget, refreshed=True, package_id=package_id
     )
     chosen = (
         next((o for o in options if o.option_id == option_id), None)
@@ -219,13 +261,7 @@ def draft_purchase_order(
     if chosen is None:
         raise ValueError(f"unknown option {option_id!r}; options: {[o.option_id for o in options]}")
     quote = next(q for q in quotes if q.vendor_id == chosen.vendor_id)
-    goal = Goal(
-        text=DEFAULT_GOAL,
-        need_by=DEFAULT_NEED_BY,
-        required_on_site=required_on_site,
-        budget_inr=budget_inr,
-    )
-    po = draft_po(goal, chosen, quote, takeoff, po_number, po_issue_date)
+    po = draft_po(_goal(package_id, ros, budget), chosen, quote, takeoff, po_number, po_issue_date)
     out: dict[str, Any] = po.model_dump(mode="json")
     return out
 

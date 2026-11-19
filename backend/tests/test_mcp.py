@@ -74,6 +74,40 @@ def test_check_budget_tool_round_trips_quote() -> None:
     assert b["verdict"] == "breach" and b["utilisation"] > 1.0
 
 
+def test_v2_package_tools() -> None:
+    async def body(c: Any) -> dict[str, Any]:
+        return {
+            "pkgs": _payload(await c.call_tool("list_packages", {})),
+            "goal": _payload(
+                await c.call_tool(
+                    "parse_goal",
+                    {"text": "Get the chillers for Project Alpha by 2027-05-01 within ₹12 Cr"},
+                )
+            ),
+            "takeoff": _payload(await c.call_tool("takeoff_from_pdf", {"package_id": "dg-2mw"})),
+            "rank": _payload(await c.call_tool("rank_vendor_options", {"package_id": "dg-2mw"})),
+            "quotes": _payload(
+                await c.call_tool(
+                    "request_vendor_quotes",
+                    {
+                        "package_id": "dg-2mw",
+                        "vendor_ids": ["D2"],
+                        "overrides": {"vendors": {"D2": {"lead_slip_days": 10}}},
+                    },
+                )
+            ),
+            "po": _payload(await c.call_tool("draft_purchase_order", {"package_id": "dg-2mw"})),
+        }
+
+    out = anyio.run(_with_client, body)
+    assert [p["package_id"] for p in out["pkgs"]] == ["swgr-480v", "dg-2mw"]
+    assert out["goal"]["supported"] is False
+    assert len(out["takeoff"]["lines"]) == 7
+    assert out["rank"]["memo"]["recommendation"] == "O-D1"
+    assert out["quotes"]["quotes"][0]["lead_time_days"] == 190
+    assert out["po"]["vendor_id"] == "D1"
+
+
 @pytest.mark.skipif(os.environ.get("SITEMIND_SKIP_STDIO") == "1", reason="stdio disabled")
 def test_stdio_subprocess() -> None:
     try:

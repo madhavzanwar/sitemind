@@ -172,7 +172,7 @@ def parse_qty(text: str) -> tuple[int, str | None] | None:
         return None
     num = float(m.group(1).replace(",", ""))
     unit = m.group(2)
-    return int(round(num)), (UNIT_ALIASES.get(unit.lower(), unit.lower()) if unit else None)
+    return round(num), (UNIT_ALIASES.get(unit.lower(), unit.lower()) if unit else None)
 
 
 @dataclass

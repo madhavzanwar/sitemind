@@ -26,31 +26,48 @@ _MON = r"(?P<mon>" + "|".join(sorted(MONTHS, key=len, reverse=True)) + r")\.?"
 
 _DATE_PATTERNS: list[re.Pattern[str]] = [
     re.compile(r"\b(?P<y>20\d\d)-(?P<m>\d{1,2})-(?P<d>\d{1,2})\b"),
-    re.compile(r"\b(?P<d>\d{1,2})(?:st|nd|rd|th)?(?:\s+of)?\s+" + _MON + r",?\s+(?P<y>20\d\d)\b",
-               re.IGNORECASE),
-    re.compile(r"\b" + _MON + r"\s+(?P<d>\d{1,2})(?:st|nd|rd|th)?,?\s+(?P<y>20\d\d)\b",
-               re.IGNORECASE),
+    re.compile(
+        r"\b(?P<d>\d{1,2})(?:st|nd|rd|th)?(?:\s+of)?\s+" + _MON + r",?\s+(?P<y>20\d\d)\b",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"\b" + _MON + r"\s+(?P<d>\d{1,2})(?:st|nd|rd|th)?,?\s+(?P<y>20\d\d)\b", re.IGNORECASE
+    ),
     re.compile(r"\b(?P<d>\d{1,2})[/.](?P<m>\d{1,2})[/.](?P<y>20\d\d)\b"),  # Indian dd/mm/yyyy
 ]
 _MONTH_ONLY = re.compile(r"\b(?:end of\s+)?" + _MON + r",?\s+(?P<y>20\d\d)\b", re.IGNORECASE)
 _RELATIVE = re.compile(
     r"\b(?:in|within)\s+(?P<n>\d{1,3})\s+(?P<u>days?|weeks?|months?)\b", re.IGNORECASE
 )
-_ORDER_CTX = re.compile(r"(order(?:ed)?|place[d]?|issue[d]?|award(?:ed)?|po)\b[^.]{0,25}$",
-                        re.IGNORECASE)
+_ORDER_CTX = re.compile(
+    r"(order(?:ed)?|place[d]?|issue[d]?|award(?:ed)?|po)\b[^.]{0,25}$", re.IGNORECASE
+)
 _BY_CTX = re.compile(r"\b(by|before|no later than|on or before|until)\s*$", re.IGNORECASE)
-_SITE_CTX = re.compile(r"(on site|delivered|delivery|energi[sz]|commission)[^.]{0,20}$",
-                       re.IGNORECASE)
+_SITE_CTX = re.compile(
+    r"(on site|delivered|delivery|energi[sz]|commission)[^.]{0,20}$", re.IGNORECASE
+)
 
 _MONEY = re.compile(
     r"(?P<cur>₹|\bRs\.?|\bINR)?\s*(?P<num>\d[\d,]*(?:\.\d+)?)\s*"
     r"(?P<unit>crores?\b|cr\b\.?|lakhs?\b|lacs?\b|lac\b|million\b|mn\b|m\b|k\b|thousand\b)?",
     re.IGNORECASE,
 )
-_UNIT_MULT = {"crore": 1e7, "cr": 1e7, "lakh": 1e5, "lac": 1e5, "million": 1e6, "mn": 1e6,
-              "m": 1e6, "k": 1e3, "thousand": 1e3}
-_BUDGET_CTX = re.compile(r"(budget|within|under|cap|ceiling|not exceed|max(?:imum)?|upto|up to"
-                         r"|for|of)\s*[:=]?\s*$", re.IGNORECASE)
+_UNIT_MULT = {
+    "crore": 1e7,
+    "cr": 1e7,
+    "lakh": 1e5,
+    "lac": 1e5,
+    "million": 1e6,
+    "mn": 1e6,
+    "m": 1e6,
+    "k": 1e3,
+    "thousand": 1e3,
+}
+_BUDGET_CTX = re.compile(
+    r"(budget|within|under|cap|ceiling|not exceed|max(?:imum)?|upto|up to"
+    r"|for|of)\s*[:=]?\s*$",
+    re.IGNORECASE,
+)
 
 _PROJECT = [
     re.compile(r"\bProject\s+(?P<name>[A-Z0-9][\w-]*)"),
@@ -161,9 +178,7 @@ def parse_goal(text: str, today: date) -> GoalParseResult:
         evidence["package"] = m.group(0) if m else kw
         conf["package"] = pconf
         if pconf < 0.5:
-            questions.append(
-                f"The goal mentions more than one package; did you mean {package}?"
-            )
+            questions.append(f"The goal mentions more than one package; did you mean {package}?")
     else:
         pm = _PACKAGE_PHRASE.search(text)
         phrase = pm.group("phrase").strip() if pm else ""
@@ -253,8 +268,7 @@ def parse_goal(text: str, today: date) -> GoalParseResult:
         bare = re.search(r"\bbudget\b[^\d]{0,15}(\d[\d,.]*)", text, re.IGNORECASE)
         if bare:
             questions.append(
-                f"Budget '{bare.group(1)}' has no currency or unit - is that rupees, lakh or "
-                "crore?"
+                f"Budget '{bare.group(1)}' has no currency or unit - is that rupees, lakh or crore?"
             )
         else:
             questions.append("What is the budget ceiling for this package (INR, ex-GST)?")

@@ -385,22 +385,64 @@ def build(out: Path = OUT) -> Path:
 DG_DOC = "PA-ME-SPC-DG-002"
 # (tag, equipment, specification, quantity, uom, notes)
 DG_MAIN: list[tuple[str, str, str, str, str, str]] = [
-    ("DG-2000-11KV", "Diesel generator set, prime rated, 11 kV alternator", "2000 kWe / 2500 kVA",
-     "4", "Nos", "N+1 for 6 MW IT load"),
-    ("ENCL-AC-75DBA", "Acoustic enclosure, 75 dB(A) @ 1 m", "75 dB(A)", "4", "Nos",
-     "Weatherproof, IP54"),
-    ("TANK-DAY-990L", "Fuel day tank with level transmitter", "990 L", "4", "Nos",
-     "Double-wall, bunded"),
-    ("SYNC-PNL-11KV", "Synchronising & load-sharing panel", "11 kV, 4 incomers", "1", "Set",
-     "PLC based, redundant"),
+    (
+        "DG-2000-11KV",
+        "Diesel generator set, prime rated, 11 kV alternator",
+        "2000 kWe / 2500 kVA",
+        "4",
+        "Nos",
+        "N+1 for 6 MW IT load",
+    ),
+    (
+        "ENCL-AC-75DBA",
+        "Acoustic enclosure, 75 dB(A) @ 1 m",
+        "75 dB(A)",
+        "4",
+        "Nos",
+        "Weatherproof, IP54",
+    ),
+    (
+        "TANK-DAY-990L",
+        "Fuel day tank with level transmitter",
+        "990 L",
+        "4",
+        "Nos",
+        "Double-wall, bunded",
+    ),
+    (
+        "SYNC-PNL-11KV",
+        "Synchronising & load-sharing panel",
+        "11 kV, 4 incomers",
+        "1",
+        "Set",
+        "PLC based, redundant",
+    ),
 ]
 DG_ANC: list[tuple[str, str, str, str, str, str]] = [
-    ("EXH-STACK-30M", "Exhaust stack with residential silencer", "30 m", "4", "Sets",
-     "CPCB stack height"),
-    ("NGR-11KV-200A", "Neutral grounding resistor", "11 kV, 200 A, 10 s", "4", "Nos",
-     "Outdoor, IP33"),
-    ("CBL-11KV-3C300", "11 kV XLPE cable, 3C x 300 sq mm Al (allowance)", "11 kV", "1,200", "m",
-     "Allowance - see datasheet"),
+    (
+        "EXH-STACK-30M",
+        "Exhaust stack with residential silencer",
+        "30 m",
+        "4",
+        "Sets",
+        "CPCB stack height",
+    ),
+    (
+        "NGR-11KV-200A",
+        "Neutral grounding resistor",
+        "11 kV, 200 A, 10 s",
+        "4",
+        "Nos",
+        "Outdoor, IP33",
+    ),
+    (
+        "CBL-11KV-3C300",
+        "11 kV XLPE cable, 3C x 300 sq mm Al (allowance)",
+        "11 kV",
+        "1,200",
+        "m",
+        "Allowance - see datasheet",
+    ),
 ]
 DG_DATASHEET: list[tuple[str, str]] = [
     ("Application", "Standby / prime power for Data Hall Blocks A and B"),
@@ -442,8 +484,12 @@ def _dg_footer(c: Canvas, w: float, sheet: str) -> None:
     c.rect(0, 0, w, 12 * mm, stroke=0, fill=1)
     c.setFillColor(colors.white)
     c.setFont("Helvetica", 7)
-    c.drawString(12 * mm, 5 * mm, f"{DG_DOC} Rev A  |  Project Alpha - Chakan MIDC  |  {sheet}  |  "
-                 "Synthetic document for SiteMind demo")
+    c.drawString(
+        12 * mm,
+        5 * mm,
+        f"{DG_DOC} Rev A  |  Project Alpha - Chakan MIDC  |  {sheet}  |  "
+        "Synthetic document for SiteMind demo",
+    )
     c.setFillColor(colors.black)
 
 
@@ -461,12 +507,18 @@ def build_dg(out: Path = DG_OUT) -> Path:
     c.drawString(18 * mm, h - 40 * mm, "2 MW DIESEL GENERATOR SETS")
     c.setFont("Helvetica", 12)
     c.drawString(18 * mm, h - 52 * mm, "Equipment list, datasheet and scope of supply")
-    c.drawString(18 * mm, h - 62 * mm, "Project Alpha - 24 MW Tier-III Data Centre, Chakan MIDC, Pune")
+    c.drawString(
+        18 * mm, h - 62 * mm, "Project Alpha - 24 MW Tier-III Data Centre, Chakan MIDC, Pune"
+    )
     c.setFillColor(colors.black)
     c.setFont("Helvetica", 10)
     y = h - 110 * mm
-    for k, v in [("Document", f"{DG_DOC} Rev A"), ("Discipline", "Mechanical / Electrical"),
-                 ("Package", "DG-01 Standby generation"), ("Status", "Issued for enquiry")]:
+    for k, v in [
+        ("Document", f"{DG_DOC} Rev A"),
+        ("Discipline", "Mechanical / Electrical"),
+        ("Package", "DG-01 Standby generation"),
+        ("Status", "Issued for enquiry"),
+    ]:
         c.drawString(18 * mm, y, f"{k}:")
         c.drawString(55 * mm, y, v)
         y -= 7 * mm
@@ -493,16 +545,20 @@ def build_dg(out: Path = DG_OUT) -> Path:
     # page 3: datasheet (parameter/value - not a quantity schedule)
     c.setFont("Helvetica-Bold", 13)
     c.drawString(15 * mm, h - 20 * mm, "GENERATOR DATASHEET")
-    t = _grid([["Parameter", "Value"]] + [list(r) for r in DG_DATASHEET], [62 * mm, 118 * mm],
-              colors.HexColor("#334155"))
+    t = _grid(
+        [["Parameter", "Value"]] + [list(r) for r in DG_DATASHEET],
+        [62 * mm, 118 * mm],
+        colors.HexColor("#334155"),
+    )
     _, th = t.wrap(0, 0)
     t.drawOn(c, 15 * mm, h - 28 * mm - th)
     _dg_footer(c, w, "Page 3 of 4")
     c.showPage()
     # page 4: scope & submittals (prose)
     styles = getSampleStyleSheet()
-    body = ParagraphStyle("b", parent=styles["BodyText"], fontName="Helvetica", fontSize=9.5,
-                          leading=13)
+    body = ParagraphStyle(
+        "b", parent=styles["BodyText"], fontName="Helvetica", fontSize=9.5, leading=13
+    )
     c.setFont("Helvetica-Bold", 13)
     c.drawString(15 * mm, h - 20 * mm, "SCOPE OF SUPPLY & SUBMITTALS")
     y = h - 28 * mm
@@ -535,7 +591,7 @@ def build_chiller_fixture(out: Path = CHILLER_OUT) -> Path:
     out.parent.mkdir(parents=True, exist_ok=True)
     c = Canvas(str(out), pagesize=landscape(A4), invariant=1)
     c.setTitle("Mech schedule M-601 - chilled water plant")
-    w, h = landscape(A4)
+    _, h = landscape(A4)
     c.setFont("Times-Bold", 14)
     c.drawString(20 * mm, h - 20 * mm, "M-601  CHILLED WATER PLANT - MECHANICAL EQUIPMENT SCHEDULE")
     c.setFont("Times-Roman", 9)
@@ -559,15 +615,21 @@ def build_chiller_fixture(out: Path = CHILLER_OUT) -> Path:
         for x, t in zip(xs, row, strict=True):
             c.drawString(x, y, t)
     c.setFont("Times-Italic", 8)
-    c.drawString(20 * mm, y - 12 * mm, "All equipment to be selected for 40 C ambient. Quantities are "
-                 "for tender only.")
+    c.drawString(
+        20 * mm,
+        y - 12 * mm,
+        "All equipment to be selected for 40 C ambient. Quantities are for tender only.",
+    )
     c.showPage()
     c.save()
     return out
 
 
-BUILDERS = {"swgr-480v": (build, OUT), "dg-2mw": (build_dg, DG_OUT),
-            "chiller-fixture": (build_chiller_fixture, CHILLER_OUT)}
+BUILDERS = {
+    "swgr-480v": (build, OUT),
+    "dg-2mw": (build_dg, DG_OUT),
+    "chiller-fixture": (build_chiller_fixture, CHILLER_OUT),
+}
 
 
 if __name__ == "__main__":

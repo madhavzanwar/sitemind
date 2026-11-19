@@ -43,5 +43,5 @@ def vendor_profile(vendor_id: str) -> dict[str, Any]:
 
 
 def load_scenario(name: str = "demo", package_id: str = DEFAULT_PACKAGE) -> dict[str, Any]:
-    """Load ``scenario_<name>.json`` of a package (``demo`` = injected failures, ``happy`` = none)."""
+    """Load a package's ``scenario_<name>.json`` (demo = injected failures, happy = none)."""
     return load_package_scenario(package_id, name)

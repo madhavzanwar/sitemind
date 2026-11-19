@@ -135,7 +135,8 @@ class VendorNetwork:
             ov["delay_days"] = int(ov.get("delay_days", 0)) + days
             summary = (
                 f"{name} replies {days} d later than usual "
-                f"(total delay {ov['delay_days']} d, reply time {self.response_hours(vendor_id)} h)."
+                f"(total delay {ov['delay_days']} d, "
+                f"reply time {self.response_hours(vendor_id)} h)."
             )
         elif kind == "price_change":
             pct = float(p.get("pct", 5.0))
@@ -321,7 +322,7 @@ class VendorNetwork:
             lead_time_days=lead + lead_delta,
             valid_until=(now + timedelta(days=int(prof.get("quote_validity_days", 30)))).date(),
             reliability=float(prof["reliability"]),
-            status="declined" if not qlines else status,  # type: ignore[arg-type]
+            status="declined" if not qlines else status,
             received_at=now,
             notes=" ".join(parts),
         )
