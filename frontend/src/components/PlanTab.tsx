@@ -1,7 +1,8 @@
 import { GitBranch, ShieldAlert } from 'lucide-react'
 import type { PlanTask, RunSnapshot } from '../types'
 import { dateTime } from '../lib/format'
-import { TaskGraph, triggerFor } from './TaskGraph'
+import { TaskGraph } from './TaskGraph'
+import { triggerFor } from '../lib/plan'
 import { Badge, Card } from './ui'
 
 const LEVEL_TONE = { low: 'success', medium: 'warning', high: 'danger' } as const

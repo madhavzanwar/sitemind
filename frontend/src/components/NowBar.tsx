@@ -6,7 +6,7 @@ import { RUN_STATUS, TONE } from '../lib/status'
 import type { TabId } from './TabsBar'
 import { Button, ProgressBar } from './ui'
 
-export function NowBar({ snap, d, onGo, onResume, busy }: { snap: RunSnapshot; d: Derived; onGo: (t: TabId) => void; onResume: () => void; busy: boolean }) {
+export function NowBar({ snap, d, onGo, onResume, busy, tab }: { snap: RunSnapshot; d: Derived; onGo: (t: TabId) => void; onResume: () => void; busy: boolean; tab: TabId }) {
   const st = RUN_STATUS[snap.status]
   const killed = snap.status === 'killed'
   const pa = d.pendingApproval
@@ -33,20 +33,22 @@ export function NowBar({ snap, d, onGo, onResume, busy }: { snap: RunSnapshot; d
       sentence = `Waiting for your approval: choose the vendor for ${d.packageTitle}`
       detail = d.recommended ? `The agent recommends ${d.recommended.vendor_name} (${inr(d.recommended.total_inr)}, ${d.recommended.float_days >= 0 ? '+' : ''}${d.recommended.float_days} d float).` : pa.summary
     }
-    cta = (
-      <Button variant="primary" size="lg" icon={ArrowRight} onClick={() => onGo('approvals')} data-testid="now-approve">
-        Review &amp; approve
-      </Button>
-    )
+    cta =
+      tab === 'approvals' ? null : (
+        <Button variant="primary" size="lg" icon={ArrowRight} onClick={() => onGo('approvals')} data-testid="now-approve">
+          Review &amp; approve
+        </Button>
+      )
   } else if (snap.status === 'completed') {
     icon = <CheckCircle2 className="h-5 w-5 text-emerald-400" />
     sentence = snap.po ? `Done: ${snap.po.po_number} sent to ${snap.po.vendor_name}` : 'Run completed'
     detail = snap.po?.issued_at ? `Issued ${Math.max(0, d.daysLeft)} sim days before the ${snap.goal.need_by} need-by date, ${inr(snap.budget.committed_inr)} committed against ${inr(snap.goal.budget_inr)}.` : null
-    cta = (
-      <Button variant="secondary" icon={FileCheck2} onClick={() => onGo('po')}>
-        View PO
-      </Button>
-    )
+    cta =
+      tab === 'po' ? null : (
+        <Button variant="secondary" icon={FileCheck2} onClick={() => onGo('po')}>
+          View PO
+        </Button>
+      )
   } else if (snap.status === 'failed') {
     icon = <XCircle className="h-5 w-5 text-rose-400" />
     sentence = 'Run stopped'

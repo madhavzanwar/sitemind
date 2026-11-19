@@ -19,12 +19,13 @@ import {
   XCircle,
   type LucideIcon,
 } from 'lucide-react'
-import type { AuditEntry, Plan, PlanTask, RunSnapshot } from '../types'
+import type { Plan, PlanTask, RunSnapshot } from '../types'
 import { cx, dayMonth } from '../lib/format'
 import { TASK_LABEL, TASK_TONE, TONE } from '../lib/status'
 import { Card } from './ui'
+import { triggerFor } from '../lib/plan'
 
-export const SPECIALIST_ICON: Record<string, LucideIcon> = {
+const SPECIALIST_ICON: Record<string, LucideIcon> = {
   planner: Brain,
   takeoff: FileText,
   quotes: MessageSquareQuote,
@@ -44,14 +45,13 @@ const STATUS_ICON: Record<PlanTask['status'], LucideIcon> = {
   skipped: Ban,
 }
 
-const NODE_W = 184
-const NODE_H = 86
+const NODE_W = 176
+const NODE_H = 78
 const SKIP_H = 46
-const COL_GAP = 36
+const COL_GAP = 30
 const SUB_GAP = 14
 const ROW_GAP = 14
 const PAD = 16
-const MAX_ROWS = 3
 
 interface Placed {
   task: PlanTask
@@ -60,7 +60,7 @@ interface Placed {
   h: number
 }
 
-function layout(plan: Plan) {
+function layout(plan: Plan, MAX_ROWS = 3) {
   const byId = new Map(plan.tasks.map((t) => [t.id, t]))
   const depth = new Map<string, number>()
   const visit = (id: string, stack: Set<string>): number => {
@@ -117,14 +117,6 @@ function diffPlans(prev: Plan | undefined, cur: Plan) {
   }
 }
 
-export function triggerFor(plan: Plan, audit: AuditEntry[]): string | null {
-  const e = audit.find((a) => a.action.includes('replan') && (a.plan_version === plan.version || a.outputs?.version === plan.version))
-  const trig = e?.inputs?.trigger ?? e?.outputs?.trigger
-  if (typeof trig === 'string') return trig.replace(/_/g, ' ')
-  const first = plan.rationale.split(/[.:;]/)[0]
-  return first ? first.slice(0, 60) : null
-}
-
 const LEGEND: { status: PlanTask['status']; label: string }[] = [
   { status: 'done', label: 'Done' },
   { status: 'running', label: 'Running' },
@@ -143,10 +135,25 @@ export function TaskGraph({ snap, className, onSelect, compact }: { snap: RunSna
   const diff = plan ? diffPlans(history[idx - 1], plan) : null
   const trigger = plan && diff ? triggerFor(plan, snap.audit) : null
   const killed = snap.status === 'killed'
-  const [zoom, setZoom] = useState(1)
-  const lay = useMemo(() => (plan ? layout(plan) : null), [plan])
+  const [userZoom, setUserZoom] = useState<number | null>(null)
+  const [showSkipped, setShowSkipped] = useState(!compact)
+  const shown = useMemo(() => (plan && !showSkipped ? { ...plan, tasks: plan.tasks.filter((t) => t.status !== 'skipped') } : plan), [plan, showSkipped])
+  const nSkipped = plan ? plan.tasks.length - plan.tasks.filter((t) => t.status !== 'skipped').length : 0
+  const lay = useMemo(() => (shown ? layout(shown, compact ? 2 : 3) : null), [shown, compact])
+  const [boxW, setBoxW] = useState(0)
   const pos = useMemo(() => new Map(lay?.placed.map((p) => [p.task.id, p]) ?? []), [lay])
   const scroller = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const el = scroller.current
+    if (!el) return
+    const ro = new ResizeObserver(([e]) => e && setBoxW(e.contentRect.width))
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
+  // default: fit the whole plan if it stays readable (≥ 0.8), otherwise scroll at 100 %
+  const fitZoom = lay && boxW ? Math.min(1, (boxW - 4) / lay.width) : 1
+  const zoom = userZoom ?? (fitZoom >= 0.8 ? fitZoom : 1)
+  const setZoom = (f: (z: number) => number) => setUserZoom(f(zoom))
 
   // keep the active task in view (only when it changes, so polling never jumps the scroll)
   const activeId = plan?.tasks.find((t) => t.status === 'running' || t.status === 'waiting_human')?.id
@@ -159,10 +166,7 @@ export function TaskGraph({ snap, className, onSelect, compact }: { snap: RunSna
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeId])
 
-  const fit = () => {
-    const el = scroller.current
-    if (el && lay) setZoom(Math.max(0.55, Math.min(1, (el.clientWidth - 8) / lay.width)))
-  }
+  const fit = () => setUserZoom(Math.max(0.55, fitZoom))
 
   return (
     <Card
@@ -198,6 +202,11 @@ export function TaskGraph({ snap, className, onSelect, compact }: { snap: RunSna
               ))}
             </div>
           )}
+          {nSkipped > 0 && (
+            <button onClick={() => setShowSkipped((v) => !v)} className="rounded-lg bg-white/[0.05] px-2.5 py-1.5 text-[13px] text-ink-200 hover:bg-white/[0.09]" data-testid="toggle-superseded">
+              {showSkipped ? 'Hide' : 'Show'} superseded ({nSkipped})
+            </button>
+          )}
           <div className="flex items-center rounded-lg bg-white/[0.05] p-1">
             <button aria-label="Zoom out" className="grid h-7 w-7 place-items-center rounded text-ink-300 hover:text-ink-50" onClick={() => setZoom((z) => Math.max(0.55, +(z - 0.1).toFixed(2)))}>
               <Minus className="h-4 w-4" />
@@ -223,6 +232,9 @@ export function TaskGraph({ snap, className, onSelect, compact }: { snap: RunSna
           )
         })}
       </div>
+      <div className="relative">
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-8 bg-gradient-to-r from-ink-900 to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-8 bg-gradient-to-l from-ink-900 to-transparent" />
       <div ref={scroller} className={cx('relative w-full overflow-x-auto overflow-y-hidden pb-2', killed && 'saturate-[0.35]')}>
         {lay && plan ? (
           <div data-testid="task-graph-canvas" data-scale={zoom.toFixed(2)} className="relative" style={{ width: lay.width * zoom, height: (compact ? Math.min(lay.height, 420) : lay.height) * zoom }}>
@@ -271,6 +283,7 @@ export function TaskGraph({ snap, className, onSelect, compact }: { snap: RunSna
           <div className="grid h-40 place-items-center text-sm text-ink-400">The planner is decomposing the goal…</div>
         )}
       </div>
+      </div>
     </Card>
   )
 }
@@ -289,7 +302,7 @@ function Node({ task, x, y, h, frozen, onClick }: { task: PlanTask; x: number; y
           ? 'Frozen'
           : 'Running…'
         : task.status === 'waiting_human'
-          ? 'Needs your approval'
+          ? 'Needs you'
           : task.deadline
             ? `Due ${dayMonth(task.deadline)}`
             : TASK_LABEL[task.status]

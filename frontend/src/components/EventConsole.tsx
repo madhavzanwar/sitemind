@@ -45,7 +45,7 @@ export function EventConsole({ snap, onInject, busy, className }: { snap: RunSna
     }
     setErr(null)
     try {
-      await onInject({ type: spec.type, vendor_id: spec.needs_vendor ? vSel : null, params: p, note: note || null })
+      await onInject({ type: spec.type, vendor_id: spec.needs_vendor || spec.type === 'date_slip' ? vSel || null : null, params: p, note: note || null })
       setNote('')
     } catch (e) {
       setErr(e instanceof Error ? e.message : String(e))
@@ -66,10 +66,11 @@ export function EventConsole({ snap, onInject, busy, className }: { snap: RunSna
             ))}
           </select>
         </label>
-        {spec?.needs_vendor && (
+        {(spec?.needs_vendor || spec?.type === 'date_slip') && (
           <label className="col-span-2 block sm:col-span-1">
             <span className="text-[13px] text-ink-400">Vendor</span>
             <select data-testid="event-vendor" value={vSel} onChange={(e) => setVendor(e.target.value)} className="field mt-1.5">
+              {!spec.needs_vendor && <option value="">None (site date)</option>}
               {vendors.map((v) => (
                 <option key={v.id} value={v.id}>
                   {v.id} · {v.name}

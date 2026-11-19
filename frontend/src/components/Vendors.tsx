@@ -59,7 +59,7 @@ export function VendorTable({ snap, className, full }: { snap: RunSnapshot; clas
       ) : (
         <>
           <div className="overflow-x-auto px-2">
-            <table className="w-full min-w-[760px] text-sm">
+            <table className="w-full min-w-[880px] text-sm [&_td]:whitespace-nowrap">
               <thead>
                 <tr className="border-b border-white/[0.06]">
                   <th className="th">Vendor</th>
@@ -99,7 +99,7 @@ export function VendorTable({ snap, className, full }: { snap: RunSnapshot; clas
                       data-testid={`vendor-${r.id}`}
                       className={cx('border-b border-white/[0.04] last:border-0', (isRec || isSel) && 'bg-accent-400/[0.06]')}
                     >
-                      <td className={cx('td relative', (isRec || isSel) && 'before:absolute before:inset-y-2 before:left-0 before:w-[3px] before:rounded-full before:bg-accent-400')}>
+                      <td className={cx('td relative !whitespace-normal', (isRec || isSel) && 'before:absolute before:inset-y-2 before:left-0 before:w-[3px] before:rounded-full before:bg-accent-400')}>
                         <div className="font-medium text-ink-50">{q || o ? r.name : <span className="italic text-ink-400">Awaiting quote</span>}</div>
                         <div className="mt-0.5 text-[13px] text-ink-400">
                           <span className="font-mono text-[12px]">{r.id}</span>
@@ -187,7 +187,7 @@ function LineComparison({ snap }: { snap: RunSnapshot }) {
     <div className="border-t border-white/[0.06] px-2 pb-4 pt-4">
       <h3 className="px-3 pb-2 text-sm font-semibold text-ink-100">Line-by-line unit prices</h3>
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[760px] text-sm">
+        <table className="w-full min-w-[880px] text-sm [&_td]:whitespace-nowrap">
           <thead>
             <tr className="border-b border-white/[0.06]">
               <th className="th">Item (from the spec)</th>

@@ -81,8 +81,7 @@ export function Audit({ snap }: { snap: RunSnapshot }) {
           </div>
         </div>
       }
-      className="h-full"
-      bodyClassName="overflow-auto"
+      bodyClassName="overflow-x-auto"
     >
       {view === 'audit' ? <AuditTable rows={filterAudit(snap.audit, q, actor)} /> : <LedgerTable rows={filterLedger(snap.ledger, q)} />}
     </Card>

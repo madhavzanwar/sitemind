@@ -132,7 +132,7 @@ export const EVENT_TYPES: EventTypeSpec[] = [
     type: 'date_slip',
     title: 'Date slip',
     description: "A vendor's lead time slips, or the required-on-site date moves.",
-    needs_vendor: true,
+    needs_vendor: false,
     params: [
       { name: 'days', label: 'Slip', kind: 'int', default: 21, choices: [], unit: 'days', min: -60, max: 120 },
       { name: 'target', label: 'Applies to', kind: 'choice', default: 'lead_time', choices: ['lead_time', 'required_on_site'], unit: '', min: null, max: null },

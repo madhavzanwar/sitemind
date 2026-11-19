@@ -10,8 +10,8 @@ export function PoPackage({ snap }: { snap: RunSnapshot }) {
   const po = snap.po
   if (!po)
     return (
-      <div data-testid="po-package" className="h-full">
-        <Card className="h-full">
+      <div data-testid="po-package">
+        <Card>
           <Empty icon={FileSignature} title="No purchase order yet" hint="The PO is drafted after the vendor-selection approval, then released after a second human sign-off." />
         </Card>
       </div>
@@ -40,9 +40,9 @@ export function PoPackage({ snap }: { snap: RunSnapshot }) {
   ]
 
   return (
-    <div data-testid="po-package" data-status={po.status} className="grid h-full min-h-0 grid-cols-[minmax(0,1fr)_380px] gap-4">
+    <div data-testid="po-package" data-status={po.status} className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_380px]">
       <Card title={po.po_number} icon={FileCheck2} subtitle={`${po.vendor_name} · ${po.project}`} bodyClassName="overflow-auto" right={<Badge tone={sent ? 'success' : po.status === 'approved' ? 'info' : 'warning'} dot>{po.status.toUpperCase()}</Badge>}>
-        <div className="relative mx-auto max-w-[980px] px-12 py-10">
+        <div className="relative mx-auto max-w-[980px] px-6 py-8 lg:px-12 lg:py-10">
           {sent && (
             <div
               data-testid="po-sent-stamp"
@@ -58,7 +58,7 @@ export function PoPackage({ snap }: { snap: RunSnapshot }) {
         </div>
       </Card>
 
-      <div className="flex min-h-0 flex-col gap-4 overflow-auto">
+      <div className="flex flex-col gap-4">
         <Card title="Status" icon={Send} bodyClassName="p-4">
           <div className="flex items-center">
             {stages.map((s, i) => (

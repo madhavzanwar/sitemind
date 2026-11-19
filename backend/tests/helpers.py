@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import time
 from collections.abc import Callable
-from typing import Any
 from datetime import date
+from typing import Any
 
 from sitemind.models import CreateRunRequest, RunSnapshot
 from sitemind.runner import snapshot

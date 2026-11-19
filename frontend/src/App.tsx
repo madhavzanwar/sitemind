@@ -1,32 +1,33 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Play, ShieldAlert } from 'lucide-react'
 import { api, IS_MOCK } from './api'
 import { mockApi, type FixtureStage } from './mock/server'
-import type { ApprovalDecision, Health, RunSnapshot } from './types'
+import type { ApprovalDecision, Health, InjectEventRequest, PlanTask, RunSnapshot, TimelineEvent } from './types'
 import { useRun } from './lib/useRun'
+import { derive } from './lib/derive'
 import { Header } from './components/Header'
-import { NavRail, type TabId } from './components/NavRail'
-import { Hero } from './components/Hero'
+import { TabsBar, type Toast } from './components/TabsBar'
+import { TAB_IDS, type TabId } from './lib/tabs'
+import { NowBar } from './components/NowBar'
+import { Kpis } from './components/Kpis'
 import { TaskGraph } from './components/TaskGraph'
 import { Timeline } from './components/Timeline'
-import { Vendors } from './components/Vendors'
+import { VendorTable } from './components/Vendors'
 import { Budget } from './components/Budget'
+import { EventConsole } from './components/EventConsole'
+import { PlanTab } from './components/PlanTab'
 import { Approvals } from './components/Approvals'
 import { Audit } from './components/Audit'
 import { PoPackage } from './components/PoPackage'
 import { Composer } from './components/Composer'
-import { Toasts, type Toast } from './components/Toasts'
-import { Button } from './components/ui'
-
-const TAB_IDS: TabId[] = ['overview', 'approvals', 'audit', 'po']
+import { MomentDetail, TaskDetail } from './components/Details'
+import { Drawer } from './components/ui'
+import { LANE_LABEL } from './lib/status'
 
 function readUrl(): { run: string | null; tab: TabId } {
   const p = new URLSearchParams(window.location.search)
   let run = p.get('run')
   const fixture = p.get('fixture') as FixtureStage | null
-  if (IS_MOCK && fixture && !run) {
-    run = mockApi.loadFixture(fixture, p.has('live'))
-  }
+  if (IS_MOCK && fixture && !run) run = mockApi.loadFixture(fixture, p.has('live'))
   const t = p.get('tab') as TabId | null
   return { run, tab: t && TAB_IDS.includes(t) ? t : 'overview' }
 }
@@ -34,24 +35,25 @@ function readUrl(): { run: string | null; tab: TabId } {
 function writeUrl(run: string | null, tab: TabId) {
   const p = new URLSearchParams(window.location.search)
   p.delete('fixture')
-  if (run) p.set('run', run)
+  if (run && !IS_MOCK) p.set('run', run)
   else p.delete('run')
   if (tab !== 'overview') p.set('tab', tab)
   else p.delete('tab')
-  // mock runs live only in memory; don't keep their ids across reloads
-  if (IS_MOCK) p.delete('run')
   const qs = p.toString()
   window.history.replaceState(null, '', `${window.location.pathname}${qs ? `?${qs}` : ''}`)
 }
 
 const initial = readUrl()
 
+type DrawerState = { kind: 'task'; id: string } | { kind: 'moment'; lane: string; day: string; events: TimelineEvent[] } | null
+
 export default function App() {
   const [runId, setRunId] = useState<string | null>(initial.run)
   const [tab, setTab] = useState<TabId>(initial.tab)
   const [health, setHealth] = useState<Health | null>(null)
   const [busy, setBusy] = useState(false)
-  const [toasts, setToasts] = useState<Toast[]>([])
+  const [toast, setToast] = useState<Toast | null>(null)
+  const [drawer, setDrawer] = useState<DrawerState>(null)
   const { snap, setSnap } = useRun(runId)
 
   useEffect(() => writeUrl(runId, tab), [runId, tab])
@@ -59,34 +61,27 @@ export default function App() {
     api.health().then(setHealth).catch(() => setHealth(null))
   }, [])
 
-  const toast = useCallback((t: Omit<Toast, 'id'>) => {
-    const id = Date.now() + Math.random()
-    // at most 2 on screen; each auto-dismisses after 5 s
-    setToasts((ts) => [...ts, { ...t, id }].slice(-2))
-    window.setTimeout(() => setToasts((ts) => ts.filter((x) => x.id !== id)), 5000)
+  const toastTimer = useRef<number | undefined>(undefined)
+  const notify = useCallback((t: Omit<Toast, 'id'>) => {
+    setToast({ ...t, id: Date.now() })
+    window.clearTimeout(toastTimer.current)
+    toastTimer.current = window.setTimeout(() => setToast(null), 5000)
   }, [])
 
-  // "resumed from checkpoint #N" toast when the worker restart count goes up
+  // Toast only transitions observed live; the first snapshot after (re)loading a run is a baseline.
   const prev = useRef<RunSnapshot | null>(null)
   useEffect(() => {
     const p = prev.current
-    // Only toast transitions observed live: the first snapshot after (re)loading a run is a baseline.
     if (snap && p && p.run_id === snap.run_id) {
-      if (snap.worker.restarts > p.worker.restarts) {
-        toast({
-          tone: 'success',
-          title: `Resumed from checkpoint #${snap.checkpoints}`,
-          body: `New worker pid ${snap.worker.pid ?? '—'} picked up the LangGraph thread. Completed side effects are replayed from the ledger, not re-executed.`,
-        })
-      }
-      if (snap.status === 'completed' && p.status !== 'completed') {
-        toast({ tone: 'success', title: 'Goal achieved', body: snap.po ? `${snap.po.po_number} sent to ${snap.po.vendor_name}.` : 'Run completed.' })
-      }
-      const newPending = snap.approvals.filter((a) => a.status === 'pending' && !p.approvals.some((x) => x.id === a.id))
-      newPending.forEach((a) => toast({ tone: 'info', title: 'Human approval needed', body: a.title }))
+      if (snap.worker.restarts > p.worker.restarts) notify({ tone: 'success', title: `Resumed from checkpoint #${snap.checkpoints}`, body: `worker pid ${snap.worker.pid ?? '—'} · no side effect repeated` })
+      if (snap.status === 'completed' && p.status !== 'completed') notify({ tone: 'success', title: 'Goal achieved', body: snap.po ? `${snap.po.po_number} sent to ${snap.po.vendor_name}` : undefined })
+      const fresh = snap.approvals.filter((a) => a.status === 'pending' && !p.approvals.some((x) => x.id === a.id))
+      if (fresh[0]) notify({ tone: 'info', title: 'Approval needed', body: fresh[0].title })
+      const applied = (snap.events ?? []).filter((e) => e.status === 'applied' && p.events?.find((x) => x.id === e.id)?.status === 'pending')
+      if (applied[0]) notify({ tone: 'info', title: `Agent reacted to ${applied[0].id}`, body: applied[0].outcome ?? undefined })
     }
     prev.current = snap
-  }, [snap, toast])
+  }, [snap, notify])
 
   const act = async (fn: () => Promise<RunSnapshot>, after?: (s: RunSnapshot) => void) => {
     setBusy(true)
@@ -95,37 +90,42 @@ export default function App() {
       setSnap(s)
       after?.(s)
     } catch (e) {
-      toast({ tone: 'danger', title: 'Request failed', body: e instanceof Error ? e.message : String(e) })
+      notify({ tone: 'danger', title: 'Request failed', body: e instanceof Error ? e.message : String(e) })
+      throw e
     } finally {
       setBusy(false)
     }
   }
 
-  const onKill = () =>
-    runId &&
-    void act(
-      () => api.kill(runId),
-      (s) => toast({ tone: 'danger', title: 'Worker killed (SIGKILL)', body: `Process terminated at checkpoint #${s.checkpoints}. State is durable — press Resume.` }),
-    )
-  const onResume = () => runId && void act(() => api.resume(runId))
-  const onDecide = async (approvalId: string, d: ApprovalDecision) => {
-    if (!runId) return
-    await act(() => api.decide(runId, approvalId, d))
+  const onKill = () => {
+    if (runId) void act(() => api.kill(runId), (s) => notify({ tone: 'danger', title: 'Worker killed (SIGKILL)', body: `state is durable at checkpoint #${s.checkpoints}` })).catch(() => undefined)
   }
-
+  const onResume = () => {
+    if (runId) void act(() => api.resume(runId)).catch(() => undefined)
+  }
+  const onDecide = async (approvalId: string, d: ApprovalDecision) => {
+    if (runId) await act(() => api.decide(runId, approvalId, d)).catch(() => undefined)
+  }
+  const onInject = async (req: InjectEventRequest) => {
+    if (runId) await act(() => api.injectEvent(runId, req), () => notify({ tone: 'info', title: 'Event injected', body: `${req.type.replace(/_/g, ' ')}${req.vendor_id ? ` on ${req.vendor_id}` : ''} — waiting for the agent` }))
+  }
   const goHome = () => {
     setRunId(null)
     setTab('overview')
+    setDrawer(null)
   }
+  const openTask = (t: PlanTask) => setDrawer({ kind: 'task', id: t.id })
+  const openMoment = (lane: string, day: string, events: TimelineEvent[]) => setDrawer({ kind: 'moment', lane, day, events })
 
-  const pending = snap?.approvals.filter((a) => a.status === 'pending').length ?? 0
-  const killed = snap?.status === 'killed'
+  const d = snap ? derive(snap) : null
+  const llm = snap?.llm.provider ? `LLM ${String(snap.llm.provider)} · ${String(snap.llm.model ?? '')}` : health ? `LLM ${health.llm.provider} · ${health.llm.model}` : ''
+  const drawerTask = drawer?.kind === 'task' ? snap?.plan?.tasks.find((t) => t.id === drawer.id) : null
 
   return (
-    <div className="flex h-full min-h-screen flex-col">
-      <Header snap={runId ? snap : null} health={health} busy={busy} onKill={onKill} onResume={onResume} onHome={goHome} />
+    <div className="flex min-h-screen flex-col">
+      <Header snap={runId ? snap : null} busy={busy} onKill={onKill} onResume={onResume} onHome={goHome} />
       {!runId ? (
-        <main className="min-h-0 flex-1 overflow-auto">
+        <main className="flex-1">
           <Composer
             onLaunched={(s) => {
               setSnap(s)
@@ -136,66 +136,72 @@ export default function App() {
           />
         </main>
       ) : (
-        <div className="flex min-h-0 flex-1">
-          <NavRail tab={tab} onTab={setTab} pending={pending} poReady={snap?.po?.status === 'sent'} onNew={goHome} />
-          <main className="flex min-h-0 min-w-0 flex-1 flex-col gap-4 p-4">
-            {killed && snap && (
-              <div
-                data-testid="killed-banner"
-                className="relative flex animate-fade-up items-center gap-4 overflow-hidden rounded-2xl border border-rose-500/40 bg-gradient-to-r from-rose-950/80 via-rose-900/30 to-ink-900/60 px-5 py-3 shadow-danger"
-              >
-                <div className="pointer-events-none absolute inset-0 overflow-hidden">
-                  <div className="absolute inset-y-0 w-1/3 animate-scan bg-gradient-to-r from-transparent via-rose-500/10 to-transparent" />
-                </div>
-                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-rose-500/20 ring-1 ring-inset ring-rose-400/40">
-                  <ShieldAlert className="h-5 w-5 text-rose-300" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="text-[14px] font-semibold text-rose-100">Worker offline — SIGKILL delivered to pid {snap.worker.pid ?? '—'}</div>
-                  <div className="text-[12.5px] text-rose-200/70">
-                    Progress is frozen, not lost: LangGraph state is durable at checkpoint #{snap.checkpoints}, and every completed side effect is in the idempotency ledger.
-                  </div>
-                </div>
-                <Button variant="success" icon={Play} onClick={onResume} disabled={busy}>
-                  Resume from checkpoint #{snap.checkpoints}
-                </Button>
-              </div>
-            )}
-            {!snap ? (
-              <div className="grid flex-1 place-items-center text-sm text-ink-400">Loading run…</div>
-            ) : tab === 'overview' ? (
-              <Overview snap={snap} />
-            ) : tab === 'approvals' ? (
-              <div className="min-h-0 flex-1">
-                <Approvals snap={snap} onDecide={onDecide} busy={busy} />
-              </div>
-            ) : tab === 'audit' ? (
-              <div className="min-h-0 flex-1">
-                <Audit snap={snap} />
-              </div>
-            ) : (
-              <div className="min-h-0 flex-1">
-                <PoPackage snap={snap} />
-              </div>
-            )}
+        <>
+          <TabsBar
+            tab={tab}
+            onTab={setTab}
+            toast={toast}
+            onDismiss={() => setToast(null)}
+            llm={llm}
+            counts={{
+              plan: { n: d?.total ?? 0 },
+              vendors: { n: snap?.quotes.length ?? 0 },
+              approvals: { n: d?.pending.length ?? 0, urgent: (d?.pending.length ?? 0) > 0 },
+              audit: { n: snap?.audit.length ?? 0 },
+            }}
+          />
+          <main className="flex-1 px-4 py-5 lg:px-6">
+            <div className="mx-auto w-full max-w-[1720px] space-y-4">
+              {!snap || !d ? (
+                <div className="grid h-64 place-items-center text-sm text-ink-400">Loading run…</div>
+              ) : (
+                <>
+                  <NowBar snap={snap} d={d} onGo={setTab} onResume={onResume} busy={busy} tab={tab} />
+                  {tab === 'overview' && (
+                    <>
+                      <Kpis snap={snap} d={d} />
+                      <div className="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_380px]">
+                        <TaskGraph snap={snap} onSelect={openTask} compact />
+                        <Budget snap={snap} />
+                      </div>
+                      <VendorTable snap={snap} />
+                      <div className="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_380px]">
+                        <Timeline snap={snap} onOpen={openMoment} />
+                        <EventConsole snap={snap} onInject={onInject} busy={busy} />
+                      </div>
+                    </>
+                  )}
+                  {tab === 'plan' && <PlanTab snap={snap} onSelect={openTask} />}
+                  {tab === 'vendors' && (
+                    <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_400px]">
+                      <VendorTable snap={snap} full />
+                      <div className="space-y-4">
+                        <Budget snap={snap} />
+                        <EventConsole snap={snap} onInject={onInject} busy={busy} />
+                      </div>
+                    </div>
+                  )}
+                  {tab === 'approvals' && <Approvals snap={snap} onDecide={onDecide} busy={busy} />}
+                  {tab === 'audit' && <Audit snap={snap} />}
+                  {tab === 'po' && <PoPackage snap={snap} />}
+                </>
+              )}
+            </div>
           </main>
-        </div>
+        </>
       )}
-      <Toasts toasts={toasts} onClose={(id) => setToasts((ts) => ts.filter((t) => t.id !== id))} />
-    </div>
-  )
-}
-
-function Overview({ snap }: { snap: RunSnapshot }) {
-  return (
-    <div className="flex min-h-0 flex-1 flex-col gap-4">
-      <Hero snap={snap} />
-      <TaskGraph snap={snap} className={snap.status === 'killed' ? 'h-[214px] shrink-0' : 'h-[272px] shrink-0'} />
-      <div className="grid min-h-[440px] flex-1 grid-cols-12 grid-rows-[minmax(0,1fr)] gap-4">
-        <Timeline snap={snap} className="col-span-5" />
-        <Vendors snap={snap} className="col-span-4" />
-        <Budget snap={snap} className="col-span-3" />
-      </div>
+      {snap && (
+        <Drawer
+          testId="detail-drawer"
+          open={!!drawer && (drawer.kind === 'moment' || !!drawerTask)}
+          onClose={() => setDrawer(null)}
+          title={drawer?.kind === 'task' ? (drawerTask?.title ?? '') : drawer?.kind === 'moment' ? `${LANE_LABEL[drawer.lane] ?? drawer.lane} · ${drawer.day}` : ''}
+          subtitle={drawer?.kind === 'task' ? drawerTask?.id : 'Timeline moment'}
+        >
+          {drawer?.kind === 'task' && drawerTask && <TaskDetail snap={snap} task={drawerTask} />}
+          {drawer?.kind === 'moment' && <MomentDetail snap={snap} lane={drawer.lane} day={drawer.day} events={drawer.events} />}
+        </Drawer>
+      )}
     </div>
   )
 }

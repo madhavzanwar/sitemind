@@ -116,3 +116,56 @@ def test_kill_resume_exactly_once() -> None:
     assert all(n == 1 for k, n in audit_keys.items() if k[0] != "worker.killed"), audit_keys
     md = client.get(f"/api/runs/{rid}/po.md")
     assert md.status_code == 200 and snap.po.po_number in md.text
+
+
+def test_restart_event_and_event_while_parked_spawn_workers() -> None:
+    """`restart` = SIGKILL + resume; an event on a parked run spawns a worker that reacts."""
+    client = TestClient(app)
+    rid = client.post("/api/runs", json=demo_request(delay=0.3).model_dump(mode="json")).json()[
+        "run_id"
+    ]
+    snap = wait_for(rid, lambda s: _done(s, "levelling"), timeout=60)
+    pid1 = snap.worker.pid
+    r = client.post(f"/api/runs/{rid}/events", json={"type": "restart"})
+    assert r.status_code == 200
+    restart = r.json()["events"][-1]
+    assert restart["status"] == "applied" and "SIGKILL" in restart["outcome"]
+    assert pid1 and not pid_alive(pid1)
+    snap = wait_for(rid, _pending_approval, timeout=90)
+    assert snap.worker.pid != pid1 and snap.worker.restarts >= 1
+    # parked at approval: inject a price change on the recommended vendor -> worker spawned,
+    # approval superseded, fresh memo, new pending approval
+    first = next(a for a in snap.approvals if a.status == ApprovalStatus.pending)
+    assert first.memo is not None
+    rec_vendor = next(o.vendor_id for o in first.memo.options if o.recommended)
+    client.post(
+        f"/api/runs/{rid}/events",
+        json={"type": "price_change", "vendor_id": rec_vendor, "params": {"pct": 6}},
+    )
+    snap = wait_for(
+        rid,
+        lambda s: (
+            _pending_approval(s)
+            and any(a.id != first.id and a.status == ApprovalStatus.pending for a in s.approvals)
+        ),
+        timeout=90,
+    )
+    old = next(a for a in snap.approvals if a.id == first.id)
+    assert old.status == ApprovalStatus.rejected and "superseded" in (old.decided_by or "")
+    assert snap.events[-1].status == "applied"
+    # finish the run through the API
+    while snap.status.value != "completed":
+        snap = wait_for(rid, lambda s: _pending_approval(s) or s.status.value == "completed", 90)
+        pend = [a for a in snap.approvals if a.status == ApprovalStatus.pending]
+        if pend:
+            client.post(f"/api/runs/{rid}/approvals/{pend[0].id}", json={"decision": "approve"})
+            snap = wait_for(
+                rid,
+                lambda s, a=pend[0]: all(
+                    x.id != a.id or x.status != ApprovalStatus.pending for x in s.approvals
+                ),
+                30,
+            )
+    msgs = Counter((m["channel"], m["ref"]) for m in get_store().list_outbox(rid))
+    assert all(n == 1 for n in msgs.values()), msgs
+    assert len(get_store().list_outbox(rid, "po")) == 1

@@ -1,9 +1,9 @@
 import { CheckCircle2, AlertTriangle, Info, X } from 'lucide-react'
 import { cx } from '../lib/format'
 
-export type TabId = 'overview' | 'plan' | 'vendors' | 'approvals' | 'audit' | 'po'
+import { TAB_IDS, type TabId } from '../lib/tabs'
 
-export const TAB_IDS: TabId[] = ['overview', 'plan', 'vendors', 'approvals', 'audit', 'po']
+export type { TabId }
 
 const LABEL: Record<TabId, string> = {
   overview: 'Overview',

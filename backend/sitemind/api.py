@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 import secrets
 import threading
 from collections.abc import AsyncIterator
@@ -198,7 +199,11 @@ async def upload_spec(file: UploadFile = File(...)) -> SpecUpload:
     updir = settings.data_dir / "uploads"
     updir.mkdir(parents=True, exist_ok=True)
     upload_id = f"up-{secrets.token_hex(6)}"
-    path = updir / f"{upload_id}.pdf"
+    name = re.sub(r"[^A-Za-z0-9._-]+", "_", Path(file.filename or "spec.pdf").name)[:80]
+    if not name.lower().endswith(".pdf"):
+        name += ".pdf"
+    (updir / upload_id).mkdir(parents=True, exist_ok=True)
+    path = updir / upload_id / name  # keep the user's filename for page citations
     path.write_bytes(data)
     try:
         import pdfplumber
@@ -217,7 +222,7 @@ async def upload_spec(file: UploadFile = File(...)) -> SpecUpload:
         takeoff = None
     up = SpecUpload(
         upload_id=upload_id,
-        filename=Path(file.filename or "spec.pdf").name,
+        filename=name,
         pages=pages,
         size_bytes=len(data),
         package_id=package_id,

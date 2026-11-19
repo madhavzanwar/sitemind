@@ -75,8 +75,8 @@ function Item({ a, active, onClick }: { a: ApprovalRequest; active: boolean; onC
         <Badge tone={tone} dot>
           {sup ? 'superseded' : a.status}
         </Badge>
-        <span className="text-xs font-medium text-ink-400">{KIND_LABEL[a.kind]}</span>
-        <span className="num ml-auto text-xs text-ink-500">{dateTime(a.requested_at)}</span>
+        <span className="truncate text-xs font-medium text-ink-400">{KIND_LABEL[a.kind]}</span>
+        <span className="num ml-auto shrink-0 whitespace-nowrap text-xs text-ink-500">{dateTime(a.requested_at)}</span>
       </div>
       <div className={cx('mt-2 text-sm font-semibold text-ink-50', sup && 'line-through decoration-ink-400/60')}>{a.title}</div>
       <div className="mt-1 line-clamp-2 text-[13px] leading-snug text-ink-300">{sup ? `Superseded by ${(a.decided_by ?? '').replace('system: superseded by ', '')}: ${a.comment ?? ''}` : a.summary}</div>
@@ -122,6 +122,36 @@ function Detail({
           {a.comment ? ` — ${a.comment}` : ''} The agent re-planned and asked again with a fresh memo.
         </div>
       )}
+      {pending && (
+        <div data-testid="decision-bar" className="sticky top-2 z-20 -mx-2 mb-6 flex flex-wrap items-center gap-3 rounded-xl border border-violet-400/30 bg-ink-800/95 px-4 py-3 shadow-xl backdrop-blur">
+          <div className="min-w-0 flex-1 text-sm text-ink-200">
+            {a.kind === 'vendor_selection' ? (
+              <>
+                Your choice: <span className="font-semibold text-ink-50">{options.find((o) => o.option_id === opt)?.vendor_name ?? opt ?? '—'}</span>
+                {opt === memo?.recommendation && <span className="text-accent-300"> · agent's recommendation</span>}
+              </>
+            ) : (
+              <>
+                Release <span className="font-semibold text-ink-50">{a.po?.po_number}</span> to {a.po?.vendor_name}
+              </>
+            )}
+          </div>
+          <input
+            data-testid="approval-comment"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            placeholder="Comment for the audit trail (optional)"
+            className="field h-10 w-full py-2 sm:w-72"
+          />
+          <Button data-testid="approve-button" variant="success" icon={Check} disabled={busy} onClick={() => void decide('approve')}>
+            Approve
+          </Button>
+          <Button data-testid="reject-button" variant="secondary" icon={X} disabled={busy} onClick={() => void decide('reject')}>
+            Reject
+          </Button>
+          {killed && <p className="w-full text-[13px] text-orange-300">Worker is offline — your decision is stored and the run resumes from its checkpoint.</p>}
+        </div>
+      )}
       <div className="grid gap-8 2xl:grid-cols-[minmax(0,1fr)_340px]">
         <div className="min-w-0 space-y-6">
           {memo ? (
@@ -130,8 +160,8 @@ function Detail({
                 <p className="text-[14px] leading-relaxed text-ink-200">{memo.situation}</p>
               </Section>
               <Section icon={ListChecks} title="Options">
-                <div className="overflow-hidden rounded-xl border border-white/[0.06]">
-                  <table className="w-full text-[13px]">
+                <div className="overflow-x-auto rounded-xl border border-white/[0.06]">
+                  <table className="w-full text-[13px] [&_td]:whitespace-nowrap">
                     <thead className="bg-white/[0.025]">
                       <tr>
                         <th className="th w-10" />
@@ -171,9 +201,9 @@ function Detail({
                                 className="h-4 w-4 accent-[#FFB224]"
                               />
                             </td>
-                            <td className="td">
+                            <td className="td !whitespace-normal">
                               <div className="flex items-center gap-2">
-                                <span className="font-mono text-xs text-ink-400">{o.option_id}</span>
+                                <span className="shrink-0 whitespace-nowrap font-mono text-xs text-ink-400">{o.option_id}</span>
                                 <span className="font-semibold text-ink-50">{o.vendor_name}</span>
                                 {o.option_id === memo.recommendation && (
                                   <Badge tone="accent">
@@ -236,36 +266,7 @@ function Detail({
             <Label className="text-violet-300">The ask</Label>
             <p className="mt-1.5 text-sm leading-relaxed text-ink-100">{memo?.asks ?? (a.kind === 'po_release' && a.po ? `Release ${a.po.po_number} to ${a.po.vendor_name}? On approval the agent dispatches it exactly once — the send is recorded under an idempotency key, so a crash or retry can never double-order.` : a.summary)}</p>
           </div>
-          {pending ? (
-            <div className="space-y-3 rounded-xl bg-white/[0.03] p-4">
-              {a.kind === 'vendor_selection' && opt && (
-                <div className="text-[13px] text-ink-300">
-                  Selected: <span className="font-semibold text-ink-50">{options.find((o) => o.option_id === opt)?.vendor_name ?? opt}</span>
-                </div>
-              )}
-              <label className="block">
-                <Label>Comment</Label>
-                <textarea
-                  data-testid="approval-comment"
-                  value={comment}
-                  onChange={(e) => setComment(e.target.value)}
-                  rows={3}
-                  placeholder="Optional note for the audit trail…"
-                  className="field mt-1.5 resize-none"
-                />
-              </label>
-              <div className="flex gap-2">
-                <Button data-testid="approve-button" variant="success" icon={Check} className="flex-1" disabled={busy} onClick={() => void decide('approve')}>
-                  Approve
-                </Button>
-                <Button data-testid="reject-button" variant="secondary" icon={X} disabled={busy} onClick={() => void decide('reject')}>
-                  Reject
-                </Button>
-              </div>
-              {killed && <p className="text-xs leading-snug text-orange-300">Worker is offline — your decision is stored and the run resumes from its checkpoint.</p>}
-              <p className="text-xs text-ink-500">Decision is recorded with idempotency key {a.id}</p>
-            </div>
-          ) : (
+          {pending ? null : (
             <div className="space-y-2 rounded-xl bg-white/[0.03] p-4 text-[13px]">
               <div className="flex items-center gap-2 font-semibold">
                 {a.status === 'approved' ? <CheckCircle2 className="h-4 w-4 text-emerald-400" /> : <XCircle className={cx('h-4 w-4', isSuperseded(a) ? 'text-ink-400' : 'text-rose-400')} />}
@@ -290,7 +291,7 @@ function PoSummary({ a }: { a: ApprovalRequest }) {
       <Section icon={FileSignature} title={`${po.po_number} · ${po.vendor_name}`}>
         <p className="text-[14px] leading-relaxed text-ink-200">{a.summary}</p>
       </Section>
-      <div className="overflow-hidden rounded-xl border border-white/[0.06]">
+      <div className="overflow-x-auto rounded-xl border border-white/[0.06]">
         <table className="w-full text-[13px]">
           <thead className="bg-white/[0.025]">
             <tr>
