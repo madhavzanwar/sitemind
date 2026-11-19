@@ -375,7 +375,7 @@ export class MockEngine {
       this.replanAfter(ev, what)
       this.requestVendorApproval(`${what}. The previous memo was superseded; options re-levelled and re-ranked.`)
       ev.triggers.push('approval_superseded')
-      return `${what}: the pending approval was superseded, the plan re-ranked and a fresh memo now recommends ${recLabel}.`
+      return `${what}: the pending approval was superseded, the plan re-ranked and a fresh memo ${changed ? 'now recommends' : 'still recommends'} ${recLabel}.`
     }
     if (changed) return `${what}: re-levelled, re-ranked — recommendation is now ${recLabel}.`
     return `${what}: re-levelled and re-ranked — ${recLabel} still leads (forecast ${cr(best)}, ${pct1(best / budget)} of budget).`
@@ -888,6 +888,10 @@ const STEPS: Step[] = [
           e.tl('quotes', `${dm.vendor}: ${dm.doc} received`, 'success')
           e.audit('quotes', 'document.received', `${e.vname(dm.vendor)} supplied the ${dm.doc} after the chase; the option is now awardable.`, { task_id: 'R2-alternate', confidence: 0.95 })
         }
+        const slipped = e.D.quotes_refreshed.find((q) => q.vendor_id === alt.vendor)
+        if (slipped) e.setQuote({ ...clone(slipped), received_at: s.sim_now })
+        const sa = e.D.attempts_refresh.find((x) => x.vendor_id === alt.vendor)
+        if (sa) s.vendor_attempts.push({ ...sa, at: s.sim_now })
         e.tl('schedule', `${alt.vendor} lead time +${alt.days} d`, 'error')
         e.audit('schedule', 'schedule.slip', `${e.vname(alt.vendor)} re-confirmed its lead time ${alt.days} d longer; CPM now misses the ${e.story.rosLabel}.`, { outputs: { vendor: alt.vendor, slip_days: alt.days }, task_id: 'R2-alternate', confidence: 0.9 })
       }

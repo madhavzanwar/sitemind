@@ -109,7 +109,12 @@ export function VendorTable({ snap, className, full }: { snap: RunSnapshot; clas
                       </td>
                       <td className="td text-right">
                         <div className="num font-medium text-ink-50">{o || q ? inr(o?.total_inr ?? q?.total_inr) : '—'}</div>
-                        {revised && (
+                        {revised && Math.abs(delta) < 0.0005 && (
+                          <div data-testid={`revised-${r.id}`} className="mt-0.5 text-[13px] text-orange-300" title={revAttempt?.detail}>
+                            rev {q.revision} · price unchanged
+                          </div>
+                        )}
+                        {revised && Math.abs(delta) >= 0.0005 && (
                           <div data-testid={`revised-${r.id}`} className={cx('mt-0.5 inline-flex items-center gap-1 text-[13px]', delta > 0 ? 'text-rose-300' : 'text-emerald-300')} title={revAttempt?.detail}>
                             {delta > 0 ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
                             <span className="num">

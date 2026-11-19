@@ -69,7 +69,7 @@
   ],
   "confidence": 0.92,
   "warnings": [
-   "SPD-T1-200KA: drawing p3 shows 3 ea (SPD-xx tags) but the equipment schedule lists 4 ea; schedule quantity used - raise an RFI to confirm."
+   "SPD-T1-200KA: p3 shows 3 ea (SPD-xx tags) but the equipment schedule lists 4 ea; schedule quantity used - raise an RFI to confirm."
   ]
  },
  "quotes_r1": [
@@ -318,7 +318,7 @@
    "meets_deadline": true,
    "score": 0.73,
    "recommended": true,
-   "rationale": "Kestrel Power Systems: committed INR 405.8 L (88.2% of budget, ok); delivers 2027-06-17 (+43 d float); on-time record 93%."
+   "rationale": "Kestrel Power Systems: committed INR 4.06 Cr (88.2% of budget, ok); delivers 2027-06-17 (+43 d float); on-time record 93%."
   },
   {
    "option_id": "O-V3X",
@@ -334,7 +334,7 @@
    "meets_deadline": true,
    "score": 0.654,
    "recommended": false,
-   "rationale": "Anvil Electric India expedited (-42 d): committed INR 417.2 L (90.7% of budget, warn); delivers 2027-07-01 (+29 d float); on-time record 90%."
+   "rationale": "Anvil Electric India expedited (-42 d): committed INR 4.17 Cr (90.7% of budget, warn); delivers 2027-07-01 (+29 d float); on-time record 90%."
   },
   {
    "option_id": "O-V1",
@@ -350,7 +350,7 @@
    "meets_deadline": true,
    "score": 0.579,
    "recommended": false,
-   "rationale": "Voltaris Switchgear Pvt Ltd: committed INR 372.5 L (81.0% of budget, ok); delivers 2027-07-15 (+15 d float); on-time record 82%."
+   "rationale": "Voltaris Switchgear Pvt Ltd: committed INR 3.72 Cr (81.0% of budget, ok); delivers 2027-07-15 (+15 d float); on-time record 82%."
   },
   {
    "option_id": "O-V3",
@@ -366,7 +366,7 @@
    "meets_deadline": false,
    "score": 0.406,
    "recommended": false,
-   "rationale": "Anvil Electric India: committed INR 391.2 L (85.0% of budget, ok); delivers 2027-08-12 (-13 d float); on-time record 90%; INFEASIBLE: misses required-on-site by 13 d."
+   "rationale": "Anvil Electric India: committed INR 3.91 Cr (85.0% of budget, ok); delivers 2027-08-12 (-13 d float); on-time record 90%; INFEASIBLE: misses required-on-site by 13 d."
   }
  ],
  "budgets_initial": [
@@ -645,7 +645,7 @@
    "meets_deadline": true,
    "score": 0.654,
    "recommended": true,
-   "rationale": "Anvil Electric India expedited (-42 d): committed INR 417.2 L (90.7% of budget, warn); delivers 2027-07-01 (+29 d float); on-time record 90%."
+   "rationale": "Anvil Electric India expedited (-42 d): committed INR 4.17 Cr (90.7% of budget, warn); delivers 2027-07-01 (+29 d float); on-time record 90%."
   },
   {
    "option_id": "O-V1",
@@ -661,7 +661,7 @@
    "meets_deadline": true,
    "score": 0.579,
    "recommended": false,
-   "rationale": "Voltaris Switchgear Pvt Ltd: committed INR 372.5 L (81.0% of budget, ok); delivers 2027-07-15 (+15 d float); on-time record 82%."
+   "rationale": "Voltaris Switchgear Pvt Ltd: committed INR 3.72 Cr (81.0% of budget, ok); delivers 2027-07-15 (+15 d float); on-time record 82%."
   },
   {
    "option_id": "O-V2",
@@ -677,7 +677,7 @@
    "meets_deadline": true,
    "score": 0.542,
    "recommended": false,
-   "rationale": "Kestrel Power Systems rev 2: committed INR 463.8 L (100.8% of budget, breach); delivers 2027-06-17 (+43 d float); on-time record 93%; INFEASIBLE: over budget."
+   "rationale": "Kestrel Power Systems rev 2: committed INR 4.64 Cr (100.8% of budget, breach); delivers 2027-06-17 (+43 d float); on-time record 93%; INFEASIBLE: over budget."
   },
   {
    "option_id": "O-V3",
@@ -693,7 +693,7 @@
    "meets_deadline": false,
    "score": 0.406,
    "recommended": false,
-   "rationale": "Anvil Electric India: committed INR 391.2 L (85.0% of budget, ok); delivers 2027-08-12 (-13 d float); on-time record 90%; INFEASIBLE: misses required-on-site by 13 d."
+   "rationale": "Anvil Electric India: committed INR 3.91 Cr (85.0% of budget, ok); delivers 2027-08-12 (-13 d float); on-time record 90%; INFEASIBLE: misses required-on-site by 13 d."
   }
  ],
  "budgets_replan": [
@@ -1160,7 +1160,7 @@
     "meets_deadline": true,
     "score": 0.654,
     "recommended": true,
-    "rationale": "Anvil Electric India expedited (-42 d): committed INR 417.2 L (90.7% of budget, warn); delivers 2027-07-01 (+29 d float); on-time record 90%."
+    "rationale": "Anvil Electric India expedited (-42 d): committed INR 4.17 Cr (90.7% of budget, warn); delivers 2027-07-01 (+29 d float); on-time record 90%."
    },
    {
     "option_id": "O-V1",
@@ -1176,7 +1176,7 @@
     "meets_deadline": true,
     "score": 0.579,
     "recommended": false,
-    "rationale": "Voltaris Switchgear Pvt Ltd: committed INR 372.5 L (81.0% of budget, ok); delivers 2027-07-15 (+15 d float); on-time record 82%."
+    "rationale": "Voltaris Switchgear Pvt Ltd: committed INR 3.72 Cr (81.0% of budget, ok); delivers 2027-07-15 (+15 d float); on-time record 82%."
    },
    {
     "option_id": "O-V2",
@@ -1192,7 +1192,7 @@
     "meets_deadline": true,
     "score": 0.542,
     "recommended": false,
-    "rationale": "Kestrel Power Systems rev 2: committed INR 463.8 L (100.8% of budget, breach); delivers 2027-06-17 (+43 d float); on-time record 93%; INFEASIBLE: over budget."
+    "rationale": "Kestrel Power Systems rev 2: committed INR 4.64 Cr (100.8% of budget, breach); delivers 2027-06-17 (+43 d float); on-time record 93%; INFEASIBLE: over budget."
    },
    {
     "option_id": "O-V3",
@@ -1208,13 +1208,13 @@
     "meets_deadline": false,
     "score": 0.406,
     "recommended": false,
-    "rationale": "Anvil Electric India: committed INR 391.2 L (85.0% of budget, ok); delivers 2027-08-12 (-13 d float); on-time record 90%; INFEASIBLE: misses required-on-site by 13 d."
+    "rationale": "Anvil Electric India: committed INR 3.91 Cr (85.0% of budget, ok); delivers 2027-08-12 (-13 d float); on-time record 90%; INFEASIBLE: misses required-on-site by 13 d."
    }
   ],
   "recommendation": "O-V3X",
-  "reasoning": "Recommend O-V3X - Anvil Electric India with expedite (INR 26.0 L): total INR 398.6 L ex-GST, delivery 2027-07-01 (+29 d float), on-time record 90%, score 0.65. Versus O-V1 (Voltaris Switchgear Pvt Ltd, score 0.58): is INR 43.8 L cheaper but has 14 d less float and a 82% vs 90% on-time record. The INR 43.8 L saving buys schedule risk: missing the energisation window delays the data-hall handover, which costs far more than the delta. Rejected O-V2: Kestrel Power Systems rev 2: committed INR 463.8 L (100.8% of budget, breach); delivers 2027-06-17 (+43 d float); on-time record 93%; INFEASIBLE: over budget. Rejected O-V3: Anvil Electric India: committed INR 391.2 L (85.0% of budget, ok); delivers 2027-08-12 (-13 d float); on-time record 90%; INFEASIBLE: misses required-on-site by 13 d.",
+  "reasoning": "Recommend O-V3X - Anvil Electric India with expedite (INR 26.0 L): total INR 3.99 Cr ex-GST, delivery 2027-07-01 (+29 d float), on-time record 90%, score 0.65. Versus O-V1 (Voltaris Switchgear Pvt Ltd, score 0.58): is INR 43.8 L cheaper but has 14 d less float and a 82% vs 90% on-time record. The INR 43.8 L saving buys schedule risk: missing the required-on-site date delays commissioning and handover, which costs far more than the delta. Rejected O-V2: Kestrel Power Systems rev 2: committed INR 4.64 Cr (100.8% of budget, breach); delivers 2027-06-17 (+43 d float); on-time record 93%; INFEASIBLE: over budget. Rejected O-V3: Anvil Electric India: committed INR 3.91 Cr (85.0% of budget, ok); delivers 2027-08-12 (-13 d float); on-time record 90%; INFEASIBLE: misses required-on-site by 13 d.",
   "risks": [
-   "O-V3X: above the 90% budget warning line - little headroom for variations or copper price movement.",
+   "O-V3X: above the 90% budget warning line - little headroom for variations or commodity price movement.",
    "O-V3X: expedite fee INR 26.0 L must be tied to a contractual delivery date with LDs, payable only on milestone.",
    "O-V1: Voltaris Switchgear Pvt Ltd on-time record is 82%; expect expediting effort and weekly progress audits."
   ],

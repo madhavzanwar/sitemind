@@ -83,9 +83,9 @@ export const STORIES: Record<string, Story> = {
   },
   'dg-2mw': {
     data: dg as unknown as MockData,
-    short: { D1: 'Brahmaputra', D2: 'Coromandel', D3: 'Saurashtra' },
+    short: { D1: 'Tarangini', D2: 'Corvane', D3: 'Halvik' },
     timeouts: {},
-    docMissing: { vendor: 'D1', doc: 'CPCB IV+ emissions certificate' },
+    docMissing: { vendor: 'D1', doc: 'CPCB IV+ emissions type-approval certificate' },
     revise: { vendor: 'D2', reason: 'USD/INR movement and steel escalation' },
     alt: { kind: 'slip', vendor: 'D3', days: 45 },
     rosLabel: '15 Nov 2027 DG commissioning window',

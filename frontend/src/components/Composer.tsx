@@ -111,6 +111,7 @@ export function Composer({ onLaunched, onOpen }: { onLaunched: (s: RunSnapshot) 
 
   const onFile = async (f: File | undefined) => {
     if (!f) return
+    setSpecMode('upload')
     setUploading(true)
     setErr(null)
     try {
