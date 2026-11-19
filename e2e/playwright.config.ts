@@ -27,11 +27,11 @@ export default defineConfig({
   use: {
     ...devices['Desktop Chrome'],
     baseURL: `http://127.0.0.1:${PORT}`,
-    viewport: { width: 1920, height: 1080 },
+    viewport: { width: 1440, height: 900 },
     trace: 'off',
     launchOptions: process.env.PW_CHROMIUM_PATH ? { executablePath: process.env.PW_CHROMIUM_PATH } : {},
   },
-  projects: [{ name: 'chromium', use: { viewport: { width: 1920, height: 1080 } } }],
+  projects: [{ name: 'chromium', use: { viewport: { width: 1440, height: 900 } } }],
   webServer: MOCK
     ? {
         command: `npx vite --port ${PORT} --strictPort --host 127.0.0.1`,

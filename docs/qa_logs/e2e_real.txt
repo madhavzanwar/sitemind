@@ -1,8 +1,6 @@
-[WebServer] INFO:     Application startup complete.
-[WebServer] INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
 
-Running 1 test using 1 worker
+  ✓  1 [chromium] › sitemind.spec.ts:32:1 › launch, survive SIGKILL, approve twice, PO sent (18.7s)
+  ✓  2 [chromium] › sitemind.spec.ts:102:1 › price change on the recommended vendor supersedes the pending approval (9.9s)
+  ✓  3 [chromium] › sitemind.spec.ts:133:1 › a second package (2 MW DG sets) runs end to end (12.8s)
 
-  ✓  1 [chromium] › sitemind.spec.ts:25:1 › launch, survive SIGKILL, approve twice, PO sent (41.7s)
-
-  1 passed (50.2s)
+  3 passed (49.9s)

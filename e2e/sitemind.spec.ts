@@ -12,7 +12,7 @@ mkdirSync(SHOTS, { recursive: true })
 // Real-backend screenshots are saved as docs/screenshots/real-*.png (mock ones come from screenshots.spec.ts).
 const shot = async (page: Page, name: string) => {
   if (MOCK) return
-  await page.mouse.move(0, 1079)
+  await page.mouse.move(0, 899)
   await page.waitForTimeout(400) // let CSS transitions settle
   await page.screenshot({ path: join(SHOTS, `real-${name}.png`) })
 }

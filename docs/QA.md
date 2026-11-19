@@ -7,15 +7,15 @@ Python 3.13, Node 22, Ollama 0.40.16 with `qwen2.5:3b`). Raw logs: [`docs/qa_log
 
 | Gate | Command | Result |
 |---|---|---|
-| Backend unit + integration tests | `make test` | **60 passed, 1 deselected** (~21 s) |
+| Backend unit + integration tests | `make test` | **115 passed, 1 deselected** (~45 s) — includes 15 live-event tests, package and goal-parse tests |
 | Kill -9 & resume integration test | `pytest tests/test_durability.py` (part of the above) | **passed** (also 3/3 repeated runs) |
-| Real local model end to end | `pytest -m llm -s tests/test_llm_real.py` | **1 passed** — 3 qwen2.5:3b calls, 0 fallbacks, 865 tokens, 75.6 s run wall time |
+| Real local model end to end | `pytest -m llm -s tests/test_llm_real.py` | **1 passed** — 3 qwen2.5:3b calls, 0 fallbacks, 876 tokens, 26.4 s run wall time (re-run after v2) |
 | Lint | `ruff check . && ruff format --check .` | **clean** (39 files) |
 | Typecheck (backend) | `python3 -m mypy sitemind` | **no issues** (22 source files) |
 | Frontend typecheck + build | `npm run build` (`tsc -b && vite build`) | **clean** |
 | Frontend lint | `npm run lint` (eslint) | **clean** |
-| Dashboard e2e (real backend) | `cd e2e && npx playwright test --trace off sitemind.spec.ts` | **1 passed** (launch → SIGKILL → resume → 2 approvals → PO sent, ~42 s) |
-| Dashboard e2e (mock mode + screenshots) | `E2E_MOCK=1 npx playwright test --trace off` | **13 passed** (same flow in mock mode + 12 screenshot captures) |
+| Dashboard e2e (real backend) | `cd e2e && npx playwright test --trace off sitemind.spec.ts` | **3 passed** — kill/resume + 2 approvals; live price-change event supersedes the pending approval; full 2 MW DG-set run |
+| Dashboard e2e (mock mode + screenshots) | `E2E_MOCK=1 npx playwright test --trace off` | **35 passed** (same flows in mock mode + screenshot captures at 1366/1440/1920) |
 | MCP server | `tests/test_mcp.py` (in-memory + real stdio subprocess) | **passed** |
 | Docker | `docker compose config -q` | config **valid**; image **built**; stack **up** (app + ollama containers) and a full goal run completed inside it — see below |
 | Demo video | `demo/run_demo.sh` → `submission/sitemind_demo.mp4` | **2:47**, H.264 1920×1080 + AAC, Piper narration, burned-in subtitles; 10 scene frames inspected (`submission/frames/`) |
@@ -53,8 +53,7 @@ Python 3.13, Node 22, Ollama 0.40.16 with `qwen2.5:3b`). Raw logs: [`docs/qa_log
 
 ### pytest
 ```
-............................................................             [100%]
-60 passed, 1 deselected in 20.53s
+115 passed, 1 deselected in 45.47s
 ```
 
 ### real model
@@ -80,22 +79,14 @@ Success: no issues found in 22 source files
 
 ### Playwright e2e
 ```
-[WebServer] INFO:     Application startup complete.
-[WebServer] INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+✓  1 [chromium] › sitemind.spec.ts:32:1 › launch, survive SIGKILL, approve twice, PO sent (18.7s)
+  ✓  2 [chromium] › sitemind.spec.ts:102:1 › price change on the recommended vendor supersedes the pending approval (9.9s)
+  ✓  3 [chromium] › sitemind.spec.ts:133:1 › a second package (2 MW DG sets) runs end to end (12.8s)
 
-Running 1 test using 1 worker
-
-  ✓  1 [chromium] › sitemind.spec.ts:25:1 › launch, survive SIGKILL, approve twice, PO sent (41.7s)
-
-  1 passed (50.2s)
+  3 passed (49.9s)
 
 # mock mode
-✓  10 [chromium] › screenshots.spec.ts:29:3 › screenshot audit (2.3s)
-  ✓  11 [chromium] › screenshots.spec.ts:29:3 › screenshot po (2.3s)
-  ✓  12 [chromium] › screenshots.spec.ts:37:1 › screenshot ledger (1.6s)
-  ✓  13 [chromium] › sitemind.spec.ts:25:1 › launch, survive SIGKILL, approve twice, PO sent (11.9s)
-
-  13 passed (41.8s)
+35 passed (1.8m)
 ```
 
 ### Docker stack (`docker compose up`)

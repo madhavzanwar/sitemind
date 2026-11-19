@@ -53,6 +53,15 @@ within budget ₹4.6 Cr."*
 Every step writes an audit entry (actor, action, reasoning summary, inputs, outputs, cost,
 confidence, plan version) and the takeoff cites the PDF page, table and row for each line.
 
+### Not just one job: live events and any package (v2)
+
+| Capability | How to try it |
+|---|---|
+| **Live event injection** (challenge 1.3's "stream of events") | Run view → *Inject a live event*: vendor replies late, price change, date slip (lead time or site date), missing document, tool failure, approver unavailable, restart. Each is applied exactly once through the ledger, recorded in the audit trail, and triggers a re-plan; a pending approval the event invalidates is superseded and re-asked with a fresh memo. API: `POST /api/runs/{id}/events`. CLI: `sitemind demo --inject "price_change:V3:pct=8@waiting"`. |
+| **A second package with zero code changes** | 2 MW DG sets (`dg-2mw`): different spec layout, vendors, lead times and failure story (price revision, lead-time slip, missing CPCB IV+ certificate that gates PO release until received or waived). Packages are data folders in `backend/sitemind/data/packages/`. |
+| **Plain-English goals** | The goal is parsed into package, project, need-by and budget with the exact text span behind each field (`POST /api/goal/parse`). Missing fields become questions; an unknown package (e.g. chillers) is handed to a human instead of guessed. |
+| **Your own spec PDF** | Upload a PDF (`POST /api/specs`); the takeoff finds schedule tables by header names on any layout, cites page/table/row, and flags lines it cannot classify with lower confidence. |
+
 ## Architecture
 
 ```mermaid
@@ -314,9 +323,9 @@ network, CPM schedule, budget, ranking and memo, PO), the planner and re-plan ru
 store and `perform_once`, the graph, kill-and-resume durability, the API and the MCP server.
 Tests marked `llm` call a real local model and are skipped when Ollama is unreachable.
 
-Current results (full logs in [`docs/QA.md`](docs/QA.md)): **60 passed** (deterministic suite, ~21 s),
+Current results (full logs in [`docs/QA.md`](docs/QA.md)): **115 passed** (deterministic suite, ~45 s),
 **1 passed** real-model run (`python3 -m pytest -m llm tests/test_llm_real.py`), dashboard e2e
-**1/1** against the real backend and **13/13** in mock mode.
+**3/3** against the real backend (kill/resume + approvals, live price-change event superseding an approval, full DG-set run) and **35/35** in mock mode.
 
 ```bash
 cd e2e && npm ci && npx playwright test --trace off sitemind.spec.ts   # real backend e2e

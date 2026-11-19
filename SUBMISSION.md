@@ -145,7 +145,7 @@ confidence. Every specialist is also exposed as an MCP tool, so another agent ca
   and an expedite fee that should be paid only against a delivery milestone.
 - The whole thing runs offline on a laptop CPU, and with the model switched off every number
   is unchanged.
-- A deterministic test suite that needs no model, including kill-and-resume durability tests. 60 deterministic tests, a real-model run and a Playwright e2e all pass.
+- A deterministic test suite that needs no model, including kill-and-resume durability tests. 115 deterministic tests (incl. 15 live-event tests), a real-model run and 3 real-backend Playwright e2e flows all pass.
 
 ### What we learned
 
